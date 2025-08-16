@@ -6,6 +6,7 @@ import torch
 import torch.nn as nn
 import json
 import threading
+import errno
 
 import matplotlib
 matplotlib.use('Agg')  # Use non-interactive backend for thread safety
@@ -139,6 +140,20 @@ def binary_cross_entropy(pred, target):
     pred = torch.clamp(pred, eps, 1 - eps)
     return -(target * torch.log(pred) + (1 - target) * torch.log(1 - pred)).mean()
 
+def handle_remove_readonly(func, path, exc):
+    import stat
+    excvalue = exc[1]
+    if func in (os.unlink, os.remove, os.rmdir):
+        try:
+            os.chmod(path, stat.S_IWRITE)
+            func(path)
+        except Exception:
+            pass
+    elif excvalue.errno == errno.ENOENT:
+        pass  # File already deleted
+    else:
+        print(f"Warning: Could not delete {path}: {excvalue}")
+
 
 
 config = json.load(open("config.json"))
@@ -172,7 +187,7 @@ for i_poisoned in range(N_POISONED_CLIENTS+1):
         SAVE_PATH = os.path.join("results",NAME_SAVE_update_PATH)
         # Remove existing directory if it exists
         if os.path.exists(SAVE_PATH):
-            shutil.rmtree(SAVE_PATH)
+            shutil.rmtree(SAVE_PATH, onerror=handle_remove_readonly)
         if not os.path.exists(SAVE_PATH):
             os.makedirs(SAVE_PATH)
         SAVE_all_PATH = os.path.join("results",'all')
@@ -231,7 +246,7 @@ for i_poisoned in range(N_POISONED_CLIENTS+1):
 
             # Create and start threads
             threads = []
-            for client_id in range(N_CLIENTS):
+            for client_id in range(N_CLIENTS+i_poisoned):
                 t = threading.Thread(target=client_thread_fn, args=(client_id, global_model, client_data, epoch, local_logs, local_weights))
                 threads.append(t)
                 t.start()
