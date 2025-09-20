@@ -101,7 +101,9 @@ IMG_SIZE = 28
 
 np.random.seed(0)
 torch.manual_seed(0)
-device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+
+# Set device
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 DATA_PATH = "./data/mnist_binary_poison/train"
 TEST_PATH = "./data/mnist_images/test"
@@ -133,13 +135,15 @@ for i_poisoned in range(START_EPOCH,N_POISONED_CLIENTS+1):
 
     X_train_tensor = {}
     y_train_tensor = {}
+    local_models = {}
+    local_optimizers = {}
     for i in range(N_HONEST):
         X_c, y_c = get_client_data(DATA_PATH, "honest", i, img_size=IMG_SIZE)
         if len(X_c) == 0:
             continue
-        model = MNISTNet().to(device)
-        model.load_state_dict(global_weights)
-        optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+        # model = MNISTNet().to(device)
+        # model.load_state_dict(global_weights)
+        # optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
         X_c_tensor = torch.tensor(X_c, dtype=torch.float32).to(device)
         y_c_tensor = torch.tensor(y_c, dtype=torch.float32).unsqueeze(1).to(device)
         X_train_tensor[f"honest_{i}"] = X_c_tensor
@@ -148,9 +152,9 @@ for i_poisoned in range(START_EPOCH,N_POISONED_CLIENTS+1):
         X_c, y_c = get_client_data(DATA_PATH, "poison", i, img_size=IMG_SIZE)
         if len(X_c) == 0:
             continue
-        model = MNISTNet().to(device)
-        model.load_state_dict(global_weights)
-        optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
+        # model = MNISTNet().to(device)
+        # model.load_state_dict(global_weights)
+        # optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
         X_c_tensor = torch.tensor(X_c, dtype=torch.float32).to(device)
         y_c_tensor = torch.tensor(y_c, dtype=torch.float32).unsqueeze(1).to(device)
         X_train_tensor[f"poison_{i}"] = X_c_tensor
@@ -164,6 +168,9 @@ for i_poisoned in range(START_EPOCH,N_POISONED_CLIENTS+1):
         for i in range(N_HONEST):
             X_c_tensor = X_train_tensor[f"honest_{i}"]
             y_c_tensor = y_train_tensor[f"honest_{i}"]
+            model = MNISTNet().to(device)
+            model.load_state_dict(global_weights)
+            optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
             model.train()
             for epoch in range(EPOCHS):
                 for start in range(0, X_c_tensor.size(0), BATCH_SIZE):
@@ -181,6 +188,9 @@ for i_poisoned in range(START_EPOCH,N_POISONED_CLIENTS+1):
         for i in range(i_poisoned):
             X_c_tensor = X_train_tensor[f"poison_{i}"]
             y_c_tensor = y_train_tensor[f"poison_{i}"]
+            model = MNISTNet().to(device)
+            model.load_state_dict(global_weights)
+            optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
             model.train()
             for epoch in range(EPOCHS):
                 for start in range(0, X_c_tensor.size(0), BATCH_SIZE):

@@ -1,0 +1,130 @@
+001_linear_CL.py
+========================================================================
+For each mode in ['normal', 'uniform', 'laplace', 'beta', 'triangular']:
+    For i_poisoned in 0..N_POISONED_CLIENTS:
+        For each config (save_path, batch_size):
+            Prepare output directories
+            Initialize SimpleLinear model with initial weights
+            Load and concatenate honest and poisoned client data
+            Load test data
+            For each epoch in EPOCHS:
+                For each batch in training data:
+                    Run training step:
+                        - Forward pass
+                        - Backward pass
+                        - Manual parameter update
+                        - Log weights, gradients, loss, accuracy
+                Evaluate model on test data, log results
+            For each record with batch == -1:
+                Plot decision boundary, loss, accuracy
+                Save plots
+            Save all logs to CSV
+========================================================================
+
+002_linear_FLW_IID.py
+========================================================================
+For each mode in ['triangular']:
+    For i_poisoned in 60..N_POISONED_CLIENTS:
+        For each config (save_path, batch_size):
+            Prepare output directories
+            Initialize global SimpleLinear model
+            Load and split honest and poisoned client data
+            Load test data
+            For each epoch in EPOCHS:
+                For each client (threaded):
+                    Train local model on client's data:
+                        - Forward pass
+                        - Backward pass
+                        - Manual parameter update
+                        - Log weights, gradients, loss, accuracy
+                    Save local weights
+                Federated averaging of local weights to update global model
+                Compute and log gradients
+                Evaluate global model on test data, log results
+            For each record with batch == -1:
+                Plot decision boundary, loss, accuracy for each client
+                Save plots
+            Save all logs to CSV
+========================================================================
+
+007_mnist_CL.py
+========================================================================
+For i_poisoned in START_EPOCH..N_POISONED_CLIENTS:
+    Prepare output directories
+    Load and concatenate honest and poisoned client MNIST data
+    Load test data
+    Initialize MNISTNet model
+    For each epoch in EPOCHS:
+        For each batch in training data:
+            Run training step:
+                - Forward pass
+                - Backward pass
+                - Update parameters
+        Evaluate model on test data, log loss and accuracy
+    Save logs to CSV
+    Plot and save loss and accuracy curves
+========================================================================
+
+008_mnist_FL.py
+========================================================================
+For i_poisoned in START_EPOCH..N_POISONED_CLIENTS:
+    Prepare output directories
+    Load test data
+    Initialize global MNISTNet model
+    For each honest client:
+        Load client data, prepare tensors
+    For each poisoned client:
+        Load client data, prepare tensors
+    For each round in ROUNDS:
+        For each client:
+            Train local model on client's data:
+                - Forward pass
+                - Backward pass
+                - Update parameters
+            Save local weights
+        Federated averaging of local weights to update global model
+        Evaluate global model on test data, log loss and accuracy
+    Save logs to CSV
+    Plot and save loss and accuracy curves
+========================================================================
+
+010_mnist_CL_model2.py
+========================================================================
+For i_poisoned in START_EPOCH..N_POISONED_CLIENTS:
+    Prepare output directories
+    Load and concatenate honest and poisoned client MNIST data
+    Load test data
+    Initialize MNISTNet model (with 2 hidden units)
+    For each epoch in EPOCHS:
+        For each batch in training data:
+            Run training step:
+                - Forward pass
+                - Backward pass
+                - Update parameters
+        Evaluate model on test data, log loss and accuracy
+    Save logs to CSV
+    Plot and save loss and accuracy curves
+========================================================================
+
+011_mnist_FL_model2.py
+========================================================================
+For i_poisoned in START_EPOCH..N_POISONED_CLIENTS:
+    Prepare output directories
+    Load test data
+    For each honest client:
+        Load client data, prepare tensors
+    For each poisoned client:
+        Load client data, prepare tensors
+    Initialize global MNISTNet model (with 2 hidden units)
+    For each round in ROUNDS:
+        For each client:
+            Train local model on client's data:
+                - Forward pass
+                - Backward pass
+                - Update parameters
+            Save local weights
+        Federated averaging of local weights to update global model
+        Evaluate global model on test data, log loss and accuracy
+    Save logs to CSV
+    Plot and save loss and accuracy curves
+========================================================================
