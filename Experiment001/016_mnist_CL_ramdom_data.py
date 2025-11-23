@@ -111,7 +111,7 @@ def binary_cross_entropy(pred, target):
 #############################################################
 ## Configurations
 #############################################################
-config = json.load(open("config_mnist.json"))
+config = json.load(open("./Experiment001/config_mnist.json"))
 LEARNING_RATE = config.get("LEARNING_RATE", 0.01)
 START_EPOCH = config.get("START_EPOCH", 0)
 EPOCHS = config.get("EPOCHS", 10)
@@ -128,14 +128,15 @@ torch.manual_seed(0)
 # Set device
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-DATA_PATH = "./data/mnist_binary_poison/train"
-TEST_PATH = "./data/mnist_images/test"
+DATA_PATH = "./Experiment001/data/mnist_binary_poison/train"
+TEST_PATH = "./Experiment001/data/mnist_images/test"
 
-BATCH_SIZE_list = []
-temp_bs = BATCH_SIZE
-while temp_bs >= 1:
-    BATCH_SIZE_list.append(temp_bs)
-    temp_bs = temp_bs // 2
+BATCH_SIZE_list = [32]
+# BATCH_SIZE_list = []
+# temp_bs = BATCH_SIZE
+# while temp_bs >= 1:
+#     BATCH_SIZE_list.append(temp_bs)
+#     temp_bs = temp_bs // 2
 
 for experiment_bs in BATCH_SIZE_list:
 
@@ -148,13 +149,13 @@ for experiment_bs in BATCH_SIZE_list:
 
         # create directory
         NAME_SAVE_update_PATH = f"poisoned_{i_poisoned}"
-        SAVE_PATH = os.path.join("results",NAME_SAVE_PATH,mode,NAME_SAVE_update_PATH)
+        SAVE_PATH = os.path.join("./Experiment001/results",NAME_SAVE_PATH,mode,NAME_SAVE_update_PATH)
         # Remove existing directory if it exists
         if os.path.exists(SAVE_PATH):
             shutil.rmtree(SAVE_PATH)
         if not os.path.exists(SAVE_PATH):
             os.makedirs(SAVE_PATH)
-        SAVE_all_PATH = os.path.join("results",NAME_SAVE_PATH,mode,'all')
+        SAVE_all_PATH = os.path.join("./Experiment001/results",NAME_SAVE_PATH,mode,'all')
         os.makedirs(SAVE_all_PATH, exist_ok=True)
         
         # Load data
