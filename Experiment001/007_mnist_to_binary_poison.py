@@ -2,8 +2,8 @@ import os
 import shutil
 
 def main():
-    base_dir = "./data/mnist_images"
-    target_dir = "./data/mnist_binary_poison"
+    base_dir = "data/mnist_images"
+    target_dir = "data/mnist_binary_poison"
     label_list = ['0','1']
     min_len_list = 0
     for label in label_list:
@@ -43,6 +43,25 @@ def main():
                     src_path = os.path.join(src_train_dir, file)
                     dst_path = os.path.join(target_train_dir, file)
                     shutil.copy(src_path, dst_path)
+
+    # copy test one set eqaully among classes
+    min_len_list = 0
+    for label in label_list:
+        src_test_dir = os.path.join(base_dir, "test", label)
+        list_of_files = os.listdir(src_test_dir)
+        if min_len_list == 0 or min_len_list > len(list_of_files):
+            min_len_list = len(list_of_files)
+
+    for label in label_list:
+        src_test_dir = os.path.join(base_dir, "test", label)
+        list_of_files = os.listdir(src_test_dir)
+        list_of_files = list_of_files[:min_len_list]
+        target_test_dir = os.path.join(target_dir, "test", label)
+        os.makedirs(target_test_dir, exist_ok=True)
+        for file in list_of_files:
+            src_path = os.path.join(src_test_dir, file)
+            dst_path = os.path.join(target_test_dir, file)
+            shutil.copy(src_path, dst_path)
 
 if __name__ == "__main__":
     main()

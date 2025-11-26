@@ -1,0 +1,13 @@
+EXPERIMENT,0%_poisoned,10%_poisoned,20%_poisoned,30%_poisoned,40%_poisoned,50%_poisoned
+CL_ModelN1L2_Batchsize1,99,99,99,99,99,99
+CL_ModelN2L2_Batchsize1,99,99,99,99,99,99
+CL_ModelN4L2_Batchsize1,99,99,99,99,99,99
+CL_ModelN8L2_Batchsize1,99,99,99,99,99,99
+CL_ModelN16L2_Batchsize1,99,99,99,99,99,99
+CL_ModelN32L2_Batchsize1,99,99,99,99,99,99
+FL_ModelN1L2_Batchsize1,99,99,99,99,99,99
+FL_ModelN2L2_Batchsize1,99,99,99,99,99,99
+FL_ModelN4L2_Batchsize1,99,99,99,99,99,99
+FL_ModelN8L2_Batchsize1,99,99,99,99,99,99
+FL_ModelN16L2_Batchsize1,99,99,99,99,99,99
+FL_ModelN32L2_Batchsize1,99,99,99,99,99,99
