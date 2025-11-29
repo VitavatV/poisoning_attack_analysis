@@ -1,3 +1,5 @@
 env313
-results
+results*
 data
+__pycache__
+*.pyc

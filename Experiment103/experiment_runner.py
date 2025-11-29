@@ -144,7 +144,7 @@ def run_single_experiment(config, seed):
                              lr=config['lr'], 
                              device=device,
                              momentum=config.get('momentum', 0.9),
-                             weight_decay=config.get('weight_decay', 0))
+                             weight_decay=float(config.get('weight_decay', 0)))
             local_weights.append(w)
             
         # --- Aggregation ---
@@ -208,14 +208,20 @@ def main():
     # 1. เตรียม List สำหรับเก็บผลลัพธ์ทั้งหมด
     all_results = []
     
-    phases = [
-        ('EXP 0: PRELIMINARY STUDY', config['exp0_vary_width']),
-        ('EXP 1: HIGH-RESOLUTION LANDSCAPE', config['exp1_fine_grained_width']),
-        ('EXP 2: DEFENSE BENCHMARK', config['exp2_defense_comparison']),
-        ('EXP 3: MECHANISM DEEP DIVE', config['exp3_mechanism_analysis']),
-        ('EXP 4: GENERALIZATION CHECK', config['exp4_attack_types'])
+    config_name_list = [
+        'exp0_vary_width',
+        'exp1_fine_grained_width',
+        'exp2_defense_comparison',
+        'exp3_mechanism_analysis',
+        'exp4_attack_types'
     ]
-    
+    phases = []
+    for config_name in config_name_list:
+        if config_name not in config:
+            logging.warning(f"Config {config_name} not found in config file. Skipping.")
+            continue    
+        phases.append((config_name, config[config_name]))
+
     for phase_name, phase_cfg in phases:
         phase_cfg['phase_name'] = phase_name
         exp_list = generate_experiments(phase_cfg, defaults)
@@ -227,7 +233,8 @@ def main():
             seed_val_losses = []
             seed_num_params = []
             
-            try:
+            # try:
+            if True:
                 for seed in seed_list:
                     t_acc, t_loss, v_acc, v_loss, num_params = run_single_experiment(exp, seed)
                     seed_test_accs.append(t_acc)
@@ -235,10 +242,10 @@ def main():
                     seed_val_accs.append(v_acc)
                     seed_val_losses.append(v_loss)
                     seed_num_params.append(num_params)
-            except Exception as e:
-                logging.error(f"Error in experiment: {e}")
-                print(f"Error in experiment: {e}")
-                continue
+            # except Exception as e:
+            #     logging.error(f"Error in experiment: {e}")
+            #     print(f"Error in experiment: {e}")
+            #     continue
             
             # Calculate stats
             if not seed_test_accs:
