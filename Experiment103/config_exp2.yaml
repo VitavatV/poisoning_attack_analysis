@@ -43,6 +43,6 @@ exp2_defense_comparison:
   dataset: "cifar10"
   combinations:
     - aggregator: ["fedavg", "median"]
-    - width_factor: [10, 64]
-    - poison_ratio: [0.3]
-    - alpha: [0.1]
+    - width_factor: [4]
+    - poison_ratio: [0.0, 0.25, 0.5]
+    - alpha: [100.0, 0.1]

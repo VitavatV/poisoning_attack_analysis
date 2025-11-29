@@ -43,5 +43,6 @@ exp4_attack_types:
   dataset: "cifar10"
   combinations:
     - poison_type: ["label_flip", "random_noise"]
-    - width_factor: [10, 64]
-    - poison_ratio: [0.3]
+    - width_factor: [4]
+    - poison_ratio: [0.0, 0.25, 0.5]
+    - alpha: [100.0, 0.1]

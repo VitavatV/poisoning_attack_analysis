@@ -42,7 +42,8 @@ seeds: [42, 101, 2024]
 exp3_mechanism_analysis:
   dataset: "cifar10"
   combinations:
-    - batch_size: [32, 128]
+    - batch_size: [8, 16, 32]
     - data_ordering: ["shuffle", "bad_good", "good_bad"]
-    - width_factor: [10, 64]
-    - poison_ratio: [0.3]
+    - width_factor: [4]
+    - poison_ratio: [0.0, 0.25, 0.5]
+    - alpha: [100.0, 0.1]

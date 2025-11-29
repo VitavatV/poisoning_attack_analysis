@@ -17,6 +17,7 @@ class ScalableCNN(nn.Module):
         base_channels = 16 
         
         current_channels = in_channels
+        current_spatial_dim = 32 # Start with CIFAR-10 size
         
         for i in range(depth):
             # คำนวณ Output Channels ตาม Width Factor
@@ -30,18 +31,17 @@ class ScalableCNN(nn.Module):
             
             # MaxPool ทุกๆ 2 ชั้น หรือตามความเหมาะสมของขนาดภาพ
             if i % 2 != 0: 
-                self.layers.append(nn.MaxPool2d(2, 2))
+                # Only add MaxPool if spatial dim > 1
+                if current_spatial_dim > 1:
+                    self.layers.append(nn.MaxPool2d(2, 2))
+                    current_spatial_dim //= 2
             
             current_channels = out_channels
             
         # คำนวณขนาดก่อนเข้า Fully Connected (Flatten)
         # หมายเหตุ: สำหรับ CIFAR 32x32 ถ้า MaxPool 2 ครั้ง เหลือ 8x8
         # ควรเขียนฟังก์ชันคำนวณอัตโนมัติหากเปลี่ยน Depth บ่อย
-        final_spatial_dim = 32
-        num_pool_layers = (depth + 1) // 2  # How many MaxPool layers
-        for _ in range(num_pool_layers):
-            final_spatial_dim = final_spatial_dim // 2
-        self.flatten_dim = current_channels * (final_spatial_dim ** 2)
+        self.flatten_dim = current_channels * (current_spatial_dim ** 2)
         
         self.classifier = nn.Linear(self.flatten_dim, num_classes)
 
