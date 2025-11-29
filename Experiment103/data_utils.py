@@ -171,7 +171,8 @@ def get_client_dataloader(dataset, client_indices, config, is_attacker=False):
         local_dataset,
         batch_size=config['batch_size'],
         shuffle=shuffle_batch,
-        num_workers=0
+        num_workers=0,
+        drop_last=True # Prevent batch size 1 error with BatchNorm
     )
     
     return loader
