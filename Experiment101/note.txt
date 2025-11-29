@@ -1,0 +1,7 @@
+IID, Non-IID
+MNIST-10, CIFAR-10, CIFAR-100, Tiny-ImageNet
+Batch size
+Local Epoche
+Shuffling, Good>Bad, Bad>Good
+Varying Depth
+Varying Width

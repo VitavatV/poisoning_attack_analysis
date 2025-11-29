@@ -1,0 +1,47 @@
+# EXP 4: Attack Type Generalization
+# Goal: Verify results generalize to different attack types
+# Runtime: ~12-20 hours (12 experiments)
+# Priority: MEDIUM - Validates generalization
+
+defaults:
+  project_name: "FL_EXP4_Attacks"
+  output_dir: "./results_exp4"
+  device: "cuda"
+  
+  # FL Settings
+  num_clients: 10
+  fraction_fit: 1.0
+  global_rounds: 150
+  local_epochs: 5
+  batch_size: 32  # Reduced for 8GB VRAM compatibility
+  optimizer: "sgd"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 5e-4
+  
+  # Model Architecture
+  depth: 4
+  
+  # Early Stopping
+  validation_split: 0.1
+  early_stopping_patience: 20
+  min_delta: 0.0001
+
+  # Attack Defaults
+  poison_type: "label_flip"
+  target_class: 0
+  poison_label: 1
+  poison_ratio: 0.0
+  alpha: 100.0
+  data_ordering: "shuffle"
+  aggregator: "fedavg"
+
+seeds: [42, 101, 2024]
+
+# Test different attack types
+exp4_attack_types:
+  dataset: "cifar10"
+  combinations:
+    - poison_type: ["label_flip", "random_noise"]
+    - width_factor: [10, 64]
+    - poison_ratio: [0.3]

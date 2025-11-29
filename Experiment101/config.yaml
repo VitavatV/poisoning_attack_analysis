@@ -1,0 +1,52 @@
+defaults:
+  project_name: "FL_DoubleDescent_Poison_v2"
+  output_dir: "./results"
+  device: "cpu" 
+  
+  # FL Settings
+  num_clients: 10
+  fraction_fit: 1.0     # เลือก Client ทั้งหมดในแต่ละรอบ (100%)
+  global_rounds: 100
+  local_epochs: 5
+  batch_size: 64
+  optimizer: "sgd"
+  lr: 0.01
+  momentum: 0.9
+
+  # Early Stopping & Validation
+  validation_split: 0.1 # แบ่งข้อมูล Train 10% มาเป็น Validation Set ที่ Server
+  early_stopping_patience: 10 # หยุดถ้า Val Loss ไม่ดีขึ้นใน 10 รอบ
+  min_delta: 0.001      # การเปลี่ยนแปลงขั้นต่ำที่ถือว่า "ดีขึ้น"
+
+  # Model Architecture
+  depth: 4
+  
+  # Attack Defaults
+  poison_type: "label_flip"
+  target_class: 0
+  poison_label: 1
+
+# --- Phases (เหมือนเดิม แต่รองรับ config ใหม่) ---
+phase1_landscape:
+  dataset: "cifar10"
+  combinations:
+    - width_factor: [4, 10, 20, 64]
+    - poison_ratio: [0.0, 0.3]
+    - alpha: [100.0, 0.1]
+    - data_ordering: "shuffle" 
+
+phase2_mechanism:
+  dataset: "cifar10"
+  combinations:
+    - width_factor: [10]
+    - poison_ratio: [0.3]
+    - alpha: [0.1]
+    - data_ordering: ["shuffle", "good_bad", "bad_good"]
+
+phase3_validation:
+  dataset: "cifar100"
+  combinations:
+    - width_factor: [4, 64]
+    - poison_ratio: [0.3]
+    - alpha: [0.5]
+    - data_ordering: "shuffle"
