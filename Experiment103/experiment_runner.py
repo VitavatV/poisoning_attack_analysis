@@ -177,7 +177,7 @@ def run_single_experiment(config, seed):
     test_loss, test_acc = evaluate_model(global_model, test_loader, device)
     print(f"FINAL RESULT: Test Acc: {test_acc:.4f}")
     
-    return test_acc, test_loss, best_acc, best_loss, num_params
+    return test_acc, test_loss, best_acc, best_loss, num_params, global_model
 
 def main():
     import sys
@@ -226,17 +226,18 @@ def main():
         phase_cfg['phase_name'] = phase_name
         exp_list = generate_experiments(phase_cfg, defaults)
         
-        for exp in exp_list:
+        for i_exp, exp in enumerate(exp_list):
             seed_test_accs = []
             seed_test_losses = []
             seed_val_accs = []
             seed_val_losses = []
             seed_num_params = []
+            model = None
             
             # try:
             if True:
                 for seed in seed_list:
-                    t_acc, t_loss, v_acc, v_loss, num_params = run_single_experiment(exp, seed)
+                    t_acc, t_loss, v_acc, v_loss, num_params, model = run_single_experiment(exp, seed)
                     seed_test_accs.append(t_acc)
                     seed_test_losses.append(t_loss)
                     seed_val_accs.append(v_acc)
@@ -290,6 +291,11 @@ def main():
             df = pd.DataFrame(all_results)
             df.to_csv(os.path.join(output_dir, "final_results.csv"), index=False)
             logging.info(f"Saved: {len(all_results)} results")
+
+            # 4. Save Model
+            if model is not None:
+                torch.save(model.state_dict(), os.path.join(output_dir, f"final_model_{i_exp}.pth"))
+                logging.info("Saved final model")
 
     print("All experiments completed. Results saved to final_results.csv")
     logging.info("All experiments completed")

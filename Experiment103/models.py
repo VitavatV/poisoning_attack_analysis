@@ -14,7 +14,7 @@ class ScalableCNN(nn.Module):
         
         # Base channels configuration
         in_channels = 3  # RGB Images
-        base_channels = 16 
+        base_channels = 1 
         
         current_channels = in_channels
         current_spatial_dim = 32 # Start with CIFAR-10 size
