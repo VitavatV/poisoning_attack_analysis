@@ -40,8 +40,8 @@ seeds: [42, 101, 2024]
 exp0_vary_width:
   dataset: "mnist"
   combinations:
-    - width_factor: [32, 16, 8, 4, 2, 1]  # Limited to 32 for 8GB VRAM (was 64)
-    - depth: [32, 16, 8, 4, 2, 1]  # Limited to 32 for 8GB VRAM (was 64)
+    - width_factor: [1, 2, 4, 8, 16, 32]
+    - depth: [1, 2, 4, 8, 16, 32]
     - poison_ratio: [0.0, 0.3, 0.5]
     - aggregator: ["fedavg"]
     # Note: This gives 30 combinations (was 42). Removed only extreme sizes that exceed 8GB VRAM.
