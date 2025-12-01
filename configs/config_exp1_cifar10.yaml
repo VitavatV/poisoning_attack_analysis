@@ -6,7 +6,6 @@
 defaults:
   project_name: "FL_EXP1_Landscape"
   output_dir: "./results_exp1_cifar10"
-  device: "cuda"
   load_to_memory: true
   
   # FL Settings

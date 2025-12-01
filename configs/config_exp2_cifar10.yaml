@@ -6,7 +6,6 @@
 defaults:
   project_name: "FL_EXP2_Defense"
   output_dir: "./results_exp2_cifar10"
-  device: "cuda"
   load_to_memory: true
   
   # FL Settings

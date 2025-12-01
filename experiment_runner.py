@@ -125,6 +125,18 @@ def run_single_experiment(config, seed):
     client_indices_subset = partition_data_dirichlet(train_ds_only, config['num_clients'], 
                                                      alpha=config['alpha'])
 
+    # Pre-create all client dataloaders once
+    client_dataloaders = {}
+    is_victim = config['poison_ratio'] > 0
+    for client_id in range(config['num_clients']):
+        client_config = config.copy()
+        client_dataloaders[client_id] = get_client_dataloader(
+            train_ds_only, 
+            client_indices_subset[client_id], 
+            client_config, 
+            is_attacker=is_victim
+        )
+
     # 2. Initialize Global Model
     # Determine num_classes and in_channels based on dataset
     if config['dataset'] == 'mnist':
@@ -173,18 +185,9 @@ def run_single_experiment(config, seed):
         
         # --- Local Training ---
         for client_id in selected_clients:
-            # Enable poisoning when poison_ratio > 0
-            is_victim = config['poison_ratio'] > 0
+            # Get pre-created dataloader for this client
+            train_loader = client_dataloaders[client_id]
             
-            # Setup Config เฉพาะ Client
-            client_config = config.copy()
-            
-            train_loader = get_client_dataloader(
-                train_ds_only, 
-                client_indices_subset[client_id], 
-                client_config, 
-                is_attacker=is_victim 
-            )
             local_model = copy.deepcopy(global_model)
             local_model.load_state_dict(global_weights)
             

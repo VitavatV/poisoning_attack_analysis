@@ -6,7 +6,6 @@
 defaults:
   project_name: "FL_EXP3_Mechanism"
   output_dir: "./results_exp3_cifar10"
-  device: "cuda"
   load_to_memory: true
   
   # FL Settings

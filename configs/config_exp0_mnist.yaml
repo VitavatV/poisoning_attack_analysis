@@ -5,7 +5,6 @@
 defaults:
   project_name: "FL_EXP0_Preliminary"
   output_dir: "./results_exp0_mnist"
-  device: "cuda"
   load_to_memory: true
   
   # FL Settings

@@ -6,7 +6,6 @@
 defaults:
   project_name: "FL_EXP4_Attacks"
   output_dir: "./results_exp4_cifar10"
-  device: "cuda"
   load_to_memory: true
   
   # FL Settings
