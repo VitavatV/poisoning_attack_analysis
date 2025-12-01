@@ -103,7 +103,7 @@ def run_single_experiment(config, seed):
     print(f"Poison: {config['poison_ratio']} ({config.get('data_ordering', 'shuffle')})")
     print("="*60)
     
-    device = torch.device(config['device'] if torch.cuda.is_available() else "cpu")
+    device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
     
     # 1. Prepare Data
     train_ds_full, test_ds = load_global_dataset(config['dataset'])
