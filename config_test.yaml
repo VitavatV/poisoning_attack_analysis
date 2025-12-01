@@ -1,0 +1,77 @@
+# Test Configuration for Experiment103
+# Minimal config for quick verification (1 round, 1 seed, small model)
+
+defaults:
+  project_name: "FL_Test_Run"
+  output_dir: "./results_test"
+  device: "cuda"
+  
+  # FL Settings (Minimal for testing)
+  num_clients: 3
+  fraction_fit: 1.0
+  global_rounds: 2  # Only 2 rounds for quick test
+  local_epochs: 1   # Only 1 epoch per round
+  batch_size: 32
+  optimizer: "sgd"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 5e-4
+  
+  # Model Architecture (Small)
+  depth: 2  # Shallow network for fast testing
+  
+  # Early Stopping
+  validation_split: 0.1
+  early_stopping_patience: 5
+  min_delta: 0.001
+
+  # Attack Defaults
+  poison_type: "label_flip"
+  target_class: 0
+  poison_label: 1
+  poison_ratio: 0.0  # Start with clean data
+  alpha: 100.0
+  data_ordering: "shuffle"
+  aggregator: "fedavg"
+
+# Single seed for quick test
+seeds: [42]
+
+# Test with just one simple experiment
+exp0_vary_width:
+  dataset: "mnist"
+  combinations:
+    - width_factor: [2, 4]  # Just 2 width values
+    - depth: [2]
+    - aggregator: ["fedavg"]
+
+exp1_fine_grained_width:
+  dataset: "mnist"
+  combinations:
+    - width_factor: [2, 4]
+    - poison_ratio: [0.0, 0.1]  # Clean vs small poison
+    - alpha: [0.1]
+    - aggregator: ["fedavg"]
+
+exp2_defense_comparison:
+  dataset: "mnist"
+  combinations:
+    - aggregator: ["fedavg"]
+    - width_factor: [4]
+    - poison_ratio: [0.1]
+    - alpha: [0.1]
+
+exp3_mechanism_analysis:
+  dataset: "mnist"
+  combinations:
+    - batch_size: [32]
+    - data_ordering: ["shuffle"]
+    - width_factor: [4]
+    - poison_ratio: [0.1]
+
+exp4_attack_types:
+  dataset: "mnist"
+  combinations:
+    - poison_type: ["label_flip"]
+    - width_factor: [4]
+    - poison_ratio: [0.1]

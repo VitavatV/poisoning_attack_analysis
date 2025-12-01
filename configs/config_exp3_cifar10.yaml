@@ -1,0 +1,50 @@
+# EXP 3: Mechanism Analysis - Batch Size & Data Ordering
+# Goal: Understand mechanism behind width's robustness
+# Runtime: ~30-55 hours (36 experiments)
+# Priority: MEDIUM - Explains why width helps
+
+defaults:
+  project_name: "FL_EXP3_Mechanism"
+  output_dir: "./results_exp3_cifar10"
+  device: "cuda"
+  load_to_memory: true
+  
+  # FL Settings
+  num_clients: 10
+  fraction_fit: 1.0
+  global_rounds: 150
+  local_epochs: 5
+  batch_size: 64  # Default for 8GB VRAM (exp varies this in combinations)
+  optimizer: "sgd"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 5e-4
+  
+  # Model Architecture
+  depth: 4
+  
+  # Early Stopping
+  validation_split: 0.1
+  early_stopping_patience: 20
+  min_delta: 0.0001
+
+  # Attack Defaults
+  poison_type: "label_flip"
+  target_class: 0
+  poison_label: 1
+  poison_ratio: 0.0
+  alpha: 100.0
+  data_ordering: "shuffle"
+  aggregator: "fedavg"
+
+seeds: [42, 101, 2024]
+
+# Vary batch size and data ordering to understand mechanism
+exp3_mechanism_analysis:
+  dataset: "cifar10"
+  combinations:
+    - batch_size: [8, 16, 32]
+    - data_ordering: ["shuffle", "bad_good", "good_bad"]
+    - width_factor: [4]
+    - poison_ratio: [0.0, 0.3, 0.5]
+    - alpha: [100.0, 0.1]
