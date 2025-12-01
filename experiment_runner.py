@@ -229,6 +229,7 @@ def run_single_experiment(config, seed):
     # 5. Final Test
     test_loss, test_acc = evaluate_model(global_model, test_loader, device)
     print(f"FINAL RESULT: Test Acc: {test_acc:.4f}")
+    num_params = sum(p.numel() for p in global_model.parameters())
     
     return test_acc, test_loss, best_acc, best_loss, num_params, global_model
 
