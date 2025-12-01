@@ -169,7 +169,8 @@ def get_client_dataloader(dataset, client_indices, config, is_attacker=False):
     
     # [NEW] Load to Memory Logic
     if config.get('load_to_memory', False):
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = torch.device("cpu")
         # Pre-load all data to a single Tensor
         data_list = []
         target_list = []

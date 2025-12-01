@@ -6,6 +6,8 @@ import torch
 import numpy as np
 from torch.utils.data import DataLoader, Subset, random_split
 import logging
+from multiprocessing import Pool, cpu_count
+from functools import partial
 
 # Import modules ของเรา
 from models import ScalableCNN
@@ -14,6 +16,75 @@ from utils import train_client, evaluate_model, fed_avg, fed_median, EarlyStoppi
 
 import pandas as pd
 import os
+
+
+def train_client_worker(args):
+    """Worker function for parallel client training.
+    
+    This function is designed to be executed in a separate process.
+    It creates a local model, trains it, and returns the trained weights.
+    
+    Args:
+        args: Tuple of (client_id, global_weights, config, train_ds_only, client_indices_subset, device_str)
+    
+    Returns:
+        Trained model weights (state_dict)
+    """
+    client_id, global_weights, config, train_ds_only, client_indices_subset, device_str = args
+    
+    # Import necessary modules in worker (required for multiprocessing)
+    from models import ScalableCNN
+    from data_utils import get_client_dataloader
+    from utils import train_client
+    import torch
+    
+    device = torch.device(device_str)
+    
+    # Recreate the dataloader for this client
+    is_victim = config['poison_ratio'] > 0
+    train_loader = get_client_dataloader(
+        train_ds_only,
+        client_indices_subset[client_id],
+        config,
+        is_attacker=is_victim
+    )
+    
+    # Determine model parameters based on dataset
+    if config['dataset'] == 'mnist':
+        num_classes, in_channels, img_size = 10, 1, 28
+    elif config['dataset'] == 'cifar10':
+        num_classes, in_channels, img_size = 10, 3, 32
+    elif config['dataset'] == 'cifar100':
+        num_classes, in_channels, img_size = 100, 3, 32
+    else:
+        num_classes = config.get('num_classes', 10)
+        in_channels = config.get('in_channels', 3)
+        img_size = config.get('img_size', 32)
+    
+    # Create local model
+    local_model = ScalableCNN(
+        num_classes=num_classes,
+        width_factor=config['width_factor'],
+        depth=config['depth'],
+        in_channels=in_channels,
+        img_size=img_size
+    ).to(device)
+    
+    # Load global weights
+    local_model.load_state_dict(global_weights)
+    
+    # Train the client
+    trained_weights = train_client(
+        local_model,
+        train_loader,
+        epochs=config['local_epochs'],
+        lr=config['lr'],
+        device=device,
+        momentum=config.get('momentum', 0.9),
+        weight_decay=float(config.get('weight_decay', 0))
+    )
+    
+    return trained_weights
 
 def load_config(path="config_definitive.yaml"):
     """Load and validate YAML configuration file"""
@@ -103,7 +174,9 @@ def run_single_experiment(config, seed):
     print(f"Poison: {config['poison_ratio']} ({config.get('data_ordering', 'shuffle')})")
     print("="*60)
     
-    device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
+    # device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
+    device = torch.device("cpu")  # Use CPU for multiprocessing compatibility
+    device_str = str(device)
     
     # 1. Prepare Data
     train_ds_full, test_ds = load_global_dataset(config['dataset'])
@@ -184,22 +257,28 @@ def run_single_experiment(config, seed):
         global_weights = global_model.state_dict()
         selected_clients = np.random.choice(range(config['num_clients']), m, replace=False)
         
-        # --- Local Training ---
-        for client_id in selected_clients:
-            # Get pre-created dataloader for this client
-            train_loader = client_dataloaders[client_id]
-            
-            local_model = copy.deepcopy(global_model)
-            local_model.load_state_dict(global_weights)
-            
-            # Train with weight_decay
-            w = train_client(local_model, train_loader, 
-                             epochs=config['local_epochs'], 
-                             lr=config['lr'], 
-                             device=device,
-                             momentum=config.get('momentum', 0.9),
-                             weight_decay=float(config.get('weight_decay', 0)))
-            local_weights.append(w)
+        # --- Parallel Local Training ---
+        # Determine number of parallel workers
+        num_workers = config.get('num_parallel_workers', -1)
+        if num_workers == -1:
+            num_workers = max(1, cpu_count() - 1)  # Leave one core free
+        num_workers = max(1, min(num_workers, cpu_count()))
+        
+        # Prepare arguments for each client
+        worker_args = [
+            (client_id, global_weights, config, train_ds_only, client_indices_subset, device_str)
+            for client_id in selected_clients
+        ]
+        
+        # Use multiprocessing Pool to train clients in parallel
+        # If only 1 worker or 1 client, skip multiprocessing overhead
+        if num_workers == 1 or len(selected_clients) == 1:
+            # Sequential execution
+            local_weights = [train_client_worker(args) for args in worker_args]
+        else:
+            # Parallel execution
+            with Pool(processes=min(num_workers, len(selected_clients))) as pool:
+                local_weights = pool.map(train_client_worker, worker_args)
             
         # --- Aggregation ---
         aggregator_name = config.get('aggregator', 'fedavg')
