@@ -226,11 +226,7 @@ def load_global_dataset(name="cifar10", root="./data"):
         ])
         train_data = datasets.MNIST(root=root, train=True, download=True, transform=transform_mnist)
         test_data = datasets.MNIST(root=root, train=False, download=True, transform=transform_mnist)
-    
-    # add target to dataset
-    train_data.targets = torch.tensor(train_data.targets)
-    test_data.targets = torch.tensor(test_data.targets)
-    
+        
     return train_data, test_data
 
 def apply_random_poisoning(dataset, client_indices, poison_ratio, seed=42):

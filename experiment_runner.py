@@ -126,6 +126,7 @@ def run_single_experiment(config, seed):
                                                      alpha=config['alpha'])
 
     # Pre-create all client dataloaders once
+    train_ds_only.targets = torch.tensor(train_ds_full.targets)
     client_dataloaders = {}
     is_victim = config['poison_ratio'] > 0
     for client_id in range(config['num_clients']):
