@@ -379,6 +379,7 @@ def main():
             total_experiments += 1
             
             # Check if this experiment has already been completed
+            n_experiments = len(existing_results_df)
             if is_experiment_completed(exp, phase_name, existing_results_df):
                 skipped_experiments += 1
                 logging.info(f"SKIPPING experiment (already completed): {phase_name} - "
@@ -457,7 +458,7 @@ def main():
 
             # 4. Save Model
             if model is not None:
-                torch.save(model.state_dict(), os.path.join(output_dir, f"final_model_{i_exp}.pth"))
+                torch.save(model.state_dict(), os.path.join(output_dir, f"final_model_{i_exp+n_experiments}.pth"))
                 logging.info("Saved final model")
 
     print(f"\n{'='*60}")
