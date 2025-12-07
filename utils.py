@@ -104,7 +104,8 @@ def train_client(model, train_loader, epochs, lr, device, momentum=0.9, weight_d
                 
                 # Log if gradients were very large
                 if total_norm > max_grad_norm * 2:
-                    logging.warning(f"⚠️ Large gradients detected! Norm: {total_norm:.3f} (clipped to {max_grad_norm})")
+                    # logging.warning(f"⚠️ Large gradients detected! Norm: {total_norm:.3f} (clipped to {max_grad_norm})")
+                    pass
             
             optimizer.step()
             
