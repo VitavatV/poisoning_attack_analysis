@@ -242,6 +242,7 @@ def run_single_experiment(config, seed):
     # 4. Global Training Loop
     best_acc = 0.0
     best_loss = np.inf
+    best_epoch = 0
     
     for round_idx in range(config['global_rounds']):
         local_weights = []
@@ -293,6 +294,7 @@ def run_single_experiment(config, seed):
         if val_acc > best_acc:
             best_acc = val_acc
             best_loss = val_loss
+            best_epoch = round_idx
             
         if early_stopper.early_stop:
             print(">>> Early Stopping Triggered!")
@@ -305,7 +307,7 @@ def run_single_experiment(config, seed):
     print(f"FINAL RESULT: Test Acc: {test_acc:.4f}")
     num_params = sum(p.numel() for p in global_model.parameters())
     
-    return test_acc, test_loss, best_acc, best_loss, num_params, global_model
+    return test_acc, test_loss, best_acc, best_loss, best_epoch, num_params, global_model
 
 def main():
     import sys
@@ -398,17 +400,19 @@ def main():
                 seed_val_accs = []
                 seed_val_losses = []
                 seed_num_params = []
+                seed_best_epoch = []
                 model = None
                 
                 # try:
                 if True:
                     for seed in seed_list:
-                        t_acc, t_loss, v_acc, v_loss, num_params, model = run_single_experiment(exp, seed)
+                        t_acc, t_loss, v_acc, v_loss, best_epoch, num_params, model = run_single_experiment(exp, seed)
                         seed_test_accs.append(t_acc)
                         seed_test_losses.append(t_loss)
                         seed_val_accs.append(v_acc)
                         seed_val_losses.append(v_loss)
                         seed_num_params.append(num_params)
+                        seed_best_epoch.append(best_epoch)
                 # except Exception as e:
                 #     logging.error(f"Error in experiment: {e}")
                 #     print(f"Error in experiment: {e}")
@@ -428,6 +432,7 @@ def main():
                 mean_loss_val = np.mean(seed_val_losses)
                 std_loss_val = np.std(seed_val_losses)
                 mean_num_params = np.mean(seed_num_params)
+                mean_best_epoch = np.max(seed_best_epoch)
     
                 # 2. รวบรวมข้อมูลลง Dictionary
                 result_entry = {
@@ -449,6 +454,7 @@ def main():
                     "mean_val_loss": mean_loss_val,
                     "std_val_loss": std_loss_val,
                     "num_parameters": mean_num_params,
+                    "best_epoch": mean_best_epoch,
                     "raw_seeds": str(seed_test_accs)
                 }
                 all_results.append(result_entry)
