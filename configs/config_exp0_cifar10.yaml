@@ -12,7 +12,9 @@ defaults:
   fraction_fit: 1.0
   global_rounds: 150
   local_epochs: 5
-  batch_size: 64  # Reduced for 8GB VRAM compatibility
+  batch_size: 128  # Optimized for RTX 3090 24GB VRAM
+  num_parallel_workers: 1  # Let GPU handle parallelization
+  device: "cuda"
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9
@@ -40,7 +42,7 @@ seeds: [42, 101, 2024]
 exp0_vary_width:
   dataset: "cifar10"
   combinations:
-    - width_factor: [1, 2, 4, 8, 16, 32]
-    - depth: [1, 2, 4, 8, 16, 32]
+    - width_factor: [8, 16, 32]
+    - depth: [8, 16, 32]
     - poison_ratio: [0.0, 0.3, 0.5]
     - aggregator: ["fedavg"]

@@ -13,7 +13,9 @@ defaults:
   fraction_fit: 1.0
   global_rounds: 150
   local_epochs: 5
-  batch_size: 64  # Reduced for 8GB VRAM compatibility
+  batch_size: 128  # Optimized for RTX 3090 24GB VRAM
+  num_parallel_workers: 1  # Let GPU handle parallelization  # Reduced for 8GB VRAM compatibility
+  device: "cuda"
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9

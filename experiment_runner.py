@@ -168,17 +168,11 @@ def run_single_experiment(config, seed):
     
     print(f"\n>>> RUNNING Seed: {seed}")
     print("\n" + "="*60)
-    print(f"RUNNING: {config.get('phase_name', 'Unknown')}")
-    print(f"Setting: Dataset={config['dataset']}, Alpha={config['alpha']}")
-    print(f"Model: W={config['width_factor']}, D={config['depth']}")
-    print(f"Poison: {config['poison_ratio']} ({config.get('data_ordering', 'shuffle')})")
-    print("="*60)
-    
-    # device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
-    device = torch.device("cpu")  # Use CPU for multiprocessing compatibility
+
+    device_config = config.get('device', 'cpu')
+    device = torch.device(device_config)
     device_str = str(device)
     
-    # 1. Prepare Data
     train_ds_full, test_ds = load_global_dataset(config['dataset'])
     
     # --- Validation Split for Early Stopping ---
@@ -317,158 +311,168 @@ def main():
     import sys
     
     # Support command-line config path
-    config_path = sys.argv[1] if len(sys.argv) > 1 else "config_definitive.yaml"
-    
-    config = load_config(config_path)
-    defaults = config['defaults']
-    seed_list = config.get('seeds', [42])
-    
-    # Create output directory
-    output_dir = defaults['output_dir']
-    os.makedirs(output_dir, exist_ok=True)
-    
-    # Setup logging
-    logging.basicConfig(
-        level=logging.INFO,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        handlers=[
-            logging.FileHandler(os.path.join(output_dir, 'experiment.log'), mode='a'),
-            logging.StreamHandler()
-        ]
-    )
-    logging.info(f"Starting experiments with config: {config_path}")
-    logging.info(f"Seeds: {seed_list}")
-    
-    # Load existing results to check for completed experiments
-    existing_results_df = load_existing_results(output_dir)
-    
-    # 1. เตรียม List สำหรับเก็บผลลัพธ์ทั้งหมด
-    all_results = []
-    
-    # Load existing results into all_results if they exist
-    if not existing_results_df.empty:
-        all_results = existing_results_df.to_dict('records')
-    
-    config_name_list = [
-        'exp0_vary_width',
-        'exp1_fine_grained_width',
-        'exp2_defense_comparison',
-        'exp3_mechanism_analysis',
-        'exp4_attack_types',
-        # Phase 0 New Experiments
-        'exp0_width_scaling',
-        'exp0_depth_scaling',
-        'exp0_mnist_baseline',
-        'exp0_cifar10_baseline'
-    ]
-    phases = []
-    for config_name in config_name_list:
-        if config_name not in config:
-            logging.warning(f"Config {config_name} not found in config file. Skipping.")
-            continue    
-        phases.append((config_name, config[config_name]))
-
-    total_experiments = 0
-    skipped_experiments = 0
-    
-    for phase_name, phase_cfg in phases:
-        phase_cfg['phase_name'] = phase_name
-        exp_list = generate_experiments(phase_cfg, defaults)
+    if len(sys.argv) > 1:
+        config_path_list = [sys.argv[1]]
+    else:
+        config_path_list = [
+            'configs/config_exp0_mnist.yaml',
+            'configs/config_exp1_mnist.yaml',
+            'configs/config_exp2_mnist.yaml',
+            'configs/config_exp3_mnist.yaml',
+            'configs/config_exp4_mnist.yaml',
+            ]
+    for config_path in config_path_list:
         
-        for i_exp, exp in enumerate(exp_list):
-            total_experiments += 1
+        config = load_config(config_path)
+        defaults = config['defaults']
+        seed_list = config.get('seeds', [42])
+        
+        # Create output directory
+        output_dir = defaults['output_dir']
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Setup logging
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(os.path.join(output_dir, 'experiment.log'), mode='a'),
+                logging.StreamHandler()
+            ]
+        )
+        logging.info(f"Starting experiments with config: {config_path}")
+        logging.info(f"Seeds: {seed_list}")
+        
+        # Load existing results to check for completed experiments
+        existing_results_df = load_existing_results(output_dir)
+        
+        # 1. เตรียม List สำหรับเก็บผลลัพธ์ทั้งหมด
+        all_results = []
+        
+        # Load existing results into all_results if they exist
+        if not existing_results_df.empty:
+            all_results = existing_results_df.to_dict('records')
+        
+        config_name_list = [
+            'exp0_vary_width',
+            'exp1_fine_grained_width',
+            'exp2_defense_comparison',
+            'exp3_mechanism_analysis',
+            'exp4_attack_types',
+            # Phase 0 New Experiments
+            'exp0_width_scaling',
+            'exp0_depth_scaling',
+            'exp0_mnist_baseline',
+            'exp0_cifar10_baseline'
+        ]
+        phases = []
+        for config_name in config_name_list:
+            if config_name not in config:
+                logging.warning(f"Config {config_name} not found in config file. Skipping.")
+                continue    
+            phases.append((config_name, config[config_name]))
+    
+        total_experiments = 0
+        skipped_experiments = 0
+        
+        for phase_name, phase_cfg in phases:
+            phase_cfg['phase_name'] = phase_name
+            exp_list = generate_experiments(phase_cfg, defaults)
             
-            # Check if this experiment has already been completed
-            n_experiments = len(existing_results_df)
-            if is_experiment_completed(exp, phase_name, existing_results_df):
-                skipped_experiments += 1
-                logging.info(f"SKIPPING experiment (already completed): {phase_name} - "
-                           f"Dataset={exp['dataset']}, Width={exp['width_factor']}, "
-                           f"Depth={exp['depth']}, Alpha={exp['alpha']}, "
-                           f"Poison={exp['poison_ratio']}")
-                print(f"\n>>> SKIPPING (already completed): {phase_name}")
-                print(f"    Dataset={exp['dataset']}, W={exp['width_factor']}, "
-                      f"D={exp['depth']}, Alpha={exp['alpha']}, Poison={exp['poison_ratio']}")
-                continue
-            
-            seed_test_accs = []
-            seed_test_losses = []
-            seed_val_accs = []
-            seed_val_losses = []
-            seed_num_params = []
-            model = None
-            
-            # try:
-            if True:
-                for seed in seed_list:
-                    t_acc, t_loss, v_acc, v_loss, num_params, model = run_single_experiment(exp, seed)
-                    seed_test_accs.append(t_acc)
-                    seed_test_losses.append(t_loss)
-                    seed_val_accs.append(v_acc)
-                    seed_val_losses.append(v_loss)
-                    seed_num_params.append(num_params)
-            # except Exception as e:
-            #     logging.error(f"Error in experiment: {e}")
-            #     print(f"Error in experiment: {e}")
-            #     continue
-            
-            # Calculate stats
-            if not seed_test_accs:
-                print(f"Warning: No valid results")
-                continue
+            for i_exp, exp in enumerate(exp_list):
+                total_experiments += 1
                 
-            mean_acc = np.mean(seed_test_accs)
-            std_acc = np.std(seed_test_accs)
-            mean_loss = np.mean(seed_test_losses)
-            std_loss = np.std(seed_test_losses)
-            mean_acc_val = np.mean(seed_val_accs)
-            std_acc_val = np.std(seed_val_accs)
-            mean_loss_val = np.mean(seed_val_losses)
-            std_loss_val = np.std(seed_val_losses)
-            mean_num_params = np.mean(seed_num_params)
-
-            # 2. รวบรวมข้อมูลลง Dictionary
-            result_entry = {
-                "phase": phase_name,
-                "dataset": exp['dataset'],
-                "width_factor": exp['width_factor'],
-                "depth": exp['depth'],
-                "poison_ratio": exp['poison_ratio'],
-                "alpha": exp['alpha'],
-                "data_ordering": exp.get('data_ordering', 'shuffle'),
-                "aggregator": exp.get('aggregator', 'fedavg'),
-                "batch_size": exp.get('batch_size', 64),
-                "mean_test_acc": mean_acc,
-                "std_test_acc": std_acc,
-                "mean_test_loss": mean_loss,
-                "std_test_loss": std_loss,
-                "mean_val_acc": mean_acc_val,
-                "std_val_acc": std_acc_val,
-                "mean_val_loss": mean_loss_val,
-                "std_val_loss": std_loss_val,
-                "num_parameters": mean_num_params,
-                "raw_seeds": str(seed_test_accs)
-            }
-            all_results.append(result_entry)
-            
-            # 3. Save ระหว่างทาง
-            df = pd.DataFrame(all_results)
-            df.to_csv(os.path.join(output_dir, "final_results.csv"), index=False)
-            logging.info(f"Saved: {len(all_results)} results")
-
-            # 4. Save Model
-            if model is not None:
-                torch.save(model.state_dict(), os.path.join(output_dir, f"final_model_{i_exp+n_experiments}.pth"))
-                logging.info("Saved final model")
-
-    print(f"\n{'='*60}")
-    print(f"All experiments completed. Results saved to final_results.csv")
-    print(f"Total experiments: {total_experiments}")
-    print(f"Skipped (already completed): {skipped_experiments}")
-    print(f"Newly completed: {total_experiments - skipped_experiments}")
-    print(f"{'='*60}")
-    logging.info(f"All experiments completed. Total: {total_experiments}, "
-                f"Skipped: {skipped_experiments}, New: {total_experiments - skipped_experiments}")
+                # Check if this experiment has already been completed
+                n_experiments = len(existing_results_df)
+                if is_experiment_completed(exp, phase_name, existing_results_df):
+                    skipped_experiments += 1
+                    logging.info(f"SKIPPING experiment (already completed): {phase_name} - "
+                               f"Dataset={exp['dataset']}, Width={exp['width_factor']}, "
+                               f"Depth={exp['depth']}, Alpha={exp['alpha']}, "
+                               f"Poison={exp['poison_ratio']}")
+                    print(f"\n>>> SKIPPING (already completed): {phase_name}")
+                    print(f"    Dataset={exp['dataset']}, W={exp['width_factor']}, "
+                          f"D={exp['depth']}, Alpha={exp['alpha']}, Poison={exp['poison_ratio']}")
+                    continue
+                
+                seed_test_accs = []
+                seed_test_losses = []
+                seed_val_accs = []
+                seed_val_losses = []
+                seed_num_params = []
+                model = None
+                
+                # try:
+                if True:
+                    for seed in seed_list:
+                        t_acc, t_loss, v_acc, v_loss, num_params, model = run_single_experiment(exp, seed)
+                        seed_test_accs.append(t_acc)
+                        seed_test_losses.append(t_loss)
+                        seed_val_accs.append(v_acc)
+                        seed_val_losses.append(v_loss)
+                        seed_num_params.append(num_params)
+                # except Exception as e:
+                #     logging.error(f"Error in experiment: {e}")
+                #     print(f"Error in experiment: {e}")
+                #     continue
+                
+                # Calculate stats
+                if not seed_test_accs:
+                    print(f"Warning: No valid results")
+                    continue
+                    
+                mean_acc = np.mean(seed_test_accs)
+                std_acc = np.std(seed_test_accs)
+                mean_loss = np.mean(seed_test_losses)
+                std_loss = np.std(seed_test_losses)
+                mean_acc_val = np.mean(seed_val_accs)
+                std_acc_val = np.std(seed_val_accs)
+                mean_loss_val = np.mean(seed_val_losses)
+                std_loss_val = np.std(seed_val_losses)
+                mean_num_params = np.mean(seed_num_params)
+    
+                # 2. รวบรวมข้อมูลลง Dictionary
+                result_entry = {
+                    "phase": phase_name,
+                    "dataset": exp['dataset'],
+                    "width_factor": exp['width_factor'],
+                    "depth": exp['depth'],
+                    "poison_ratio": exp['poison_ratio'],
+                    "alpha": exp['alpha'],
+                    "data_ordering": exp.get('data_ordering', 'shuffle'),
+                    "aggregator": exp.get('aggregator', 'fedavg'),
+                    "batch_size": exp.get('batch_size', 64),
+                    "mean_test_acc": mean_acc,
+                    "std_test_acc": std_acc,
+                    "mean_test_loss": mean_loss,
+                    "std_test_loss": std_loss,
+                    "mean_val_acc": mean_acc_val,
+                    "std_val_acc": std_acc_val,
+                    "mean_val_loss": mean_loss_val,
+                    "std_val_loss": std_loss_val,
+                    "num_parameters": mean_num_params,
+                    "raw_seeds": str(seed_test_accs)
+                }
+                all_results.append(result_entry)
+                
+                # 3. Save ระหว่างทาง
+                df = pd.DataFrame(all_results)
+                df.to_csv(os.path.join(output_dir, "final_results.csv"), index=False)
+                logging.info(f"Saved: {len(all_results)} results")
+    
+                # 4. Save Model
+                if model is not None:
+                    torch.save(model.state_dict(), os.path.join(output_dir, f"final_model_{i_exp+n_experiments}.pth"))
+                    logging.info("Saved final model")
+    
+        print(f"\n{'='*60}")
+        print(f"All experiments completed. Results saved to final_results.csv")
+        print(f"Total experiments: {total_experiments}")
+        print(f"Skipped (already completed): {skipped_experiments}")
+        print(f"Newly completed: {total_experiments - skipped_experiments}")
+        print(f"{'='*60}")
+        logging.info(f"All experiments completed. Total: {total_experiments}, "
+                    f"Skipped: {skipped_experiments}, New: {total_experiments - skipped_experiments}")
 
 if __name__ == "__main__":
     main()
