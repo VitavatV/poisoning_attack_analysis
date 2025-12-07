@@ -318,7 +318,6 @@ def main():
             'configs/config_exp0_mnist.yaml',
             'configs/config_exp1_mnist.yaml',
             'configs/config_exp2_mnist.yaml',
-            'configs/config_exp3_mnist.yaml',
             'configs/config_exp4_mnist.yaml',
             ]
     for config_path in config_path_list:

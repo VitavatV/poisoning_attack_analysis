@@ -15,7 +15,7 @@ defaults:
   local_epochs: 5
   batch_size: 128  # Optimized for RTX 3090 24GB VRAM
   num_parallel_workers: 1  # Let GPU handle parallelization  # Default for 8GB VRAM (exp varies this in combinations)
-  device: "cuda"
+  device: "cuda:2" # GPU 2
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9
@@ -44,8 +44,7 @@ seeds: [42, 101, 2024]
 exp3_mechanism_analysis:
   dataset: "mnist"
   combinations:
-    - batch_size: [8, 16, 32]
+    - batch_size: [128, 32, 8]
     - data_ordering: ["shuffle", "bad_good", "good_bad"]
     - width_factor: [4]
     - poison_ratio: [0.0, 0.3, 0.5]
-    - alpha: [100.0, 0.1]
