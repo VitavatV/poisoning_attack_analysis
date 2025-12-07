@@ -81,7 +81,8 @@ def train_client_worker(args):
         lr=config['lr'],
         device=device,
         momentum=config.get('momentum', 0.9),
-        weight_decay=float(config.get('weight_decay', 0))
+        weight_decay=float(config.get('weight_decay', 0)),
+        max_grad_norm=config.get('max_grad_norm', 1.0)
     )
     
     return trained_weights
