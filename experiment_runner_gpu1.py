@@ -160,6 +160,9 @@ def generate_experiments(phase_config, defaults):
     return experiments
 
 def run_single_experiment(config, seed):
+    # GPU 1 Runner - Force cuda:1 device
+    config['device'] = 'cuda:1'
+    
     # Set all seeds
     random.seed(seed)
     torch.manual_seed(seed)
@@ -167,7 +170,7 @@ def run_single_experiment(config, seed):
     np.random.seed(seed)
     torch.backends.cudnn.deterministic = True
     
-    print(f"\n>>> RUNNING Seed: {seed}")
+    print(f"\n>>> RUNNING Seed: {seed} on GPU 1 (cuda:1)")
     print("\n" + "="*60)
 
     device_config = config.get('device', 'cpu')
@@ -318,10 +321,9 @@ def main():
         config_path_list = [sys.argv[1]]
     else:
         config_path_list = [
-            'configs/config_exp0_mnist.yaml',
             'configs/config_exp1_mnist.yaml',
             'configs/config_exp2_mnist.yaml',
-            'configs/config_exp4_mnist.yaml',
+            'configs/config_exp3_mnist_B.yaml',
             ]
     for config_path in config_path_list:
         

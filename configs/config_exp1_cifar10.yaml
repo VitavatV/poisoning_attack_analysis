@@ -15,7 +15,6 @@ defaults:
   local_epochs: 5
   batch_size: 128  # Optimized for RTX 3090 24GB VRAM
   num_parallel_workers: 1  # Let GPU handle parallelization  # Reduced for 8GB VRAM compatibility
-  device: "cuda:2" # GPU 2
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9

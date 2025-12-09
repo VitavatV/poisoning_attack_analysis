@@ -1,11 +1,10 @@
-# EXP 3: Mechanism Analysis - Batch Size & Data Ordering
+# EXP 3 MNIST - Part C (GPU 2)
+# Batch size 8 experiments (9 experiments total)
 # Goal: Understand mechanism behind width's robustness
-# Runtime: ~30-55 hours (36 experiments)
-# Priority: MEDIUM - Explains why width helps
 
 defaults:
   project_name: "FL_EXP3_Mechanism"
-  output_dir: "./results_exp3_cifar10"
+  output_dir: "./results_exp3_mnist"
   load_to_memory: true
   
   # FL Settings
@@ -13,8 +12,8 @@ defaults:
   fraction_fit: 1.0
   global_rounds: 2000
   local_epochs: 5
-  batch_size: 128  # Optimized for RTX 3090 24GB VRAM
-  num_parallel_workers: 1  # Let GPU handle parallelization  # Default for 8GB VRAM (exp varies this in combinations)
+  batch_size: 8
+  num_parallel_workers: 1
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9
@@ -37,13 +36,13 @@ defaults:
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-seeds: [42, 101, 2024]
+seeds: [42]
 
-# Vary batch size and data ordering to understand mechanism
-exp3_mechanism_analysis:
-  dataset: "cifar10"
+# Batch size 8 with all data orderings and poison ratios
+exp3_mechanism_analysis_gpu2:
+  dataset: "mnist"
   combinations:
-    - batch_size: [128, 32, 8]
+    - batch_size: [8]
     - data_ordering: ["shuffle", "bad_good", "good_bad"]
     - width_factor: [4]
     - poison_ratio: [0.0, 0.3, 0.5]

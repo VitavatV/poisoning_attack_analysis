@@ -160,6 +160,9 @@ def generate_experiments(phase_config, defaults):
     return experiments
 
 def run_single_experiment(config, seed):
+    # CPU Runner - Force cpu device
+    config['device'] = 'cpu'
+    
     # Set all seeds
     random.seed(seed)
     torch.manual_seed(seed)
@@ -167,7 +170,7 @@ def run_single_experiment(config, seed):
     np.random.seed(seed)
     torch.backends.cudnn.deterministic = True
     
-    print(f"\n>>> RUNNING Seed: {seed}")
+    print(f"\n>>> RUNNING Seed: {seed} on CPU")
     print("\n" + "="*60)
 
     device_config = config.get('device', 'cpu')
@@ -318,9 +321,10 @@ def main():
         config_path_list = [sys.argv[1]]
     else:
         config_path_list = [
-            'configs/config_exp1_cifar10.yaml',
-            'configs/config_exp3_cifar10.yaml',
-            'configs/config_exp3_mnist.yaml',
+            'configs/config_exp0_mnist.yaml',
+            'configs/config_exp2_cifar10.yaml',
+            'configs/config_exp3_mnist_A.yaml',
+            'configs/config_exp4_cifar10.yaml',
             ]
     for config_path in config_path_list:
         
