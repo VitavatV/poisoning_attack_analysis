@@ -162,6 +162,8 @@ def generate_experiments(phase_config, defaults):
 def run_single_experiment(config, seed):
     # GPU 1 Runner - Force cuda:1 device
     config['device'] = 'cuda:1'
+    # Set num_parallel_workers to 6
+    config['num_parallel_workers'] = 5
     
     # Set all seeds
     random.seed(seed)
@@ -315,6 +317,15 @@ def run_single_experiment(config, seed):
 
 def main():
     import sys
+    import multiprocessing
+    
+    # CRITICAL: Set multiprocessing start method to 'spawn' for CUDA compatibility
+    # This must be called before any CUDA operations to avoid:
+    # "RuntimeError: Cannot re-initialize CUDA in forked subprocess"
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        pass  # Already set
     
     # Support command-line config path
     if len(sys.argv) > 1:
