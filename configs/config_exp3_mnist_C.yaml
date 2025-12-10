@@ -36,10 +36,10 @@ defaults:
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-seeds: [42]
+seeds: [42, 101, 2024]
 
 # Batch size 8 with all data orderings and poison ratios
-exp3_mechanism_analysis_gpu2:
+exp3_mechanism_analysis:
   dataset: "mnist"
   combinations:
     - batch_size: [8]
