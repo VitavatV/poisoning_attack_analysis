@@ -485,6 +485,13 @@ def main():
                 df = pd.DataFrame(all_results)
                 df.to_csv(os.path.join(output_dir, "final_results.csv"), index=False)
                 logging.info(f"Saved: {len(all_results)} results")
+                
+                # Load existing results to check for completed experiments
+                existing_results_df = load_existing_results(output_dir)
+                all_results = []
+                if not existing_results_df.empty:
+                    all_results = existing_results_df.to_dict('records')
+                all_results.append(result_entry)
     
                 # 4. Save Model
                 if model is not None:
