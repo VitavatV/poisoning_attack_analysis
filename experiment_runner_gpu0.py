@@ -473,6 +473,12 @@ def main():
                     "best_epoch": mean_best_epoch,
                     "raw_seeds": str(seed_test_accs)
                 }
+                
+                # Load existing results to check for completed experiments
+                existing_results_df = load_existing_results(output_dir)
+                all_results = []
+                if not existing_results_df.empty:
+                    all_results = existing_results_df.to_dict('records')
                 all_results.append(result_entry)
                 
                 # 3. Save ระหว่างทาง
