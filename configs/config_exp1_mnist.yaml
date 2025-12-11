@@ -37,13 +37,13 @@ defaults:
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-seeds: [42, 101, 2024]
+seeds: [42]
 
 # Fine-grained width sweep with poisoning comparison
 exp1_fine_grained_width:
   dataset: "mnist"
   combinations:
-    - width_factor: [4]
-    - poison_ratio: [0.0, 0.3, 0.5]
-    - alpha: [100.0, 50.0, 0.1]
+    - width_factor: [64, 128, 256, 512, 1024]
+    - poison_ratio: [0.0, 0.5]
+    - alpha: [100.0, 0.1]
     - aggregator: ["fedavg"]
