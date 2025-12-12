@@ -168,8 +168,9 @@ def get_client_dataloader(dataset, client_indices, config, is_attacker=False):
     local_dataset = FederatedDataset(dataset, final_indices, poison_map=poison_map)
     
     # [NEW] Load to Memory Logic
+    device_config = config.get('device', 'cpu')
+    
     if config.get('load_to_memory', False):
-        device_config = config.get('device', 'cpu')
         device = torch.device(device_config)
         # Pre-load all data to a single Tensor
         data_list = []

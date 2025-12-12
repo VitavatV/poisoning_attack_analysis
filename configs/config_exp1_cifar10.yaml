@@ -43,7 +43,7 @@ seeds: [42]
 exp1_fine_grained_width:
   dataset: "cifar10"
   combinations:
-    - width_factor: [64, 128, 256, 512, 1024]
+    - width_factor: [1024, 512, 256, 128, 64]
     - poison_ratio: [0.0, 0.5]
     - alpha: [100.0, 0.1]
     - aggregator: ["fedavg"]
