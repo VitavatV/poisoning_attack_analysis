@@ -163,7 +163,7 @@ def run_single_experiment(config, seed):
     # GPU 0 Runner - Force cuda:0 device
     config['device'] = 'cuda:0'
     # Set num_parallel_workers to 6
-    config['num_parallel_workers'] = 5
+    config['num_parallel_workers'] = 3
     
     # Set all seeds
     random.seed(seed)

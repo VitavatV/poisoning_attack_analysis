@@ -33,8 +33,8 @@ def analyze_interpolation_thresholds():
     """วิเคราะห์หา width และ depth ที่ใกล้เคียงจุด interpolation threshold"""
     
     # ทดสอบค่า width และ depth ต่างๆ
-    width_factors = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512]
-    depths = [1, 2, 4, 8, 16, 32, 64]
+    width_factors = [64, 96, 128, 192, 256, 384, 448, 480, 512]
+    depths = [4]
     
     print("=" * 100)
     print("INTERPOLATION THRESHOLD ANALYSIS")
@@ -115,3 +115,70 @@ def analyze_interpolation_thresholds():
 
 if __name__ == "__main__":
     analyze_interpolation_thresholds()
+
+# INTERPOLATION THRESHOLD ANALYSIS
+# ====================================================================================================
+
+# ====================================================================================================
+# Dataset: MNIST
+#   Training samples (n): 600,000
+#   Classes (k): 10
+#   Interpolation threshold (P = n × k): 6,000,000 parameters
+# ====================================================================================================
+
+# 🎯 Top 10 configurations closest to interpolation threshold:
+
+# Width    Depth    Parameters      Ratio (P/nk)    Status
+# ----------------------------------------------------------------------------------------------------
+# 448      4        5,647,946       0.9413          Under-param
+# 480      4        6,466,090       1.0777          ⭐ INTERPOLATION
+# 512      4        7,339,530       1.2233          Over-param
+# 384      4        4,177,546       0.6963          Under-param
+# 256      4        1,900,298       0.3167          Under-param
+# 192      4        1,093,450       0.1822          Under-param
+# 128      4        507,786         0.0846          Under-param
+# 96       4        297,898         0.0496          Under-param
+# 64       4        143,306         0.0239          Under-param
+
+# ✨ BEST MATCH:
+#    Width Factor: 448
+#    Depth: 4
+#    Parameters: 5,647,946
+#    Ratio: 0.9413 (1.0 = perfect interpolation)
+
+# 📊 Regime Analysis:
+#    Under-parameterized (P < 0.9nk): 6 configs
+#    Interpolation regime (0.9nk ≤ P ≤ 1.1nk): 2 configs
+#    Over-parameterized (P > 1.1nk): 1 configs
+
+# ====================================================================================================
+# Dataset: CIFAR10
+#   Training samples (n): 50,000
+#   Classes (k): 10
+#   Interpolation threshold (P = n × k): 500,000 parameters
+# ====================================================================================================
+
+# 🎯 Top 10 configurations closest to interpolation threshold:
+
+# Width    Depth    Parameters      Ratio (P/nk)    Status
+# ----------------------------------------------------------------------------------------------------
+# 128      4        529,290         1.0586          ⭐ INTERPOLATION
+# 96       4        314,026         0.6281          Under-param
+# 64       4        154,058         0.3081          Under-param
+# 192      4        1,125,706       2.2514          Over-param
+# 256      4        1,943,306       3.8866          Over-param
+# 384      4        4,242,058       8.4841          Over-param
+# 448      4        5,723,210       11.4464         Over-param
+# 480      4        6,546,730       13.0935         Over-param
+# 512      4        7,425,546       14.8511         Over-param
+
+# ✨ BEST MATCH:
+#    Width Factor: 128
+#    Depth: 4
+#    Parameters: 529,290
+#    Ratio: 1.0586 (1.0 = perfect interpolation)
+
+# 📊 Regime Analysis:
+#    Under-parameterized (P < 0.9nk): 2 configs
+#    Interpolation regime (0.9nk ≤ P ≤ 1.1nk): 1 configs
+#    Over-parameterized (P > 1.1nk): 6 configs
