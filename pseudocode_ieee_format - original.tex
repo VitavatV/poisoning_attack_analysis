@@ -1,0 +1,267 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\begin{document}
+
+\title{Federated Learning with Poisoning Attack Resistance: Algorithm Pseudocode}
+
+\maketitle
+
+\section{Algorithm Specifications}
+
+\begin{algorithm}
+\caption{Federated Learning Training with Parallel Client Updates}
+\label{alg:federated_training}
+\begin{algorithmic}[1]
+\Require Global configuration $\mathcal{C}$, dataset $\mathcal{D}$, random seed $s$
+\Ensure Trained global model $\mathcal{M}_G$, test accuracy $\alpha_{test}$, test loss $\mathcal{L}_{test}$
+\Procedure{Federated\_Training}{$\mathcal{C}, \mathcal{D}, s$}
+    \State $\text{Set\_Random\_Seeds}(s)$ \Comment{Ensure reproducibility}
+    \State $\text{device} \gets \text{``cuda:0''}$ \Comment{GPU assignment}
+    \State
+    \State \textit{// Data preparation}
+    \State $\mathcal{D}_{\text{train}}, \mathcal{D}_{\text{test}} \gets \text{Load\_Global\_Dataset}(\mathcal{C}.\text{dataset})$
+    \State $\text{val\_size} \gets \lfloor |\mathcal{D}_{\text{train}}| \times \mathcal{C}.\text{validation\_split} \rfloor$
+    \State $\mathcal{D}_{\text{train}}, \mathcal{D}_{\text{val}} \gets \text{Random\_Split}(\mathcal{D}_{\text{train}}, \text{val\_size})$
+    \State
+    \State \textit{// Client data partitioning with Dirichlet distribution}
+    \State $\text{indices}_{\text{clients}} \gets \text{Partition\_Dirichlet}(\mathcal{D}_{\text{train}}, \mathcal{C}.\text{num\_clients}, \mathcal{C}.\alpha)$
+    \State
+    \State \textit{// Initialize global model}
+    \State $\mathcal{M}_G \gets \text{ScalableCNN}(\mathcal{C}.\text{width\_factor}, \mathcal{C}.\text{depth}, \mathcal{C}.\text{num\_classes})$
+    \State $w_{\text{global}} \gets \mathcal{M}_G.\text{state\_dict}()$
+    \State
+    \State \textit{// Initialize early stopping}
+    \State $\text{early\_stopper} \gets \text{EarlyStopping}(\mathcal{C}.\text{patience}, \mathcal{C}.\text{min\_delta})$
+    \State $\text{best\_acc} \gets 0, \text{best\_loss} \gets \infty, \text{best\_epoch} \gets 0$
+    \State
+    \State \textit{// Global training rounds}
+    \For{$r = 1$ \textbf{to} $\mathcal{C}.\text{global\_rounds}$}
+        \State \textit{// Client selection}
+        \State $m \gets \max(\lfloor \mathcal{C}.\text{fraction\_fit} \times \mathcal{C}.\text{num\_clients} \rfloor, 1)$
+        \State $S \gets \text{Random\_Sample}(m \text{ clients from } \{1,\ldots,\mathcal{C}.\text{num\_clients}\})$
+        \State
+        \State \textit{// Parallel local training}
+        \State $\text{local\_weights} \gets []$
+        \State $\text{num\_workers} \gets \mathcal{C}.\text{num\_parallel\_workers}$
+        \State
+        \If{$\text{num\_workers} = 1$ \textbf{or} $|S| = 1$}
+            \State \textit{// Sequential execution}
+            \For{\textbf{each} client $i \in S$}
+                \State $w_i \gets \text{Train\_Client\_Worker}(i, w_{\text{global}}, \mathcal{C}, \mathcal{D}_{\text{train}}, \text{indices}_{\text{clients}})$
+                \State $\text{local\_weights}.\text{append}(w_i)$
+            \EndFor
+        \Else
+            \State \textit{// Parallel execution with multiprocessing}
+            \State $\text{pool} \gets \text{ProcessPool}(\min(\text{num\_workers}, |S|))$
+            \State $\text{local\_weights} \gets \text{pool}.\text{map}(\text{Train\_Client\_Worker}, S)$
+            \State $\text{pool}.\text{close}()$
+        \EndIf
+        \State
+        \State \textit{// Aggregation}
+        \If{$\mathcal{C}.\text{aggregator} = \text{``median''}$}
+            \State $w_{\text{global}} \gets \text{Fed\_Median}(\text{local\_weights})$
+        \Else
+            \State $w_{\text{global}} \gets \text{Fed\_Avg}(\text{local\_weights})$
+        \EndIf
+        \State $\mathcal{M}_G.\text{load\_state\_dict}(w_{\text{global}})$
+        \State
+        \State \textit{// Validation and early stopping}
+        \State $\mathcal{L}_{\text{val}}, \text{acc}_{\text{val}} \gets \text{Evaluate\_Model}(\mathcal{M}_G, \mathcal{D}_{\text{val}}, \text{device})$
+        \State \textbf{print} Round $r$/$\mathcal{C}.\text{global\_rounds}$ | Val Loss: $\mathcal{L}_{\text{val}}$ | Val Acc: $\text{acc}_{\text{val}}$
+        \State
+        \State $\text{early\_stopper}(\mathcal{L}_{\text{val}}, w_{\text{global}})$
+        \State
+        \If{$\text{acc}_{\text{val}} > \text{best\_acc}$}
+            \State $\text{best\_acc} \gets \text{acc}_{\text{val}}$
+            \State $\text{best\_loss} \gets \mathcal{L}_{\text{val}}$
+            \State $\text{best\_epoch} \gets r$
+        \EndIf
+        \State
+        \If{$\text{early\_stopper}.\text{early\_stop} = \text{True}$}
+            \State \textbf{print} ``>>> Early Stopping Triggered!''
+            \State $w_{\text{global}} \gets \text{early\_stopper}.\text{get\_best\_weights}()$
+            \State $\mathcal{M}_G.\text{load\_state\_dict}(w_{\text{global}})$
+            \State \textbf{break}
+        \EndIf
+    \EndFor
+    \State
+    \State \textit{// Final evaluation}
+    \State $\mathcal{L}_{\text{test}}, \alpha_{\text{test}} \gets \text{Evaluate\_Model}(\mathcal{M}_G, \mathcal{D}_{\text{test}}, \text{device})$
+    \State $\text{num\_params} \gets |\Theta(\mathcal{M}_G)|$
+    \State
+    \State \Return $\alpha_{\text{test}}, \mathcal{L}_{\text{test}}, \text{best\_acc}, \text{best\_loss}, \text{best\_epoch}, \text{num\_params}, \mathcal{M}_G$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Client Training Worker (Parallel Process)}
+\label{alg:client_worker}
+\begin{algorithmic}[1]
+\Require Client ID $i$, global weights $w_{\text{global}}$, config $\mathcal{C}$, training dataset $\mathcal{D}_{\text{train}}$, client indices mapping $\text{indices}_{\text{clients}}$
+\Ensure Updated local weights $w_i$
+\Procedure{Train\_Client\_Worker}{$i, w_{\text{global}}, \mathcal{C}, \mathcal{D}_{\text{train}}, \text{indices}_{\text{clients}}$}
+    \State $\text{device} \gets \text{torch}.\text{device}(\mathcal{C}.\text{device})$
+    \State
+    \State \textit{// Create client dataloader}
+    \State $\text{is\_victim} \gets (\mathcal{C}.\text{poison\_ratio} > 0)$
+    \State $\text{loader}_i \gets \text{Get\_Client\_DataLoader}(\mathcal{D}_{\text{train}}, \text{indices}_{\text{clients}}[i], \mathcal{C}, \text{is\_victim})$
+    \State
+    \State \textit{// Determine model parameters based on dataset}
+    \If{$\mathcal{C}.\text{dataset} = \text{``mnist''}$}
+        \State $\text{num\_classes}, \text{in\_channels}, \text{img\_size} \gets 10, 1, 28$
+    \ElsIf{$\mathcal{C}.\text{dataset} = \text{``cifar10''}$}
+        \State $\text{num\_classes}, \text{in\_channels}, \text{img\_size} \gets 10, 3, 32$
+    \ElsIf{$\mathcal{C}.\text{dataset} = \text{``cifar100''}$}
+        \State $\text{num\_classes}, \text{in\_channels}, \text{img\_size} \gets 100, 3, 32$
+    \EndIf
+    \State
+    \State \textit{// Create and initialize local model}
+    \State $\mathcal{M}_{\text{local}} \gets \text{ScalableCNN}(\text{num\_classes}, \mathcal{C}.\text{width\_factor}, \mathcal{C}.\text{depth}, \text{in\_channels}, \text{img\_size})$
+    \State $\mathcal{M}_{\text{local}}.\text{to}(\text{device})$
+    \State $\mathcal{M}_{\text{local}}.\text{load\_state\_dict}(w_{\text{global}})$
+    \State
+    \State \textit{// Train local model}
+    \State $w_i \gets \text{Train\_Client}(\mathcal{M}_{\text{local}}, \text{loader}_i, \mathcal{C}.\text{local\_epochs}, \mathcal{C}.\text{lr}, \text{device}, \mathcal{C}.\text{momentum}, \mathcal{C}.\text{weight\_decay}, \mathcal{C}.\text{max\_grad\_norm})$
+    \State
+    \State \Return $w_i$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Experiment Configuration Generator}
+\label{alg:generate_experiments}
+\begin{algorithmic}[1]
+\Require Phase configuration $\mathcal{P}$, default parameters $\mathcal{D}$
+\Ensure List of experiment configurations $\mathcal{E}$
+\Procedure{Generate\_Experiments}{$\mathcal{P}, \mathcal{D}$}
+    \State $\text{vary\_params} \gets \{\}$
+    \For{\textbf{each} item \textbf{in} $\mathcal{P}.\text{combinations}$}
+        \State $\text{vary\_params}.\text{update}(\text{item})$
+    \EndFor
+    \State
+    \State $\text{keys} \gets \text{vary\_params}.\text{keys}()$
+    \State $\text{values} \gets \text{vary\_params}.\text{values}()$
+    \State
+    \State $\mathcal{E} \gets []$
+    \For{\textbf{each} combination \textbf{in} $\text{Cartesian\_Product}(\text{values})$}
+        \State $\text{exp} \gets \mathcal{D}.\text{copy}()$ \Comment{Start with defaults}
+        \State $\text{exp}.\text{dataset} \gets \mathcal{P}.\text{dataset}$
+        \State $\text{exp}.\text{phase\_name} \gets \mathcal{P}.\text{phase\_name}$
+        \State
+        \For{$(k, v)$ \textbf{in} $\text{zip}(\text{keys}, \text{combination})$}
+            \State $\text{exp}[k] \gets v$ \Comment{Override with grid search values}
+        \EndFor
+        \State
+        \State $\mathcal{E}.\text{append}(\text{exp})$
+    \EndFor
+    \State
+    \State \Return $\mathcal{E}$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Experiment Completion Check}
+\label{alg:is_completed}
+\begin{algorithmic}[1]
+\Require Experiment configuration $\text{exp}$, phase name $p$, existing results DataFrame $\mathcal{R}$
+\Ensure Boolean indicating if experiment already completed
+\Procedure{Is\_Experiment\_Completed}{$\text{exp}, p, \mathcal{R}$}
+    \If{$\mathcal{R}$ is empty}
+        \State \Return False
+    \EndIf
+    \State
+    \State \textit{// Define unique experiment identifiers}
+    \State $\text{key\_params} \gets \{$
+    \State \hspace{1cm} ``phase'': $p$,
+    \State \hspace{1cm} ``dataset'': $\text{exp}.\text{dataset}$,
+    \State \hspace{1cm} ``width\_factor'': $\text{exp}.\text{width\_factor}$,
+    \State \hspace{1cm} ``depth'': $\text{exp}.\text{depth}$,
+    \State \hspace{1cm} ``poison\_ratio'': $\text{exp}.\text{poison\_ratio}$,
+    \State \hspace{1cm} ``alpha'': $\text{exp}.\alpha$,
+    \State \hspace{1cm} ``data\_ordering'': $\text{exp}.\text{data\_ordering}$,
+    \State \hspace{1cm} ``aggregator'': $\text{exp}.\text{aggregator}$,
+    \State \hspace{1cm} ``batch\_size'': $\text{exp}.\text{batch\_size}$
+    \State $\}$
+    \State
+    \State \textit{// Check for matching row in results}
+    \State $\text{mask} \gets [\text{True}] \times |\mathcal{R}|$
+    \For{\textbf{each} $(\text{param}, \text{value})$ \textbf{in} $\text{key\_params}$}
+        \If{param $\in \mathcal{R}.\text{columns}$}
+            \State $\text{mask} \gets \text{mask} \land (\mathcal{R}[\text{param}] = \text{value})$
+        \EndIf
+    \EndFor
+    \State
+    \State \Return $\text{any}(\text{mask})$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{Key Mathematical Formulations}
+
+\subsection{Aggregation Methods}
+
+\textbf{FedAvg (Federated Averaging):}
+\begin{equation}
+w_{t+1} = \frac{1}{|S|} \sum_{i \in S} w_i^{(t)}
+\end{equation}
+
+\textbf{FedMedian (Coordinate-wise Median):}
+\begin{equation}
+w_{t+1}[j] = \text{median}\{w_i^{(t)}[j] : i \in S\}, \quad \forall j
+\end{equation}
+
+\subsection{Dirichlet Data Partitioning}
+
+For non-IID data distribution across clients:
+\begin{equation}
+p_i \sim \text{Dir}(\alpha \cdot \mathbf{1}_K)
+\end{equation}
+where $\alpha$ controls heterogeneity ($\alpha \to 0$: highly non-IID, $\alpha \to \infty$: IID)
+
+\subsection{Early Stopping Criterion}
+
+Stop training when validation loss $\mathcal{L}_{\text{val}}$ does not improve by at least $\delta_{\min}$ for $p$ consecutive rounds:
+\begin{equation}
+\text{Stop if: } \min_{r \in [t-p, t]} \mathcal{L}_{\text{val}}^{(r)} - \mathcal{L}_{\text{val}}^{(t)} < \delta_{\min}
+\end{equation}
+
+\subsection{Model Capacity}
+
+Model parameters determined by:
+\begin{equation}
+|\Theta| = f(\text{width\_factor}, \text{depth}, \text{num\_classes})
+\end{equation}
+where ScalableCNN architecture scales both width (channels per layer) and depth (number of layers).
+
+\section{Computational Complexity}
+
+\textbf{Per Round Complexity:} $O(m \cdot E \cdot B \cdot |\Theta|)$
+\begin{itemize}
+    \item $m$: number of selected clients
+    \item $E$: local epochs
+    \item $B$: batch size
+    \item $|\Theta|$: model parameters
+\end{itemize}
+
+\textbf{Parallelization Speedup:} Linear up to $\min(\text{num\_workers}, m)$ with multiprocessing
+
+\textbf{Memory Requirement:} $O(|\Theta| \cdot \text{num\_workers})$ for parallel client training
+
+\section{Implementation Notes}
+
+\begin{enumerate}
+    \item \textbf{Multiprocessing Strategy:} Uses \texttt{spawn} method for CUDA compatibility to avoid ``Cannot re-initialize CUDA in forked subprocess'' errors
+    \item \textbf{Device Management:} Hardcoded to \texttt{cuda:0} for GPU 0 assignment in multi-GPU setups
+    \item \textbf{Reproducibility:} Comprehensive seed setting for Python random, NumPy, and PyTorch (including CUDA and cuDNN)
+    \item \textbf{Gradient Clipping:} Applied with \texttt{max\_grad\_norm} to prevent exploding gradients during training
+    \item \textbf{Result Persistence:} Incremental saving to CSV after each experiment to prevent data loss
+\end{enumerate}
+
+\end{document}

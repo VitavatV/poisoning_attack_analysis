@@ -1,0 +1,11 @@
+Experiment,Dataset,Goal,Runtime,Priority,Seeds,Total_Runs
+Exp0,MNIST,Width vs Depth Grid,60-100h,-,"[42, 101, 2024]",144
+Exp0,CIFAR10,Width vs Depth Grid,-,-,"[42, 101, 2024]",144
+Exp1,MNIST,Fine-Grained Width Analysis,-,HIGH,[42],20
+Exp1,CIFAR10,Fine-Grained Width Analysis,40-80h,HIGH,[42],20
+Exp2,MNIST,Defense Benchmark,12-20h,HIGH,"[42, 101, 2024]",18
+Exp2,CIFAR10,Defense Benchmark,-,HIGH,"[42, 101, 2024]",18
+Exp3,MNIST,Mechanism Analysis,30-55h,MEDIUM,"[42, 101, 2024]",81
+Exp3,CIFAR10,Mechanism Analysis,-,MEDIUM,"[42, 101, 2024]",81
+Exp4,MNIST,Attack Type Generalization,-,MEDIUM,"[42, 101, 2024]",18
+Exp4,CIFAR10,Attack Type Generalization,12-20h,MEDIUM,"[42, 101, 2024]",18

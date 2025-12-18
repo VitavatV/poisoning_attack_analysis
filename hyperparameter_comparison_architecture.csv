@@ -1,0 +1,11 @@
+Experiment,Dataset,Width_Factor_Values,Depth_Values,Architecture_Details
+Exp0,MNIST,"[1, 4, 16, 64]","[1, 4, 16, 64]",Full grid search (4×4 = 16 combinations)
+Exp0,CIFAR10,"[1, 4, 16, 64]","[1, 4, 16, 64]",Full grid search (4×4 = 16 combinations)
+Exp1,MNIST,"[1024, 512, 256, 128, 64]",[4],Fine-grained width sweep (5 points)
+Exp1,CIFAR10,"[1024, 512, 256, 128, 64]",[4],Fine-grained width sweep (5 points)
+Exp2,MNIST,[4],[4],Fixed at critical width
+Exp2,CIFAR10,[4],[4],Fixed at critical width
+Exp3,MNIST,[4],[4],Fixed at critical width
+Exp3,CIFAR10,[4],[4],Fixed at critical width
+Exp4,MNIST,[4],[4],Fixed at critical width
+Exp4,CIFAR10,[4],[4],Fixed at critical width

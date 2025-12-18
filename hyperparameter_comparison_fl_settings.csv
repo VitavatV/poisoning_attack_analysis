@@ -1,0 +1,9 @@
+Parameter,Exp0_MNIST,Exp0_CIFAR10,Exp1_MNIST,Exp1_CIFAR10,Exp2_MNIST,Exp2_CIFAR10,Exp3_MNIST,Exp3_CIFAR10,Exp4_MNIST,Exp4_CIFAR10
+num_clients,10,10,10,10,10,10,10,10,10,10
+fraction_fit,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0
+global_rounds,2000,2000,2000,2000,2000,2000,2000,2000,2000,2000
+local_epochs,5,5,5,5,5,5,5,5,5,5
+batch_size_default,128,128,128,128,128,128,128,128,128,128
+batch_size_varied,-,-,-,-,-,-,"[128, 32, 8]","[128, 32, 8]",-,-
+num_parallel_workers,1,1,1,1,1,1,1,1,1,1
+validation_split,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1,0.1

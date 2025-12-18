@@ -1,0 +1,11 @@
+Experiment,Dataset,Width_Factor,Depth,Poison_Ratio,Poison_Type,Alpha,Data_Ordering,Aggregator,Batch_Size,Num_Clients,Global_Rounds,Local_Epochs,LR,Momentum,Weight_Decay,Seeds,Combinations
+Exp0,MNIST,"[1,4,16,64]","[1,4,16,64]","[0.0,0.3,0.5]",label_flip,[100.0],shuffle,fedavg,[128],10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",48
+Exp0,CIFAR10,"[1,4,16,64]","[1,4,16,64]","[0.0,0.3,0.5]",label_flip,[100.0],shuffle,fedavg,[128],10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",48
+Exp1,MNIST,"[1024,512,256,128,64]",[4],"[0.0,0.5]",label_flip,"[100.0,0.1]",shuffle,fedavg,[128],10,2000,5,0.01,0.9,5e-4,[42],20
+Exp1,CIFAR10,"[1024,512,256,128,64]",[4],"[0.0,0.5]",label_flip,"[100.0,0.1]",shuffle,fedavg,[128],10,2000,5,0.01,0.9,5e-4,[42],20
+Exp2,MNIST,[4],[4],"[0.0,0.3,0.5]",label_flip,[100.0],shuffle,"[fedavg,median]",[128],10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",6
+Exp2,CIFAR10,[4],[4],"[0.0,0.3,0.5]",label_flip,[100.0],shuffle,"[fedavg,median]",[128],10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",6
+Exp3,MNIST,[4],[4],"[0.0,0.3,0.5]",label_flip,[100.0],"[shuffle,bad_good,good_bad]",fedavg,"[128,32,8]",10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",27
+Exp3,CIFAR10,[4],[4],"[0.0,0.3,0.5]",label_flip,[100.0],"[shuffle,bad_good,good_bad]",fedavg,"[128,32,8]",10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",27
+Exp4,MNIST,[4],[4],"[0.0,0.3,0.5]","[label_flip,random_noise]",[100.0],shuffle,fedavg,[128],10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",6
+Exp4,CIFAR10,[4],[4],"[0.0,0.3,0.5]","[label_flip,random_noise]",[100.0],shuffle,fedavg,[128],10,2000,5,0.01,0.9,5e-4,"[42,101,2024]",6

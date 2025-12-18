@@ -1,0 +1,180 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\begin{document}
+
+\title{Federated Learning with Poisoning Attack Resistance}
+
+\maketitle
+
+\section{Main Algorithm}
+
+\begin{algorithm}
+\caption{Federated Learning Training}
+\label{alg:federated_training}
+\begin{algorithmic}[1]
+\Require Config $\mathcal{C}$, dataset name $\mathcal{D}$, seed $s$
+\Ensure Test accuracy $\alpha_{test}$, test loss $\mathcal{L}_{test}$, trained model $\mathcal{M}_G$
+\Procedure{FederatedTraining}{$\mathcal{C}, \mathcal{D}, s$}
+    \State $\mathcal{D}_{train}, \mathcal{D}_{val}, \mathcal{D}_{test}, \mathbf{I} \gets \textsc{Initialize}(\mathcal{C}, \mathcal{D}, s)$
+    \State $\mathcal{M}_G, w_g \gets \textsc{CreateModel}(\mathcal{C})$
+    \State $\mathcal{ES} \gets \textsc{EarlyStopping}(\mathcal{C}.patience, \mathcal{C}.min\_delta)$
+    \State $acc^*, \mathcal{L}^*, r^* \gets 0, \infty, 0$
+    \State
+    \For{$r = 1$ \textbf{to} $\mathcal{C}.R$} \Comment{$R$ = global rounds}
+        \State $S \gets \textsc{SelectClients}(\mathcal{C}.N_c, \mathcal{C}.f)$ \Comment{$N_c$ clients, fraction $f$}
+        \State $W \gets \textsc{ParallelTrain}(S, w_g, \mathcal{C}, \mathcal{D}_{train}, \mathbf{I})$
+        \State $w_g \gets \textsc{Aggregate}(W, \mathcal{C}.agg)$ \Comment{FedAvg or FedMedian}
+        \State $\mathcal{M}_G.\textsc{Load}(w_g)$
+        \State
+        \State $\mathcal{L}_{val}, acc_{val} \gets \textsc{Evaluate}(\mathcal{M}_G, \mathcal{D}_{val})$
+        \If{$acc_{val} > acc^*$}
+            \State $acc^*, \mathcal{L}^*, r^* \gets acc_{val}, \mathcal{L}_{val}, r$
+        \EndIf
+        \State
+        \If{$\mathcal{ES}(\mathcal{L}_{val}, w_g) = \text{True}$}
+            \State $w_g \gets \mathcal{ES}.\textsc{GetBest}()$; $\mathcal{M}_G.\textsc{Load}(w_g)$; \textbf{break}
+        \EndIf
+    \EndFor
+    \State
+    \State $\mathcal{L}_{test}, \alpha_{test} \gets \textsc{Evaluate}(\mathcal{M}_G, \mathcal{D}_{test})$
+    \State \Return $\alpha_{test}, \mathcal{L}_{test}, acc^*, \mathcal{L}^*, r^*, |\Theta(\mathcal{M}_G)|$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{Helper Procedures}
+
+\begin{algorithm}
+\caption{Initialization and Client Training}
+\label{alg:helpers}
+\begin{algorithmic}[1]
+\Procedure{Initialize}{$\mathcal{C}, \mathcal{D}, s$}
+    \State $\textsc{SetSeeds}(s)$; device $\gets$ ``cuda:0''
+    \State $\mathcal{D}_{tr}, \mathcal{D}_{te} \gets \textsc{LoadDataset}(\mathcal{D})$
+    \State $\mathcal{D}_{tr}, \mathcal{D}_{val} \gets \textsc{Split}(\mathcal{D}_{tr}, \mathcal{C}.val\_split)$
+    \State $\mathbf{I} \gets \textsc{DirichletPartition}(\mathcal{D}_{tr}, \mathcal{C}.N_c, \mathcal{C}.\alpha)$
+    \State \Return $\mathcal{D}_{tr}, \mathcal{D}_{val}, \mathcal{D}_{te}, \mathbf{I}$
+\EndProcedure
+\State
+\Procedure{SelectClients}{$N_c, f$}
+    \State $m \gets \max(\lfloor f \cdot N_c \rfloor, 1)$
+    \State \Return $\textsc{RandomSample}(\{1,\ldots,N_c\}, m)$
+\EndProcedure
+\State
+\Procedure{ParallelTrain}{$S, w_g, \mathcal{C}, \mathcal{D}_{tr}, \mathbf{I}$}
+    \If{$\mathcal{C}.workers = 1$ \textbf{or} $|S| = 1$}
+        \State $W \gets [\textsc{TrainClient}(i, w_g, \mathcal{C}, \mathcal{D}_{tr}, \mathbf{I}) \text{ for } i \in S]$
+    \Else
+        \State $W \gets \textsc{ProcessPool}(\mathcal{C}.workers).\textsc{Map}(\textsc{TrainClient}, S)$
+    \EndIf
+    \State \Return $W$
+\EndProcedure
+\State
+\Procedure{TrainClient}{$i, w_g, \mathcal{C}, \mathcal{D}_{tr}, \mathbf{I}$}
+    \State $L_i \gets \textsc{GetDataLoader}(\mathcal{D}_{tr}, \mathbf{I}[i], \mathcal{C})$
+    \State $\mathcal{M} \gets \textsc{CreateModel}(\mathcal{C})$; $\mathcal{M}.\textsc{Load}(w_g)$
+    \State $w_i \gets \textsc{LocalTrain}(\mathcal{M}, L_i, \mathcal{C}.E, \mathcal{C}.lr)$ \Comment{$E$ = local epochs}
+    \State \Return $w_i$
+\EndProcedure
+\State
+\Procedure{Aggregate}{$W, agg$}
+    \If{$agg = \text{``median''}$}
+        \State \Return $\textsc{FedMedian}(W)$ \Comment{Coordinate-wise median}
+    \Else
+        \State \Return $\frac{1}{|W|}\sum_{w \in W} w$ \Comment{FedAvg}
+    \EndIf
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{Experiment Management}
+
+\begin{algorithm}
+\caption{Experiment Configuration}
+\label{alg:experiments}
+\begin{algorithmic}[1]
+\Procedure{GenerateExperiments}{$\mathcal{P}, \mathcal{D}_{def}$}
+    \State $\mathcal{V} \gets \bigcup_{item \in \mathcal{P}.combinations} item$ \Comment{Merge all vary params}
+    \State $\mathcal{E} \gets []$
+    \For{$c \in \textsc{CartesianProduct}(\mathcal{V}.values)$}
+        \State $exp \gets \mathcal{D}_{def} \cup \mathcal{P} \cup \textsc{Zip}(\mathcal{V}.keys, c)$
+        \State $\mathcal{E}.\textsc{Append}(exp)$
+    \EndFor
+    \State \Return $\mathcal{E}$
+\EndProcedure
+\State
+\Procedure{IsCompleted}{$exp, p, \mathcal{R}$}
+    \If{$\mathcal{R} = \emptyset$} \Return False \EndIf
+    \State $K \gets \{phase, dataset, width\_factor, depth, poison\_ratio, \alpha, ...\}$
+    \State $M \gets \bigwedge_{k \in K} (\mathcal{R}[k] = exp[k])$ \Comment{Match all keys}
+    \State \Return $\textsc{Any}(M)$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{Key Mathematical Formulations}
+
+\subsection{Aggregation Methods}
+
+\textbf{FedAvg (Federated Averaging):}
+\begin{equation}
+w_{t+1} = \frac{1}{|S|} \sum_{i \in S} w_i^{(t)}
+\end{equation}
+
+\textbf{FedMedian (Coordinate-wise Median):}
+\begin{equation}
+w_{t+1}[j] = \text{median}\{w_i^{(t)}[j] : i \in S\}, \quad \forall j
+\end{equation}
+
+\subsection{Dirichlet Data Partitioning}
+
+For non-IID data distribution across clients:
+\begin{equation}
+p_i \sim \text{Dir}(\alpha \cdot \mathbf{1}_K)
+\end{equation}
+where $\alpha$ controls heterogeneity ($\alpha \to 0$: highly non-IID, $\alpha \to \infty$: IID)
+
+\subsection{Early Stopping Criterion}
+
+Stop training when validation loss $\mathcal{L}_{\text{val}}$ does not improve by at least $\delta_{\min}$ for $p$ consecutive rounds:
+\begin{equation}
+\text{Stop if: } \min_{r \in [t-p, t]} \mathcal{L}_{\text{val}}^{(r)} - \mathcal{L}_{\text{val}}^{(t)} < \delta_{\min}
+\end{equation}
+
+\subsection{Model Capacity}
+
+Model parameters determined by:
+\begin{equation}
+|\Theta| = f(\text{width\_factor}, \text{depth}, \text{num\_classes})
+\end{equation}
+where ScalableCNN architecture scales both width (channels per layer) and depth (number of layers).
+
+\section{Computational Complexity}
+
+\textbf{Per Round Complexity:} $O(m \cdot E \cdot B \cdot |\Theta|)$
+\begin{itemize}
+    \item $m$: number of selected clients
+    \item $E$: local epochs
+    \item $B$: batch size
+    \item $|\Theta|$: model parameters
+\end{itemize}
+
+\textbf{Parallelization Speedup:} Linear up to $\min(\text{num\_workers}, m)$ with multiprocessing
+
+\textbf{Memory Requirement:} $O(|\Theta| \cdot \text{num\_workers})$ for parallel client training
+
+\section{Implementation Notes}
+
+\begin{enumerate}
+    \item \textbf{Multiprocessing Strategy:} Uses \texttt{spawn} method for CUDA compatibility to avoid ``Cannot re-initialize CUDA in forked subprocess'' errors
+    \item \textbf{Device Management:} Hardcoded to \texttt{cuda:0} for GPU 0 assignment in multi-GPU setups
+    \item \textbf{Reproducibility:} Comprehensive seed setting for Python random, NumPy, and PyTorch (including CUDA and cuDNN)
+    \item \textbf{Gradient Clipping:} Applied with \texttt{max\_grad\_norm} to prevent exploding gradients during training
+    \item \textbf{Result Persistence:} Incremental saving to CSV after each experiment to prevent data loss
+\end{enumerate}
+
+\end{document}

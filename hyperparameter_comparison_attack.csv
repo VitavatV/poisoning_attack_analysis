@@ -1,0 +1,11 @@
+Experiment,Dataset,Poison_Type,Poison_Ratio,Alpha_Values,Data_Ordering,Aggregator,Target_Class,Poison_Label
+Exp0,MNIST,label_flip,"[0.0, 0.3, 0.5]",[100.0],shuffle,fedavg,0,1
+Exp0,CIFAR10,label_flip,"[0.0, 0.3, 0.5]",[100.0],shuffle,fedavg,0,1
+Exp1,MNIST,label_flip,"[0.0, 0.5]","[100.0, 0.1]",shuffle,fedavg,0,1
+Exp1,CIFAR10,label_flip,"[0.0, 0.5]","[100.0, 0.1]",shuffle,fedavg,0,1
+Exp2,MNIST,label_flip,"[0.0, 0.3, 0.5]",[100.0],shuffle,"[fedavg, median]",0,1
+Exp2,CIFAR10,label_flip,"[0.0, 0.3, 0.5]",[100.0],shuffle,"[fedavg, median]",0,1
+Exp3,MNIST,label_flip,"[0.0, 0.3, 0.5]",[100.0],"[shuffle, bad_good, good_bad]",fedavg,0,1
+Exp3,CIFAR10,label_flip,"[0.0, 0.3, 0.5]",[100.0],"[shuffle, bad_good, good_bad]",fedavg,0,1
+Exp4,MNIST,"[label_flip, random_noise]","[0.0, 0.3, 0.5]",[100.0],shuffle,fedavg,0,1
+Exp4,CIFAR10,"[label_flip, random_noise]","[0.0, 0.3, 0.5]",[100.0],shuffle,fedavg,0,1
