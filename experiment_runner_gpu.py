@@ -18,7 +18,7 @@ from multiprocessing import Pool, cpu_count
 import sys
 
 # Import modules
-from models import ScalableCNN
+from models import ScalableCNN, LogisticRegression
 from data_utils import load_global_dataset, partition_data_dirichlet, get_client_dataloader
 from utils import train_client, evaluate_model, fed_avg, fed_median, EarlyStopping
 
@@ -28,7 +28,8 @@ import os
 
 def get_available_gpu() -> int:
     """
-    Find an available GPU with sufficient free memory.
+    Find an available GPU with exclusive lock (one worker per GPU).
+    Uses PID lock files to prevent multiple workers on same GPU.
     
     Returns:
         GPU ID (int) if available, None otherwise
@@ -40,9 +41,34 @@ def get_available_gpu() -> int:
     gpu_count = torch.cuda.device_count()
     print(f"Found {gpu_count} GPUs")
     
+    # Create locks directory
+    lock_dir = os.path.join(os.getcwd(), '.gpu_locks')
+    os.makedirs(lock_dir, exist_ok=True)
+    
+    pid = os.getpid()
+    
+    # Clean up stale locks (processes that no longer exist)
+    for lock_file in os.listdir(lock_dir):
+        if lock_file.startswith('gpu_') and lock_file.endswith('.lock'):
+            lock_path = os.path.join(lock_dir, lock_file)
+            try:
+                with open(lock_path, 'r') as f:
+                    old_pid = int(f.read().strip())
+                
+                # Check if process still exists
+                try:
+                    os.kill(old_pid, 0)  # Signal 0 checks existence without killing
+                except (OSError, ProcessLookupError):
+                    # Process doesn't exist, remove stale lock
+                    os.remove(lock_path)
+                    print(f"Removed stale lock: {lock_file}")
+            except Exception as e:
+                print(f"Error checking lock {lock_file}: {e}")
+    
+    # Try to claim a GPU
     for gpu_id in range(gpu_count):
         try:
-            # Get memory info
+            # Check memory
             mem_free, mem_total = torch.cuda.mem_get_info(gpu_id)
             mem_free_gb = mem_free / (1024**3)
             mem_total_gb = mem_total / (1024**3)
@@ -50,13 +76,49 @@ def get_available_gpu() -> int:
             print(f"GPU {gpu_id}: {mem_free_gb:.1f}GB free / {mem_total_gb:.1f}GB total")
             
             # Require at least 4GB free
-            if mem_free_gb > 4.0:
+            if mem_free_gb <= 4.0:
+                continue
+            
+            # Check if GPU is already locked
+            lock_file = os.path.join(lock_dir, f'gpu_{gpu_id}.lock')
+            
+            if os.path.exists(lock_file):
+                # GPU already claimed by another worker
+                with open(lock_file, 'r') as f:
+                    lock_pid = int(f.read().strip())
+                print(f"GPU {gpu_id} already claimed by PID {lock_pid}")
+                continue
+            
+            # Try to claim this GPU
+            try:
+                with open(lock_file, 'w') as f:
+                    f.write(str(pid))
+                
+                print(f"✓ Successfully claimed GPU {gpu_id} (PID {pid})")
                 return gpu_id
+            except Exception as e:
+                print(f"Failed to claim GPU {gpu_id}: {e}")
+                continue
+                
         except Exception as e:
             print(f"Error checking GPU {gpu_id}: {e}")
             continue
     
+    print("No available GPUs (all claimed or insufficient memory)")
     return None
+
+
+def release_gpu_lock(gpu_id: int):
+    """Release GPU lock when worker exits"""
+    lock_dir = os.path.join(os.getcwd(), '.gpu_locks')
+    lock_file = os.path.join(lock_dir, f'gpu_{gpu_id}.lock')
+    
+    if os.path.exists(lock_file):
+        try:
+            os.remove(lock_file)
+            print(f"Released GPU {gpu_id} lock")
+        except Exception as e:
+            print(f"Error releasing GPU lock: {e}")
 
 
 def request_task_from_manager(worker_id: str, gpu_id: int, host='localhost', port=5000) -> dict:
@@ -113,6 +175,94 @@ def notify_task_complete(task_id: str, worker_id: str, host='localhost', port=50
         print(f"Error notifying completion: {e}")
 
 
+def notify_task_failed(task_id: str, worker_id: str, error_msg: str, host='localhost', port=5000):
+    """Notify manager that task has failed"""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((host, port))
+        
+        request = {
+            'type': 'task_failed',
+            'task_id': task_id,
+            'worker_id': worker_id,
+            'error': error_msg
+        }
+        
+        sock.sendall(json.dumps(request).encode('utf-8'))
+        response = sock.recv(1024).decode('utf-8')
+        sock.close()
+        
+        print(f"Task {task_id} marked as failed")
+    except Exception as e:
+        print(f"Error notifying failure: {e}")
+
+
+
+def submit_result_to_manager(task_id: str, worker_id: str, result_data: dict, host='localhost', port=5000):
+    """Submit experiment result to manager"""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((host, port))
+        
+        request = {
+            'type': 'submit_result',
+            'task_id': task_id,
+            'worker_id': worker_id,
+            'result_data': result_data
+        }
+        
+        sock.sendall(json.dumps(request).encode('utf-8'))
+        response = sock.recv(1024).decode('utf-8')
+        sock.close()
+        
+        print(f"Result submitted for task {task_id}")
+        return True
+    except Exception as e:
+        print(f"Error submitting result: {e}")
+        return False
+
+
+def create_model(config, num_classes, in_channels, img_size):
+    """
+    Create model based on model_type in config.
+    
+    Args:
+        config: Experiment configuration dict
+        num_classes: Number of output classes
+        in_channels: Number of input channels
+        img_size: Spatial dimension of input
+    
+    Returns:
+        PyTorch model instance
+    """
+    model_type = config.get('model_type', 'cnn')  # Default to CNN
+    
+    # Get width and depth with defaults
+    width_factor = config.get('width_factor', 4)
+    depth = config.get('depth', 4)
+    
+    if model_type == 'lr':
+        # Multi-Layer Perceptron (scalable logistic regression)
+        model = LogisticRegression(
+            num_classes=num_classes,
+            width_factor=width_factor,
+            depth=depth,
+            in_channels=in_channels,
+            img_size=img_size
+        )
+    else:  # model_type == 'cnn'
+        # Convolutional Neural Network
+        model = ScalableCNN(
+            num_classes=num_classes,
+            width_factor=width_factor,
+            depth=depth,
+            in_channels=in_channels,
+            img_size=img_size
+        )
+    
+    return model
+
+
 def train_client_worker(args):
     """Worker function for parallel client training"""
     client_id, global_weights, config, train_ds_only, client_indices_subset, device_str = args
@@ -143,13 +293,7 @@ def train_client_worker(args):
         in_channels = config.get('in_channels', 3)
         img_size = config.get('img_size', 32)
     
-    local_model = ScalableCNN(
-        num_classes=num_classes,
-        width_factor=config['width_factor'],
-        depth=config['depth'],
-        in_channels=in_channels,
-        img_size=img_size
-    ).to(device)
+    local_model = create_model(config, num_classes, in_channels, img_size).to(device)
     
     local_model.load_state_dict(global_weights)
     
@@ -228,13 +372,7 @@ def run_single_experiment(config, seed, gpu_id):
         in_channels = config.get('in_channels', 3)
         img_size = config.get('img_size', 32)
         
-    global_model = ScalableCNN(
-        num_classes=num_classes, 
-        width_factor=config['width_factor'], 
-        depth=config['depth'],
-        in_channels=in_channels,
-        img_size=img_size
-    ).to(device)
+    global_model = create_model(config, num_classes, in_channels, img_size).to(device)
     global_weights = global_model.state_dict()
     
     # Early Stopping
@@ -333,12 +471,13 @@ def run_task(task: dict, gpu_id: int):
         # Run experiment
         t_acc, t_loss, v_acc, v_loss, best_epoch, num_params, model = run_single_experiment(config, seed, gpu_id)
         
-        # Save result
+         # Save result
         result_entry = {
             "phase": phase,
             "dataset": config['dataset'],
-            "width_factor": config['width_factor'],
-            "depth": config['depth'],
+            "model_type": config.get('model_type', 'cnn'),
+            "width_factor": config.get('width_factor', 4),
+            "depth": config.get('depth', 4),
             "poison_ratio": config['poison_ratio'],
             "poison_type": config.get('poison_type', 'label_flip'),
             "alpha": config['alpha'],
@@ -355,32 +494,39 @@ def run_task(task: dict, gpu_id: int):
             "std_val_loss": 0.0,
             "num_parameters": num_params,
             "best_epoch": best_epoch,
-            "raw_seeds": str([t_acc])
+            "seed": seed
         }
         
-        # Append to CSV
-        csv_path = os.path.join(output_dir, "final_results.csv")
+        # Submit result to manager (manager will save to all output directories)
+        success = submit_result_to_manager(task['task_id'], f"gpu{gpu_id}", result_entry)
         
-        if os.path.exists(csv_path):
-            df = pd.read_csv(csv_path)
-            df = pd.concat([df, pd.DataFrame([result_entry])], ignore_index=True)
-        else:
-            df = pd.DataFrame([result_entry])
-        
-        df.to_csv(csv_path, index=False)
-        logging.info(f"Saved result to {csv_path}")
-        
-        # Save model
-        model_path = os.path.join(output_dir, f"model_{task['task_id']}.pth")
-        torch.save(model.state_dict(), model_path)
+        if not success:
+            # Fallback: save locally if manager submission failed
+            logging.warning("Failed to submit to manager, saving locally...")
+            csv_path = os.path.join(output_dir, "final_results.csv")
+            
+            if os.path.exists(csv_path):
+                df = pd.read_csv(csv_path)
+                df = pd.concat([df, pd.DataFrame([result_entry])], ignore_index=True)
+            else:
+                df = pd.DataFrame([result_entry])
+            
+            df.to_csv(csv_path, index=False)
+            logging.info(f"Saved result to {csv_path} (fallback)")
         
         logging.info(f"Task {task['task_id']} completed successfully")
         return True
         
     except Exception as e:
-        logging.error(f"Error running task {task['task_id']}: {e}")
+        error_msg = str(e)
+        logging.error(f"Error running task {task['task_id']}: {error_msg}")
+        
         import traceback
         traceback.print_exc()
+        
+        # Notify manager that task failed so it can be reassigned
+        notify_task_failed(task['task_id'], f"gpu{gpu_id}", error_msg)
+        
         return False
 
 
@@ -403,6 +549,10 @@ def worker_loop(manager_host='localhost', manager_port=5000):
     if gpu_id is None:
         print("No available GPU found. Exiting.")
         sys.exit(0)
+    
+    # Register cleanup handler to release GPU lock on exit
+    import atexit
+    atexit.register(release_gpu_lock, gpu_id)
     
     worker_id = f"gpu{gpu_id}"
     print(f"\nWorker ID: {worker_id}")

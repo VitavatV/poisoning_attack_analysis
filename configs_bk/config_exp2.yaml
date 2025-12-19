@@ -46,8 +46,9 @@ seeds: [42, 101, 2024, 3141, 9876]
 # Factorial Design: Batch Size × Data Ordering × Poison Level
 exp2_mechanism_analysis:
   combinations:
+    - model_type: ["cnn", "lr"]                     # Model comparison
     - dataset: ["mnist", "cifar10"]
     - batch_size: [128, 32, 8]                 # Large, medium, small batches
     - data_ordering: ["shuffle", "bad_good", "good_bad"]  # Different ordering strategies
-    - width_factor: [4]                        # Fixed width for controlled comparison
+    - width_factor: [4]                        # Fixed width for controlled comparison (CNN only)
     - poison_ratio: [0.0, 0.3, 0.5]           # Clean, moderate, severe

@@ -37,6 +37,7 @@ class ExperimentManager:
         self.assigned_tasks: Dict[str, dict] = {}  # task_id -> worker info
         self.lock = threading.Lock()
         self.running = True
+        self.state_file = 'manager_state.json'  # State persistence file
         
     def load_all_configs(self) -> List[dict]:
         """Load all experiment config files"""
@@ -98,6 +99,8 @@ class ExperimentManager:
         ]
         
         task_counter = 0
+        task_signatures = {}  # signature -> task_id mapping for deduplication
+        duplicates_skipped = 0
         
         for config in configs:
             defaults = config['defaults']
@@ -114,6 +117,27 @@ class ExperimentManager:
                 
                 for exp in experiments:
                     for seed in seed_list:
+                        # Create task signature to detect duplicates
+                        exp['seed'] = seed  # Add seed to config for signature
+                        signature = self._create_task_signature(exp)
+                        
+                        # Check if this exact experiment already exists
+                        if signature in task_signatures:
+                            duplicates_skipped += 1
+                            existing_task_id = task_signatures[signature]
+                            
+                            # Add this output directory to the existing task
+                            if exp['output_dir'] not in self.tasks[existing_task_id]['output_dirs']:
+                                self.tasks[existing_task_id]['output_dirs'].append(exp['output_dir'])
+                            
+                            logging.debug(
+                                f"Skipping duplicate: {phase_name} seed={seed} "
+                                f"(already exists as {existing_task_id}), "
+                                f"added output_dir: {exp['output_dir']}"
+                            )
+                            continue
+                        
+                        # Create unique task
                         task_id = f"{phase_name}_{task_counter}_{seed}"
                         
                         self.tasks[task_id] = {
@@ -121,15 +145,22 @@ class ExperimentManager:
                             'phase': phase_name,
                             'config': exp,
                             'seed': seed,
-                            'output_dir': exp['output_dir'],
+                            'output_dir': exp['output_dir'],  # Primary output dir
+                            'output_dirs': [exp['output_dir']],  # All output dirs (for duplicates)
                             'status': 'pending',
                             'assigned_to': None,
-                            'assigned_at': None
+                            'assigned_at': None,
+                            'retry_count': 0,          # Track retry attempts
+                            'last_error': None         # Track last error message
                         }
                         
+                        # Register this signature
+                        task_signatures[signature] = task_id
                         task_counter += 1
         
-        logging.info(f"Generated {len(self.tasks)} total tasks")
+        logging.info(f"Generated {len(self.tasks)} unique tasks")
+        if duplicates_skipped > 0:
+            logging.info(f"Skipped {duplicates_skipped} duplicate tasks across configs")
     
     def load_completed_tasks(self):
         """Scan all result directories for completed tasks"""
@@ -167,6 +198,7 @@ class ExperimentManager:
         key_params = [
             config.get('phase', config.get('phase_name', '')),
             config.get('dataset', ''),
+            config.get('model_type', 'cnn'),        # Added model_type
             str(config.get('width_factor', '')),
             str(config.get('depth', '')),
             str(config.get('poison_ratio', '')),
@@ -177,6 +209,99 @@ class ExperimentManager:
             str(config.get('batch_size', 64))
         ]
         return '|'.join(key_params)
+    
+    def save_state(self):
+        """Save manager state to file for crash recovery"""
+        with self.lock:
+            # Convert tasks dict to serializable format
+            state = {
+                'tasks': {},
+                'assigned_tasks': {}
+            }
+            
+            for task_id, task in self.tasks.items():
+                # Copy task and convert datetime to string
+                task_copy = task.copy()
+                if 'assigned_at' in task_copy and task_copy['assigned_at'] is not None:
+                    task_copy['assigned_at'] = task_copy['assigned_at'].isoformat()
+                state['tasks'][task_id] = task_copy
+            
+            for task_id, task in self.assigned_tasks.items():
+                task_copy = task.copy()
+                if 'assigned_at' in task_copy and task_copy['assigned_at'] is not None:
+                    task_copy['assigned_at'] = task_copy['assigned_at'].isoformat()
+                state['assigned_tasks'][task_id] = task_copy
+            
+            try:
+                with open(self.state_file, 'w') as f:
+                    json.dump(state, f, indent=2)
+                logging.info(f"Saved state: {len(self.tasks)} tasks")
+            except Exception as e:
+                logging.error(f"Error saving state: {e}")
+        # print status complete count / all tasks
+        complete_count = sum(1 for t in self.tasks.values() if t['status'] == 'complete')
+        logging.info(f"{complete_count}/{len(self.tasks)} tasks are complete")  
+    
+    def load_state(self):
+        """Load manager state from file after restart"""
+        if not os.path.exists(self.state_file):
+            logging.info("No previous state file found - starting fresh")
+            return False
+        
+        try:
+            with open(self.state_file, 'r') as f:
+                state = json.load(f)
+            
+            # Restore tasks
+            for task_id, task in state.get('tasks', {}).items():
+                # Convert datetime strings back
+                if 'assigned_at' in task and task['assigned_at'] is not None:
+                    task['assigned_at'] = datetime.fromisoformat(task['assigned_at'])
+                self.tasks[task_id] = task
+            
+            # Restore assigned tasks
+            for task_id, task in state.get('assigned_tasks', {}).items():
+                if 'assigned_at' in task and task['assigned_at'] is not None:
+                    task['assigned_at'] = datetime.fromisoformat(task['assigned_at'])
+                self.assigned_tasks[task_id] = task
+            
+            logging.info(f"Loaded state: {len(self.tasks)} tasks, {len(self.assigned_tasks)} assigned")
+            
+            # Check for stale assignments (workers might have died during manager downtime)
+            self.check_stale_assignments()
+            
+            return True
+            
+        except Exception as e:
+            logging.error(f"Error loading state: {e}")
+            return False
+    
+    def check_stale_assignments(self):
+        """Check if assigned workers are still alive"""
+        current_time = datetime.now()
+        stale_tasks = []
+        
+        for task_id, task in list(self.assigned_tasks.items()):
+            assigned_at = task.get('assigned_at')
+            if assigned_at is None:
+                stale_tasks.append(task_id)
+                continue
+            
+            # If assigned more than 2 hours ago, consider stale
+            elapsed = (current_time - assigned_at).total_seconds()
+            if elapsed > 7200:  # 2 hours
+                stale_tasks.append(task_id)
+        
+        # Reassign stale tasks
+        for task_id in stale_tasks:
+            logging.warning(f"Reassigning stale task {task_id}")
+            self.tasks[task_id]['status'] = 'pending'
+            self.tasks[task_id]['assigned_to'] = None
+            if task_id in self.assigned_tasks:
+                del self.assigned_tasks[task_id]
+        
+        if stale_tasks:
+            logging.info(f"Reassigned {len(stale_tasks)} stale tasks")
     
     def refresh_completed(self):
         """Periodically refresh completed tasks from CSV files"""
@@ -255,6 +380,70 @@ class ExperimentManager:
             else:
                 logging.warning(f"Unknown task {task_id} reported complete by {worker_id}")
     
+    def save_result(self, task_id: str, result_data: dict):
+        """Save experiment result to all output directories for this task"""
+        with self.lock:
+            if task_id not in self.tasks:
+                logging.warning(f"Cannot save result: task {task_id} not found")
+                return
+            
+            task = self.tasks[task_id]
+            output_dirs = task.get('output_dirs', [task.get('output_dir')])
+            
+            # Save to all output directories (handles duplicates across configs)
+            for output_dir in output_dirs:
+                try:
+                    os.makedirs(output_dir, exist_ok=True)
+                    csv_path = os.path.join(output_dir, 'final_results.csv')
+                    
+                    # Read existing results
+                    if os.path.exists(csv_path):
+                        df = pd.read_csv(csv_path)
+                        df = pd.concat([df, pd.DataFrame([result_data])], ignore_index=True)
+                    else:
+                        df = pd.DataFrame([result_data])
+                    
+                    # Save updated results
+                    df.to_csv(csv_path, index=False)
+                    logging.info(f"Saved result for {task_id} to {csv_path}")
+                    
+                except Exception as e:
+                    logging.error(f"Error saving result to {csv_path}: {e}")
+            
+            logging.info(
+                f"Result saved to {len(output_dirs)} director{'y' if len(output_dirs) == 1 else 'ies'} "
+                f"for task {task_id}"
+            )
+    
+    def mark_failed(self, task_id: str, worker_id: str, error_msg: str, max_retries: int = 3):
+        """Mark task as failed and reassign if under retry limit"""
+        with self.lock:
+            if task_id in self.tasks:
+                task = self.tasks[task_id]
+                task['retry_count'] += 1
+                task['last_error'] = error_msg
+                
+                if task_id in self.assigned_tasks:
+                    del self.assigned_tasks[task_id]
+                
+                if task['retry_count'] <= max_retries:
+                    # Reassign task
+                    task['status'] = 'pending'
+                    task['assigned_to'] = None
+                    logging.warning(
+                        f"Task {task_id} failed on {worker_id} (attempt {task['retry_count']}/{max_retries}). "
+                        f"Error: {error_msg[:100]}... Reassigning."
+                    )
+                else:
+                    # Mark as failed permanently
+                    task['status'] = 'failed'
+                    logging.error(
+                        f"Task {task_id} failed {task['retry_count']} times. Giving up. "
+                        f"Last error: {error_msg[:100]}"
+                    )
+            else:
+                logging.warning(f"Unknown task {task_id} reported failed by {worker_id}")
+    
     def check_all_complete(self):
         """Check if all tasks are complete and initiate shutdown if so"""
         # Note: Should be called while holding self.lock
@@ -278,12 +467,14 @@ class ExperimentManager:
             pending = sum(1 for t in self.tasks.values() if t['status'] == 'pending')
             assigned = sum(1 for t in self.tasks.values() if t['status'] == 'assigned')
             complete = sum(1 for t in self.tasks.values() if t['status'] == 'complete')
+            failed = sum(1 for t in self.tasks.values() if t['status'] == 'failed')
             
             return {
                 'total': total,
                 'pending': pending,
                 'assigned': assigned,
                 'complete': complete,
+                'failed': failed,
                 'progress': f"{complete}/{total} ({100*complete/total:.1f}%)" if total > 0 else "0/0"
             }
     
@@ -301,9 +492,18 @@ class ExperimentManager:
                 task = self.get_next_task(worker_id)
                 
                 if task:
+                    # Create a clean task dict without internal fields
+                    clean_task = {
+                        'task_id': task['task_id'],
+                        'phase': task['phase'],
+                        'config': task['config'],
+                        'seed': task['seed'],
+                        'output_dir': task['output_dir']
+                    }
+                    
                     response = {
                         'type': 'task',
-                        'task': task
+                        'task': clean_task
                     }
                 else:
                     response = {'type': 'no_task'}
@@ -314,6 +514,29 @@ class ExperimentManager:
                 task_id = request['task_id']
                 worker_id = request['worker_id']
                 self.mark_complete(task_id, worker_id)
+                
+                response = {'type': 'ack'}
+                conn.sendall(json.dumps(response).encode('utf-8'))
+            
+            elif request['type'] == 'submit_result':
+                task_id = request['task_id']
+                result_data = request['result_data']
+                worker_id = request.get('worker_id', 'unknown')
+                
+                # Save result to all output directories
+                self.save_result(task_id, result_data)
+                
+                # Mark task as complete
+                self.mark_complete(task_id, worker_id)
+                
+                response = {'type': 'ack'}
+                conn.sendall(json.dumps(response).encode('utf-8'))
+            
+            elif request['type'] == 'task_failed':
+                task_id = request['task_id']
+                worker_id = request['worker_id']
+                error_msg = request.get('error', 'Unknown error')
+                self.mark_failed(task_id, worker_id, error_msg)
                 
                 response = {'type': 'ack'}
                 conn.sendall(json.dumps(response).encode('utf-8'))

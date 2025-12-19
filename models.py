@@ -56,3 +56,67 @@ class ScalableCNN(nn.Module):
     def get_num_parameters(self):
         """คืนค่าจำนวนพารามิเตอร์ทั้งหมดในโมเดล"""
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
+
+
+class LogisticRegression(nn.Module):
+    """
+    Scalable Multi-Layer Perceptron (MLP) for comparison with CNN.
+    Uses same width_factor and depth parameters as ScalableCNN.
+    
+    When depth=1: Pure logistic regression (single linear layer)
+    When depth>1: Multi-layer perceptron with hidden layers
+    """
+    def __init__(self, num_classes=10, width_factor=1, depth=4, in_channels=3, img_size=32):
+        """
+        Args:
+            num_classes: Number of output classes (10 for MNIST/CIFAR-10)
+            width_factor: Multiplier for hidden layer size
+            depth: Number of hidden layers (depth=1 means no hidden layers, just output layer)
+            in_channels: Number of input channels (1 for MNIST, 3 for CIFAR)
+            img_size: Spatial dimension of input images (28 for MNIST, 32 for CIFAR)
+        """
+        super(LogisticRegression, self).__init__()
+        
+        # Calculate flattened input dimension
+        self.input_dim = in_channels * img_size * img_size
+        
+        # Build network layers
+        self.layers = nn.ModuleList()
+        
+        # Base hidden size (comparable to CNN base channels)
+        base_hidden = 64  # Base units for hidden layers
+        
+        if depth == 1:
+            # Pure logistic regression: input -> output
+            self.layers.append(nn.Linear(self.input_dim, num_classes))
+        else:
+            # Multi-layer perceptron
+            current_dim = self.input_dim
+            
+            # Add hidden layers
+            for i in range(depth - 1):
+                # Hidden layer size scales with width_factor
+                hidden_size = int(base_hidden * width_factor)
+                
+                self.layers.append(nn.Linear(current_dim, hidden_size))
+                self.layers.append(nn.ReLU())
+                self.layers.append(nn.BatchNorm1d(hidden_size))
+                
+                current_dim = hidden_size
+            
+            # Output layer
+            self.layers.append(nn.Linear(current_dim, num_classes))
+    
+    def forward(self, x):
+        # Flatten input: (batch_size, channels, height, width) -> (batch_size, features)
+        x = x.view(x.size(0), -1)
+        
+        # Pass through all layers
+        for layer in self.layers:
+            x = layer(x)
+        
+        return x
+    
+    def get_num_parameters(self):
+        """Return total number of trainable parameters"""
+        return sum(p.numel() for p in self.parameters() if p.requires_grad)
