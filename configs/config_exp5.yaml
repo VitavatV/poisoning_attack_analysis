@@ -1,20 +1,23 @@
-# EXP 5: Defense Comparison
-# Goal: Compare different defense mechanisms (FedAvg vs robust aggregation)
-# Runtime: ~12-20 hours (12 experiments per dataset, 24 total)
-# Priority: HIGH
+# EXP 5: Defense Mechanism Comparison
+# IEEE Publication-Ready Configuration
+# Goal: Benchmark intrinsic (model width) vs extrinsic (robust aggregation) defenses
+# Statistical Rigor: 5 random seeds, controlled comparison
+# Expected Runtime: ~40-60 hours (180 experiments: 2 datasets × 2 aggregators × 3 poison levels × 5 seeds)
 
 defaults:
-  project_name: "FL_EXP5_Defense"
+  project_name: "FL_EXP5_Defense_Benchmark"
   output_dir: "./results_exp5_{dataset}"
   load_to_memory: true
   
-  # FL Settings
+  # Federated Learning Configuration
   num_clients: 10
   fraction_fit: 1.0
-  global_rounds: 2000
+  global_rounds: 3000                # Increased for convergence
   local_epochs: 5
-  batch_size: 128  # Optimized for RTX 3090 24GB VRAM
-  num_parallel_workers: 1  # Let GPU handle parallelization  # Reduced for 8GB VRAM compatibility
+  batch_size: 128
+  num_parallel_workers: 1
+  
+  # Optimization (IEEE standard settings)
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9
@@ -23,26 +26,27 @@ defaults:
   # Model Architecture
   depth: 4
   
-  # Early Stopping
+  # Validation & Early Stopping
   validation_split: 0.1
-  early_stopping_patience: 10
+  early_stopping_patience: 20        # Increased for IEEE standards
   min_delta: 0.0001
 
-  # Attack Defaults
+  # Poisoning Attack Configuration
   poison_type: "label_flip"
   target_class: 0
   poison_label: 1
-  poison_ratio: 0.0
+  poison_ratio: 0.0                  # Varied in combinations
   alpha: 100.0
   data_ordering: "shuffle"
-  aggregator: "fedavg"
+  aggregator: "fedavg"               # Varied in combinations
 
-seeds: [42, 101, 2024]
+# Statistical Significance: 5 independent random seeds
+seeds: [42, 101, 2024, 3141, 9876]
 
-# Compare FedAvg vs Median at critical and robust width
+# Defense Comparison: FedAvg vs Byzantine-Robust Aggregation
 exp5_defense_comparison:
   combinations:
     - dataset: ["mnist", "cifar10"]
-    - aggregator: ["fedavg", "median"]
-    - width_factor: [4]
-    - poison_ratio: [0.0, 0.3, 0.5]
+    - aggregator: ["fedavg", "median"]         # Baseline vs robust aggregation
+    - width_factor: [4]                        # Fixed width for controlled comparison
+    - poison_ratio: [0.0, 0.3, 0.5]           # Clean, moderate, severe

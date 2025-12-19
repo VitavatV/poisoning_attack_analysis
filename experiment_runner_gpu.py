@@ -1,0 +1,446 @@
+"""
+GPU Worker Process
+
+Requests tasks from experiment_manager and executes them on available GPU.
+Supports dynamic GPU allocation and automatic task completion reporting.
+"""
+
+import random
+import yaml
+import socket
+import json
+import time
+import torch
+import numpy as np
+from torch.utils.data import DataLoader, Subset, random_split
+import logging
+from multiprocessing import Pool, cpu_count
+import sys
+
+# Import modules
+from models import ScalableCNN
+from data_utils import load_global_dataset, partition_data_dirichlet, get_client_dataloader
+from utils import train_client, evaluate_model, fed_avg, fed_median, EarlyStopping
+
+import pandas as pd
+import os
+
+
+def get_available_gpu() -> int:
+    """
+    Find an available GPU with sufficient free memory.
+    
+    Returns:
+        GPU ID (int) if available, None otherwise
+    """
+    if not torch.cuda.is_available():
+        print("CUDA not available")
+        return None
+    
+    gpu_count = torch.cuda.device_count()
+    print(f"Found {gpu_count} GPUs")
+    
+    for gpu_id in range(gpu_count):
+        try:
+            # Get memory info
+            mem_free, mem_total = torch.cuda.mem_get_info(gpu_id)
+            mem_free_gb = mem_free / (1024**3)
+            mem_total_gb = mem_total / (1024**3)
+            
+            print(f"GPU {gpu_id}: {mem_free_gb:.1f}GB free / {mem_total_gb:.1f}GB total")
+            
+            # Require at least 4GB free
+            if mem_free_gb > 4.0:
+                return gpu_id
+        except Exception as e:
+            print(f"Error checking GPU {gpu_id}: {e}")
+            continue
+    
+    return None
+
+
+def request_task_from_manager(worker_id: str, gpu_id: int, host='localhost', port=5000) -> dict:
+    """
+    Request a task from the experiment manager.
+    
+    Returns:
+        Task dict if available, None otherwise
+    """
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((host, port))
+        
+        request = {
+            'type': 'request_task',
+            'worker_id': worker_id,
+            'gpu_id': gpu_id
+        }
+        
+        sock.sendall(json.dumps(request).encode('utf-8'))
+        response_data = sock.recv(8192).decode('utf-8')
+        sock.close()
+        
+        response = json.loads(response_data)
+        
+        if response['type'] == 'task':
+            return response['task']
+        elif response['type'] == 'no_task':
+            return None
+        
+    except Exception as e:
+        print(f"Error requesting task: {e}")
+        return None
+
+
+def notify_task_complete(task_id: str, worker_id: str, host='localhost', port=5000):
+    """Notify manager that task is complete"""
+    try:
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.connect((host, port))
+        
+        request = {
+            'type': 'task_complete',
+            'task_id': task_id,
+            'worker_id': worker_id
+        }
+        
+        sock.sendall(json.dumps(request).encode('utf-8'))
+        response = sock.recv(1024).decode('utf-8')
+        sock.close()
+        
+        print(f"Task {task_id} marked complete")
+    except Exception as e:
+        print(f"Error notifying completion: {e}")
+
+
+def train_client_worker(args):
+    """Worker function for parallel client training"""
+    client_id, global_weights, config, train_ds_only, client_indices_subset, device_str = args
+    
+    from models import ScalableCNN
+    from data_utils import get_client_dataloader
+    from utils import train_client
+    import torch
+    
+    device = torch.device(device_str)
+    
+    is_victim = config['poison_ratio'] > 0
+    train_loader = get_client_dataloader(
+        train_ds_only,
+        client_indices_subset[client_id],
+        config,
+        is_attacker=is_victim
+    )
+    
+    if config['dataset'] == 'mnist':
+        num_classes, in_channels, img_size = 10, 1, 28
+    elif config['dataset'] == 'cifar10':
+        num_classes, in_channels, img_size = 10, 3, 32
+    elif config['dataset'] == 'cifar100':
+        num_classes, in_channels, img_size = 100, 3, 32
+    else:
+        num_classes = config.get('num_classes', 10)
+        in_channels = config.get('in_channels', 3)
+        img_size = config.get('img_size', 32)
+    
+    local_model = ScalableCNN(
+        num_classes=num_classes,
+        width_factor=config['width_factor'],
+        depth=config['depth'],
+        in_channels=in_channels,
+        img_size=img_size
+    ).to(device)
+    
+    local_model.load_state_dict(global_weights)
+    
+    trained_weights = train_client(
+        local_model,
+        train_loader,
+        epochs=config['local_epochs'],
+        lr=config['lr'],
+        device=device,
+        momentum=config.get('momentum', 0.9),
+        weight_decay=float(config.get('weight_decay', 0)),
+        max_grad_norm=config.get('max_grad_norm', 1.0)
+    )
+    
+    return trained_weights
+
+
+def run_single_experiment(config, seed, gpu_id):
+    """Run a single experiment on specified GPU"""
+    # Force specific GPU
+    config['device'] = f'cuda:{gpu_id}'
+    config['num_parallel_workers'] = 3
+    
+    # Set all seeds
+    random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    np.random.seed(seed)
+    torch.backends.cudnn.deterministic = True
+    
+    print(f"\n>>> RUNNING Seed: {seed} on GPU {gpu_id}")
+    print("\n" + "="*60)
+
+    device = torch.device(config['device'])
+    device_str = str(device)
+    
+    train_ds_full, test_ds = load_global_dataset(config['dataset'])
+    
+    # Validation Split
+    val_size = int(len(train_ds_full) * config['validation_split'])
+    train_size = len(train_ds_full) - val_size
+    
+    train_ds, val_ds = random_split(train_ds_full, [train_size, val_size], 
+                                    generator=torch.Generator().manual_seed(42))
+    
+    val_loader = DataLoader(val_ds, batch_size=config['batch_size'], shuffle=False)
+    test_loader = DataLoader(test_ds, batch_size=config['batch_size'], shuffle=False)
+    
+    # Partition data
+    train_subset_indices = train_ds.indices
+    train_ds_only = Subset(train_ds_full, train_subset_indices)
+    client_indices_subset = partition_data_dirichlet(train_ds_only, config['num_clients'], 
+                                                     alpha=config['alpha'])
+
+    train_ds_only.targets = torch.tensor(train_ds_full.targets)
+    client_dataloaders = {}
+    is_victim = config['poison_ratio'] > 0
+    for client_id in range(config['num_clients']):
+        client_config = config.copy()
+        client_dataloaders[client_id] = get_client_dataloader(
+            train_ds_only, 
+            client_indices_subset[client_id], 
+            client_config, 
+            is_attacker=is_victim
+        )
+
+    # Initialize model
+    if config['dataset'] == 'mnist':
+        num_classes, in_channels, img_size = 10, 1, 28
+    elif config['dataset'] == 'cifar10':
+        num_classes, in_channels, img_size = 10, 3, 32
+    elif config['dataset'] == 'cifar100':
+        num_classes, in_channels, img_size = 100, 3, 32
+    else:
+        num_classes = config.get('num_classes', 10)
+        in_channels = config.get('in_channels', 3)
+        img_size = config.get('img_size', 32)
+        
+    global_model = ScalableCNN(
+        num_classes=num_classes, 
+        width_factor=config['width_factor'], 
+        depth=config['depth'],
+        in_channels=in_channels,
+        img_size=img_size
+    ).to(device)
+    global_weights = global_model.state_dict()
+    
+    # Early Stopping
+    early_stopper = EarlyStopping(
+        patience=config['early_stopping_patience'], 
+        min_delta=config['min_delta']
+    )
+    
+    # Training Loop
+    best_acc = 0.0
+    best_loss = np.inf
+    best_epoch = 0
+    
+    for round_idx in range(config['global_rounds']):
+        local_weights = []
+        
+        m = max(int(config['fraction_fit'] * config['num_clients']), 1)
+        global_weights = global_model.state_dict()
+        selected_clients = np.random.choice(range(config['num_clients']), m, replace=False)
+        
+        # Parallel training
+        num_workers = config.get('num_parallel_workers', -1)
+        if num_workers == -1:
+            num_workers = max(1, cpu_count() - 1)
+        num_workers = max(1, min(num_workers, cpu_count()))
+        
+        worker_args = [
+            (client_id, global_weights, config, train_ds_only, client_indices_subset, device_str)
+            for client_id in selected_clients
+        ]
+        
+        if num_workers == 1 or len(selected_clients) == 1:
+            local_weights = [train_client_worker(args) for args in worker_args]
+        else:
+            with Pool(processes=min(num_workers, len(selected_clients))) as pool:
+                local_weights = pool.map(train_client_worker, worker_args)
+            
+        # Aggregation
+        aggregator_name = config.get('aggregator', 'fedavg')
+        if aggregator_name == 'median':
+            global_weights = fed_median(local_weights)
+        else:
+            global_weights = fed_avg(local_weights)
+        global_model.load_state_dict(global_weights)
+        
+        # Validation
+        val_loss, val_acc = evaluate_model(global_model, val_loader, device)
+        
+        print(f"Round {round_idx+1}/{config['global_rounds']} | Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.4f}")
+        
+        early_stopper(val_loss, global_weights)
+        
+        if val_acc > best_acc:
+            best_acc = val_acc
+            best_loss = val_loss
+            best_epoch = round_idx
+            
+        if early_stopper.early_stop:
+            print(">>> Early Stopping Triggered!")
+            global_model.load_state_dict(early_stopper.get_best_weights())
+            break
+            
+    # Final Test
+    test_loss, test_acc = evaluate_model(global_model, test_loader, device)
+    print(f"FINAL RESULT: Test Acc: {test_acc:.4f}")
+    num_params = sum(p.numel() for p in global_model.parameters())
+    
+    return test_acc, test_loss, best_acc, best_loss, best_epoch, num_params, global_model
+
+
+def run_task(task: dict, gpu_id: int):
+    """Execute a single task"""
+    config = task['config']
+    seed = task['seed']
+    output_dir = task['output_dir']
+    phase = task['phase']
+    
+    # Setup logging per task
+    os.makedirs(output_dir, exist_ok=True)
+    
+    log_file = os.path.join(output_dir, f"worker_{task['task_id']}.log")
+    logging.basicConfig(
+        level=logging.INFO,
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_file, mode='a'),
+            logging.StreamHandler()
+        ],
+        force=True
+    )
+    
+    logging.info(f"Starting task {task['task_id']}")
+    logging.info(f"Config: {config}")
+    
+    try:
+        # Run experiment
+        t_acc, t_loss, v_acc, v_loss, best_epoch, num_params, model = run_single_experiment(config, seed, gpu_id)
+        
+        # Save result
+        result_entry = {
+            "phase": phase,
+            "dataset": config['dataset'],
+            "width_factor": config['width_factor'],
+            "depth": config['depth'],
+            "poison_ratio": config['poison_ratio'],
+            "poison_type": config.get('poison_type', 'label_flip'),
+            "alpha": config['alpha'],
+            "data_ordering": config.get('data_ordering', 'shuffle'),
+            "aggregator": config.get('aggregator', 'fedavg'),
+            "batch_size": config.get('batch_size', 64),
+            "mean_test_acc": t_acc,
+            "std_test_acc": 0.0,  # Single seed
+            "mean_test_loss": t_loss,
+            "std_test_loss": 0.0,
+            "mean_val_acc": v_acc,
+            "std_val_acc": 0.0,
+            "mean_val_loss": v_loss,
+            "std_val_loss": 0.0,
+            "num_parameters": num_params,
+            "best_epoch": best_epoch,
+            "raw_seeds": str([t_acc])
+        }
+        
+        # Append to CSV
+        csv_path = os.path.join(output_dir, "final_results.csv")
+        
+        if os.path.exists(csv_path):
+            df = pd.read_csv(csv_path)
+            df = pd.concat([df, pd.DataFrame([result_entry])], ignore_index=True)
+        else:
+            df = pd.DataFrame([result_entry])
+        
+        df.to_csv(csv_path, index=False)
+        logging.info(f"Saved result to {csv_path}")
+        
+        # Save model
+        model_path = os.path.join(output_dir, f"model_{task['task_id']}.pth")
+        torch.save(model.state_dict(), model_path)
+        
+        logging.info(f"Task {task['task_id']} completed successfully")
+        return True
+        
+    except Exception as e:
+        logging.error(f"Error running task {task['task_id']}: {e}")
+        import traceback
+        traceback.print_exc()
+        return False
+
+
+def worker_loop(manager_host='localhost', manager_port=5000):
+    """Main worker loop"""
+    import multiprocessing
+    
+    # Set multiprocessing method
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        pass
+    
+    print("="*60)
+    print("GPU Worker Starting")
+    print("="*60)
+    
+    # 1. Check for available GPU
+    gpu_id = get_available_gpu()
+    if gpu_id is None:
+        print("No available GPU found. Exiting.")
+        sys.exit(0)
+    
+    worker_id = f"gpu{gpu_id}"
+    print(f"\nWorker ID: {worker_id}")
+    print(f"Using GPU: {gpu_id}")
+    print(f"Manager: {manager_host}:{manager_port}")
+    print("="*60)
+    
+    task_count = 0
+    
+    while True:
+        # 2. Request task
+        print(f"\n[{worker_id}] Requesting task from manager...")
+        task = request_task_from_manager(worker_id, gpu_id, manager_host, manager_port)
+        
+        if task is None:
+            print(f"[{worker_id}] No more tasks available. Shutting down.")
+            break
+        
+        task_count += 1
+        print(f"\n[{worker_id}] Received task {task['task_id']} (Task #{task_count})")
+        
+        # 3. Execute task
+        success = run_task(task, gpu_id)
+        
+        # 4. Notify completion
+        if success:
+            notify_task_complete(task['task_id'], worker_id, manager_host, manager_port)
+        
+        # 5. Wait before next request
+        print(f"\n[{worker_id}] Waiting 10 seconds before next request...")
+        time.sleep(10)
+    
+    print(f"\n[{worker_id}] Worker shutting down. Completed {task_count} tasks.")
+
+
+if __name__ == "__main__":
+    # Parse command-line args for manager host/port
+    manager_host = sys.argv[1] if len(sys.argv) > 1 else 'localhost'
+    manager_port = int(sys.argv[2]) if len(sys.argv) > 2 else 5000
+    
+    worker_loop(manager_host, manager_port)

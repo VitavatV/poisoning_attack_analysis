@@ -1,20 +1,23 @@
-# EXP 4: IID vs NonIID
-# Goal: Compare model performance under IID vs Non-IID data distributions
-# Runtime: ~20-40 hours (varies by alpha values)
-# Priority: HIGH - Understanding data heterogeneity impact
+# EXP 4: IID vs Non-IID Data Distribution
+# IEEE Publication-Ready Configuration
+# Goal: Evaluate robustness under varying data heterogeneity levels
+# Statistical Rigor: 5 random seeds, comprehensive alpha range
+# Expected Runtime: ~80-120 hours (360 experiments: 2 datasets × 4 alphas × 3 poison levels × 5 seeds)
 
 defaults:
-  project_name: "FL_EXP4_IID_NonIID"
+  project_name: "FL_EXP4_Data_Heterogeneity"
   output_dir: "./results_exp4_{dataset}"
   load_to_memory: true
   
-  # FL Settings
+  # Federated Learning Configuration
   num_clients: 10
   fraction_fit: 1.0
-  global_rounds: 2000
+  global_rounds: 3000                # Increased for convergence
   local_epochs: 5
-  batch_size: 128  # Optimized for RTX 3090 24GB VRAM
-  num_parallel_workers: 1  # Let GPU handle parallelization
+  batch_size: 128
+  num_parallel_workers: 1
+  
+  # Optimization (IEEE standard settings)
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9
@@ -23,28 +26,28 @@ defaults:
   # Model Architecture
   depth: 4
   
-  # Early Stopping
+  # Validation & Early Stopping
   validation_split: 0.1
-  early_stopping_patience: 10
+  early_stopping_patience: 20        # Increased for IEEE standards
   min_delta: 0.0001
 
-  # Attack Defaults
+  # Poisoning Attack Configuration
   poison_type: "label_flip"
   target_class: 0
   poison_label: 1
-  poison_ratio: 0.0
-  alpha: 100.0
+  poison_ratio: 0.0                  # Varied in combinations
+  alpha: 100.0                       # Varied in combinations
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-seeds: [42, 101, 2024]
+# Statistical Significance: 5 independent random seeds
+seeds: [42, 101, 2024, 3141, 9876]
 
-# Compare IID (alpha=100) vs various NonIID levels
+# Data Heterogeneity Analysis: Dirichlet alpha exploration
 exp4_iid_vs_noniid:
   combinations:
     - dataset: ["mnist", "cifar10"]
-    - alpha: [100.0, 10.0, 1.0, 0.1]  # IID to highly NonIID
-    - width_factor: [4]
-    - poison_ratio: [0.0, 0.3, 0.5]
+    - alpha: [100.0, 10.0, 1.0, 0.1]           # IID → Highly Non-IID
+    - width_factor: [4]                        # Fixed width for controlled comparison
+    - poison_ratio: [0.0, 0.3, 0.5]           # Clean, moderate, severe
     - aggregator: ["fedavg"]
-

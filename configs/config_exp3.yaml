@@ -1,20 +1,23 @@
-# EXP 3: Attack Type
-# Goal: Compare different poisoning attack types and their impact
-# Runtime: ~12-20 hours (12 experiments per dataset, 24 total)
-# Priority: MEDIUM
+# EXP 3: Attack Type Generalization
+# IEEE Publication-Ready Configuration
+# Goal: Validate robustness findings across different attack types
+# Statistical Rigor: 5 random seeds, multiple attack vectors
+# Expected Runtime: ~40-60 hours (180 experiments: 2 datasets × 2 attacks × 3 poison levels × 5 seeds)
 
 defaults:
-  project_name: "FL_EXP3_Attacks"
+  project_name: "FL_EXP3_Attack_Generalization"
   output_dir: "./results_exp3_{dataset}"
   load_to_memory: true
   
-  # FL Settings
+  # Federated Learning Configuration
   num_clients: 10
   fraction_fit: 1.0
-  global_rounds: 2000
+  global_rounds: 3000                # Increased for convergence
   local_epochs: 5
-  batch_size: 128  # Optimized for RTX 3090 24GB VRAM
-  num_parallel_workers: 1  # Let GPU handle parallelization  # Reduced for 8GB VRAM compatibility
+  batch_size: 128
+  num_parallel_workers: 1
+  
+  # Optimization (IEEE standard settings)
   optimizer: "sgd"
   lr: 0.01
   momentum: 0.9
@@ -23,26 +26,27 @@ defaults:
   # Model Architecture
   depth: 4
   
-  # Early Stopping
+  # Validation & Early Stopping
   validation_split: 0.1
-  early_stopping_patience: 10
+  early_stopping_patience: 20        # Increased for IEEE standards
   min_delta: 0.0001
 
-  # Attack Defaults
-  poison_type: "label_flip"
+  # Poisoning Attack Configuration
+  poison_type: "label_flip"          # Varied in combinations
   target_class: 0
   poison_label: 1
-  poison_ratio: 0.0
+  poison_ratio: 0.0                  # Varied in combinations
   alpha: 100.0
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-seeds: [42, 101, 2024]
+# Statistical Significance: 5 independent random seeds
+seeds: [42, 101, 2024, 3141, 9876]
 
-# Test different attack types
+# Attack Type Comparison
 exp3_attack_types:
   combinations:
     - dataset: ["mnist", "cifar10"]
-    - poison_type: ["label_flip", "random_noise"]
-    - width_factor: [4]
-    - poison_ratio: [0.0, 0.3, 0.5]
+    - poison_type: ["label_flip", "random_noise"]  # Targeted vs untargeted attacks
+    - width_factor: [4]                            # Fixed width for controlled comparison
+    - poison_ratio: [0.0, 0.3, 0.5]               # Clean, moderate, severe
