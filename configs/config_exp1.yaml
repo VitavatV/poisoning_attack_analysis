@@ -39,15 +39,13 @@ defaults:
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-# Statistical Significance: 5 independent random seeds
-seeds: [42, 101]
-
 # Comprehensive Grid Search
 exp1_vary_width:
   combinations:
+    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
     - model_type: ["cnn", "lr"]               # Model comparison: CNN vs Logistic Regression
     - dataset: ["mnist", "cifar10"]
-    - width_factor: [1]              # Narrow to wide models (CNN only)
-    - depth: [1]                     # Shallow to deep models (CNN only)
-    - poison_ratio: [0.0]            # Clean, moderate, severe attacks
+    - width_factor: [1, 4, 16, 64]              # Narrow to wide models (CNN only)
+    - depth: [1, 4, 16, 64]                     # Shallow to deep models (CNN only)
+    - poison_ratio: [0.0, 0.3, 0.5]            # Clean, moderate, severe attacks
     - aggregator: ["fedavg"]

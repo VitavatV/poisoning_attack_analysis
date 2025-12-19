@@ -104,7 +104,7 @@ class ExperimentManager:
         
         for config in configs:
             defaults = config['defaults']
-            seed_list = config.get('seeds', [42])
+            
             
             for phase_name in phase_names:
                 if phase_name not in config:
@@ -116,47 +116,48 @@ class ExperimentManager:
                 experiments = self.generate_experiments(phase_cfg, defaults)
                 
                 for exp in experiments:
-                    for seed in seed_list:
-                        # Create task signature to detect duplicates
-                        exp['seed'] = seed  # Add seed to config for signature
-                        signature = self._create_task_signature(exp)
+                    # Seed is now part of the experiment config from combinations
+                    seed = exp.get('seed', 42)  # Fallback to 42 if not specified
+                    
+                    # Create task signature to detect duplicates
+                    signature = self._create_task_signature(exp)
+                    
+                    # Check if this exact experiment already exists
+                    if signature in task_signatures:
+                        duplicates_skipped += 1
+                        existing_task_id = task_signatures[signature]
                         
-                        # Check if this exact experiment already exists
-                        if signature in task_signatures:
-                            duplicates_skipped += 1
-                            existing_task_id = task_signatures[signature]
-                            
-                            # Add this output directory to the existing task
-                            if exp['output_dir'] not in self.tasks[existing_task_id]['output_dirs']:
-                                self.tasks[existing_task_id]['output_dirs'].append(exp['output_dir'])
-                            
-                            logging.debug(
-                                f"Skipping duplicate: {phase_name} seed={seed} "
-                                f"(already exists as {existing_task_id}), "
-                                f"added output_dir: {exp['output_dir']}"
-                            )
-                            continue
+                        # Add this output directory to the existing task
+                        if exp['output_dir'] not in self.tasks[existing_task_id]['output_dirs']:
+                            self.tasks[existing_task_id]['output_dirs'].append(exp['output_dir'])
                         
-                        # Create unique task
-                        task_id = f"{phase_name}_{task_counter}_{seed}"
-                        
-                        self.tasks[task_id] = {
-                            'task_id': task_id,
-                            'phase': phase_name,
-                            'config': exp,
-                            'seed': seed,
-                            'output_dir': exp['output_dir'],  # Primary output dir
-                            'output_dirs': [exp['output_dir']],  # All output dirs (for duplicates)
-                            'status': 'pending',
-                            'assigned_to': None,
-                            'assigned_at': None,
-                            'retry_count': 0,          # Track retry attempts
-                            'last_error': None         # Track last error message
-                        }
-                        
-                        # Register this signature
-                        task_signatures[signature] = task_id
-                        task_counter += 1
+                        logging.debug(
+                            f"Skipping duplicate: {phase_name} seed={seed} "
+                            f"(already exists as {existing_task_id}), "
+                            f"added output_dir: {exp['output_dir']}"
+                        )
+                        continue
+                    
+                    # Create unique task
+                    task_id = f"{phase_name}_{task_counter}_{seed}"
+                    
+                    self.tasks[task_id] = {
+                        'task_id': task_id,
+                        'phase': phase_name,
+                        'config': exp,
+                        'seed': seed,
+                        'output_dir': exp['output_dir'],  # Primary output dir
+                        'output_dirs': [exp['output_dir']],  # All output dirs (for duplicates)
+                        'status': 'pending',
+                        'assigned_to': None,
+                        'assigned_at': None,
+                        'retry_count': 0,          # Track retry attempts
+                        'last_error': None         # Track last error message
+                    }
+                    
+                    # Register this signature
+                    task_signatures[signature] = task_id
+                    task_counter += 1
         
         logging.info(f"Generated {len(self.tasks)} unique tasks")
         if duplicates_skipped > 0:
@@ -206,7 +207,8 @@ class ExperimentManager:
             str(config.get('alpha', '')),
             config.get('data_ordering', 'shuffle'),
             config.get('aggregator', 'fedavg'),
-            str(config.get('batch_size', 64))
+            str(config.get('batch_size', 64)),
+            str(config.get('seed', 42))  # Include seed for deduplication
         ]
         return '|'.join(key_params)
     

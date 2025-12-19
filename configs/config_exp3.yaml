@@ -1,0 +1,51 @@
+# EXP 3: Attack Type Generalization
+# IEEE Publication-Ready Configuration
+# Goal: Validate robustness findings across different attack types
+# Statistical Rigor: 5 random seeds, multiple attack vectors
+# Expected Runtime: ~40-60 hours (180 experiments: 2 datasets × 2 attacks × 3 poison levels × 5 seeds)
+
+defaults:
+  project_name: "FL_EXP3_Attack_Generalization"
+  output_dir: "./results_exp3_{dataset}"
+  load_to_memory: true
+  
+  # Federated Learning Configuration
+  num_clients: 10
+  fraction_fit: 1.0
+  global_rounds: 3000                # Increased for convergence
+  local_epochs: 5
+  batch_size: 128
+  num_parallel_workers: 1
+  
+  # Optimization (IEEE standard settings)
+  optimizer: "sgd"
+  lr: 0.01
+  momentum: 0.9
+  weight_decay: 5e-4
+  
+  # Model Architecture
+  depth: 4
+  
+  # Validation & Early Stopping
+  validation_split: 0.1
+  early_stopping_patience: 20        # Increased for IEEE standards
+  min_delta: 0.0001
+
+  # Poisoning Attack Configuration
+  poison_type: "label_flip"          # Varied in combinations
+  target_class: 0
+  poison_label: 1
+  poison_ratio: 0.0                  # Varied in combinations
+  alpha: 100.0
+  data_ordering: "shuffle"
+  aggregator: "fedavg"
+
+# Attack Type Comparison
+exp3_attack_types:
+  combinations:
+    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
+    - model_type: ["cnn", "lr"]                     # Model comparison
+    - dataset: ["mnist", "cifar10"]
+    - poison_type: ["label_flip", "random_noise"]  # Targeted vs untargeted attacks
+    - width_factor: [4]                            # Fixed width for controlled comparison (CNN only)
+    - poison_ratio: [0.0, 0.3, 0.5]               # Clean, moderate, severe
