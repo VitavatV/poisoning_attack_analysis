@@ -127,6 +127,7 @@ def is_experiment_completed(exp, phase_name, existing_results_df):
         'width_factor': exp['width_factor'],
         'depth': exp['depth'],
         'poison_ratio': exp['poison_ratio'],
+        'poison_type': exp.get('poison_type', 'label_flip'),
         'alpha': exp['alpha'],
         'data_ordering': exp.get('data_ordering', 'shuffle'),
         'aggregator': exp.get('aggregator', 'fedavg'),
@@ -152,10 +153,20 @@ def generate_experiments(phase_config, defaults):
     experiments = []
     for instance in itertools.product(*vals):
         exp_setup = defaults.copy()
-        exp_setup['dataset'] = phase_config['dataset']
+        
+        # Handle dataset: check if it's in combinations first, otherwise use phase_config
+        if 'dataset' not in vary_params:
+            # Backward compatibility: dataset is hardcoded in phase_config
+            exp_setup['dataset'] = phase_config.get('dataset', 'mnist')
+        
         exp_setup['phase_name'] = phase_config.get('phase_name', 'Unknown')
         for k, v in zip(keys, instance):
             exp_setup[k] = v
+        
+        # Resolve {dataset} placeholder in output_dir
+        if 'output_dir' in exp_setup and '{dataset}' in exp_setup['output_dir']:
+            exp_setup['output_dir'] = exp_setup['output_dir'].format(dataset=exp_setup['dataset'])
+        
         experiments.append(exp_setup)
     return experiments
 
@@ -332,10 +343,11 @@ def main():
         config_path_list = [sys.argv[1]]
     else:
         config_path_list = [
-            'configs/config_exp0_mnist.yaml',
-            'configs/config_exp2_cifar10.yaml',
-            'configs/config_exp3_mnist_A.yaml',
-            'configs/config_exp4_cifar10.yaml',
+            'configs/config_exp1.yaml',
+            'configs/config_exp2.yaml',
+            'configs/config_exp3.yaml',
+            'configs/config_exp4.yaml',
+            'configs/config_exp5.yaml',
             ]
     for config_path in config_path_list:
         
@@ -370,16 +382,16 @@ def main():
             all_results = existing_results_df.to_dict('records')
         
         config_name_list = [
-            'exp0_vary_width',
-            'exp1_fine_grained_width',
-            'exp2_defense_comparison',
-            'exp3_mechanism_analysis',
-            'exp4_attack_types',
+            'exp1_vary_width',
+            'exp4_iid_vs_noniid',
+            'exp5_defense_comparison',
+            'exp2_mechanism_analysis',
+            'exp3_attack_types',
             # Phase 0 New Experiments
-            'exp0_width_scaling',
-            'exp0_depth_scaling',
-            'exp0_mnist_baseline',
-            'exp0_cifar10_baseline'
+            'exp1_width_scaling',
+            'exp1_depth_scaling',
+            'exp1_mnist_baseline',
+            'exp1_cifar10_baseline'
         ]
         phases = []
         for config_name in config_name_list:
@@ -457,6 +469,7 @@ def main():
                     "width_factor": exp['width_factor'],
                     "depth": exp['depth'],
                     "poison_ratio": exp['poison_ratio'],
+                    "poison_type": exp.get('poison_type', 'label_flip'),
                     "alpha": exp['alpha'],
                     "data_ordering": exp.get('data_ordering', 'shuffle'),
                     "aggregator": exp.get('aggregator', 'fedavg'),

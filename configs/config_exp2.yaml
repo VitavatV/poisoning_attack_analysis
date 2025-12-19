@@ -1,11 +1,11 @@
-# EXP 3: Mechanism Analysis - Batch Size & Data Ordering
-# Goal: Understand mechanism behind width's robustness
-# Runtime: ~30-55 hours (36 experiments)
-# Priority: MEDIUM - Explains why width helps
+# EXP 2: Batch Size and Data Ordering
+# Goal: Analyze how batch size and data ordering affect model robustness
+# Runtime: ~30-55 hours (36 experiments per dataset, 72 total)
+# Priority: MEDIUM
 
 defaults:
-  project_name: "FL_EXP3_Mechanism"
-  output_dir: "./results_exp3_mnist"
+  project_name: "FL_EXP2_Mechanism"
+  output_dir: "./results_exp2_{dataset}"
   load_to_memory: true
   
   # FL Settings
@@ -40,9 +40,9 @@ defaults:
 seeds: [42, 101, 2024]
 
 # Vary batch size and data ordering to understand mechanism
-exp3_mechanism_analysis:
-  dataset: "mnist"
+exp2_mechanism_analysis:
   combinations:
+    - dataset: ["mnist", "cifar10"]
     - batch_size: [128, 32, 8]
     - data_ordering: ["shuffle", "bad_good", "good_bad"]
     - width_factor: [4]

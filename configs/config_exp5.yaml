@@ -1,11 +1,11 @@
-# EXP 1: High-Resolution Landscape - Fine-Grained Width Analysis
-# Goal: Plot double descent with detailed width points, compare clean vs poisoned
-# Runtime: ~40-80 hours (54 experiments)
-# Priority: HIGH - Core experiment for main hypothesis
+# EXP 5: Defense Comparison
+# Goal: Compare different defense mechanisms (FedAvg vs robust aggregation)
+# Runtime: ~12-20 hours (12 experiments per dataset, 24 total)
+# Priority: HIGH
 
 defaults:
-  project_name: "FL_EXP1_Landscape"
-  output_dir: "./results_exp1_cifar10"
+  project_name: "FL_EXP5_Defense"
+  output_dir: "./results_exp5_{dataset}"
   load_to_memory: true
   
   # FL Settings
@@ -37,13 +37,12 @@ defaults:
   data_ordering: "shuffle"
   aggregator: "fedavg"
 
-seeds: [42]
+seeds: [42, 101, 2024]
 
-# Fine-grained width sweep with poisoning comparison
-exp1_fine_grained_width:
-  dataset: "cifar10"
+# Compare FedAvg vs Median at critical and robust width
+exp5_defense_comparison:
   combinations:
-    - width_factor: [1024, 512, 256, 128, 64]
-    - poison_ratio: [0.0, 0.5]
-    - alpha: [100.0, 0.1]
-    - aggregator: ["fedavg"]
+    - dataset: ["mnist", "cifar10"]
+    - aggregator: ["fedavg", "median"]
+    - width_factor: [4]
+    - poison_ratio: [0.0, 0.3, 0.5]
