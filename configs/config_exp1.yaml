@@ -19,7 +19,7 @@ defaults:
   
   # Optimization (IEEE standard settings)
   optimizer: "sgd"
-  lr: 0.01                           # Standard SGD learning rate
+  lr: 0.02                           # Standard SGD learning rate
   momentum: 0.9                      # Nesterov momentum
   weight_decay: 5e-4                 # L2 regularization
   
@@ -28,7 +28,7 @@ defaults:
   
   # Validation & Early Stopping
   validation_split: 0.1              # 10% for validation
-  early_stopping_patience: 20        # Increased patience for IEEE standards
+  early_stopping_patience: 10        # Increased patience for IEEE standards
   min_delta: 0.0001                  # Minimum improvement threshold
 
   # Poisoning Attack Configuration
@@ -43,7 +43,7 @@ defaults:
 exp1_vary_width:
   combinations:
     - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
-    - model_type: ["cnn", "lr"]               # Model comparison: CNN vs Logistic Regression
+    - model_type: ["lr", "cnn"]               # Model comparison: CNN vs Logistic Regression
     - dataset: ["mnist", "cifar10"]
     - width_factor: [1, 4, 16, 64]              # Narrow to wide models (CNN only)
     - depth: [1, 4, 16, 64]                     # Shallow to deep models (CNN only)

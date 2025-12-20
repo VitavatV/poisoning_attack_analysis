@@ -19,7 +19,7 @@ defaults:
   
   # Optimization (IEEE standard settings)
   optimizer: "sgd"
-  lr: 0.01
+  lr: 0.02
   momentum: 0.9
   weight_decay: 5e-4
   
@@ -28,7 +28,7 @@ defaults:
   
   # Validation & Early Stopping
   validation_split: 0.1
-  early_stopping_patience: 20        # Increased for IEEE standards
+  early_stopping_patience: 10        # Increased for IEEE standards
   min_delta: 0.0001
 
   # Poisoning Attack Configuration
@@ -44,7 +44,7 @@ defaults:
 exp5_defense_comparison:
   combinations:
     - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
-    - model_type: ["cnn", "lr"]                     # Model comparison
+    - model_type: ["lr", "cnn"]                     # Model comparison
     - dataset: ["mnist", "cifar10"]
     - aggregator: ["fedavg", "median"]         # Baseline vs robust aggregation
     - width_factor: [4]                        # Fixed width for controlled comparison (CNN only)

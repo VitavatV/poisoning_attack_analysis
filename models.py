@@ -70,8 +70,8 @@ class LogisticRegression(nn.Module):
         """
         Args:
             num_classes: Number of output classes (10 for MNIST/CIFAR-10)
-            width_factor: Multiplier for hidden layer size
-            depth: Number of hidden layers (depth=1 means no hidden layers, just output layer)
+            width_factor: Number of hidden units per layer (matches CNN channel count)
+            depth: Number of hidden layers (same as CNN conv blocks for fair comparison)
             in_channels: Number of input channels (1 for MNIST, 3 for CIFAR)
             img_size: Spatial dimension of input images (28 for MNIST, 32 for CIFAR)
         """
@@ -83,20 +83,17 @@ class LogisticRegression(nn.Module):
         # Build network layers
         self.layers = nn.ModuleList()
         
-        # Base hidden size (comparable to CNN base channels)
-        base_hidden = 64  # Base units for hidden layers
-        
-        if depth == 1:
-            # Pure logistic regression: input -> output
+        if depth == 0:
+            # Pure logistic regression: input -> output (no hidden layers)
             self.layers.append(nn.Linear(self.input_dim, num_classes))
         else:
-            # Multi-layer perceptron
+            # Multi-layer perceptron with 'depth' hidden layers
             current_dim = self.input_dim
             
-            # Add hidden layers
-            for i in range(depth - 1):
-                # Hidden layer size scales with width_factor
-                hidden_size = int(base_hidden * width_factor)
+            # Add 'depth' hidden layers (same count as CNN conv blocks)
+            for i in range(depth):
+                # Hidden layer size = width_factor (matches CNN channel count)
+                hidden_size = width_factor
                 
                 self.layers.append(nn.Linear(current_dim, hidden_size))
                 self.layers.append(nn.ReLU())

@@ -474,6 +474,7 @@ def run_task(task: dict, gpu_id: int):
          # Save result
         result_entry = {
             "phase": phase,
+            "signature": f"{config['dataset']}|{config.get('model_type', 'cnn')}|{config.get('width_factor', 4)}|{config.get('depth', 4)}|{config['poison_ratio']}|{config.get('poison_type', 'label_flip')}|{config['alpha']}|{config.get('data_ordering', 'shuffle')}|{config.get('aggregator', 'fedavg')}|{config.get('batch_size', 64)}|{seed}",
             "dataset": config['dataset'],
             "model_type": config.get('model_type', 'cnn'),
             "width_factor": config.get('width_factor', 4),

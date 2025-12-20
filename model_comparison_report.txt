@@ -1,0 +1,76 @@
+
+======================================================================
+COMPARISON FOR MNIST
+======================================================================
+
+======================================================================
+ScalableCNN (MNIST) - Layer-by-Layer Parameter Count
+======================================================================
+Layer  1: layers.0.weight                          | Shape: [4, 1, 3, 3]         | Params: 36
+Layer  2: layers.0.bias                            | Shape: [4]                  | Params: 4
+Layer  3: layers.1.weight                          | Shape: [4]                  | Params: 4
+Layer  4: layers.1.bias                            | Shape: [4]                  | Params: 4
+Layer  5: layers.3.weight                          | Shape: [4, 4, 3, 3]         | Params: 144
+Layer  6: layers.3.bias                            | Shape: [4]                  | Params: 4
+Layer  7: layers.4.weight                          | Shape: [4]                  | Params: 4
+Layer  8: layers.4.bias                            | Shape: [4]                  | Params: 4
+Layer  9: layers.7.weight                          | Shape: [4, 4, 3, 3]         | Params: 144
+Layer 10: layers.7.bias                            | Shape: [4]                  | Params: 4
+Layer 11: layers.8.weight                          | Shape: [4]                  | Params: 4
+Layer 12: layers.8.bias                            | Shape: [4]                  | Params: 4
+Layer 13: layers.10.weight                         | Shape: [4, 4, 3, 3]         | Params: 144
+Layer 14: layers.10.bias                           | Shape: [4]                  | Params: 4
+Layer 15: layers.11.weight                         | Shape: [4]                  | Params: 4
+Layer 16: layers.11.bias                           | Shape: [4]                  | Params: 4
+Layer 17: classifier.weight                        | Shape: [10, 196]            | Params: 1,960
+Layer 18: classifier.bias                          | Shape: [10]                 | Params: 10
+----------------------------------------------------------------------
+TOTAL PARAMETERS                                               | 2,486
+======================================================================
+
+
+======================================================================
+LogisticRegression (MNIST) - Layer-by-Layer Parameter Count
+======================================================================
+Layer  1: layers.0.weight                          | Shape: [4, 784]             | Params: 3,136
+Layer  2: layers.0.bias                            | Shape: [4]                  | Params: 4
+Layer  3: layers.2.weight                          | Shape: [4]                  | Params: 4
+Layer  4: layers.2.bias                            | Shape: [4]                  | Params: 4
+Layer  5: layers.3.weight                          | Shape: [4, 4]               | Params: 16
+Layer  6: layers.3.bias                            | Shape: [4]                  | Params: 4
+Layer  7: layers.5.weight                          | Shape: [4]                  | Params: 4
+Layer  8: layers.5.bias                            | Shape: [4]                  | Params: 4
+Layer  9: layers.6.weight                          | Shape: [4, 4]               | Params: 16
+Layer 10: layers.6.bias                            | Shape: [4]                  | Params: 4
+Layer 11: layers.8.weight                          | Shape: [4]                  | Params: 4
+Layer 12: layers.8.bias                            | Shape: [4]                  | Params: 4
+Layer 13: layers.9.weight                          | Shape: [10, 4]              | Params: 40
+Layer 14: layers.9.bias                            | Shape: [10]                 | Params: 10
+----------------------------------------------------------------------
+TOTAL PARAMETERS                                               | 3,254
+======================================================================
+
+
+======================================================================
+ScalableCNN (MNIST) - Detailed Parameter Calculations
+Configuration: {'name': 'MNIST', 'num_classes': 10, 'width_factor': 4, 'depth': 4, 'in_channels': 1, 'img_size': 28}
+======================================================================
+
+CNN Layer Calculations:
+----------------------------------------------------------------------
+
+Block 1:
+Traceback (most recent call last):
+  File "C:\github\poisoning_attack_analysis\compare_model_parameters.py", line 192, in <module>
+    main()
+    ~~~~^^
+  File "C:\github\poisoning_attack_analysis\compare_model_parameters.py", line 175, in main
+    detailed_layer_calculation(cnn, f"ScalableCNN ({config['name']})", config)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\github\poisoning_attack_analysis\compare_model_parameters.py", line 54, in detailed_layer_calculation
+    print(f"  Conv2d({in_ch} \u2192 {out_ch}, 3╫3):")
+    ~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Python313\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 11: character maps to <undefined>

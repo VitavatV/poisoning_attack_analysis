@@ -164,25 +164,24 @@ class ExperimentManager:
             logging.info(f"Skipped {duplicates_skipped} duplicate tasks across configs")
     
     def load_completed_tasks(self):
-        """Scan all result directories for completed tasks"""
-        result_dirs = glob.glob('results_*')
+        """Load completed tasks from centralized CSV"""
+        centralized_csv = 'final_results.csv'
         
-        for result_dir in result_dirs:
-            csv_path = os.path.join(result_dir, 'final_results.csv')
-            if not os.path.exists(csv_path):
-                continue
+        if not os.path.exists(centralized_csv):
+            logging.info("No centralized final_results.csv found - starting fresh")
+            return
+        
+        try:
+            df = pd.read_csv(centralized_csv)
             
-            try:
-                df = pd.read_csv(csv_path)
-                
-                for _, row in df.iterrows():
-                    # Create a signature for this completed experiment
-                    sig = self._create_task_signature(row.to_dict())
-                    self.completed_tasks.add(sig)
-                
-                logging.info(f"Loaded {len(df)} completed experiments from {csv_path}")
-            except Exception as e:
-                logging.error(f"Error loading {csv_path}: {e}")
+            for _, row in df.iterrows():
+                row_dict = row.to_dict()
+                sig = self._create_task_signature(row_dict)
+                self.completed_tasks.add(sig)
+            
+            logging.info(f"Loaded {len(df)} completed experiments from {centralized_csv}")
+        except Exception as e:
+            logging.error(f"Error loading {centralized_csv}: {e}")
         
         # Mark matching tasks as complete
         with self.lock:
@@ -209,6 +208,23 @@ class ExperimentManager:
             config.get('aggregator', 'fedavg'),
             str(config.get('batch_size', 64)),
             str(config.get('seed', 42))  # Include seed for deduplication
+        ]
+        return '|'.join(key_params)
+    
+    def _create_result_signature(self, config: dict) -> str:
+        """Create result signature (without phase) for CSV display"""
+        key_params = [
+            config.get('dataset', ''),
+            config.get('model_type', 'cnn'),
+            str(config.get('width_factor', '')),
+            str(config.get('depth', '')),
+            str(config.get('poison_ratio', '')),
+            config.get('poison_type', 'label_flip'),
+            str(config.get('alpha', '')),
+            config.get('data_ordering', 'shuffle'),
+            config.get('aggregator', 'fedavg'),
+            str(config.get('batch_size', 64)),
+            str(config.get('seed', 42))
         ]
         return '|'.join(key_params)
     
@@ -306,25 +322,24 @@ class ExperimentManager:
             logging.info(f"Reassigned {len(stale_tasks)} stale tasks")
     
     def refresh_completed(self):
-        """Periodically refresh completed tasks from CSV files"""
+        """Periodically refresh completed tasks from centralized CSV"""
         while self.running:
             time.sleep(5)  # Check every 5 seconds
             
-            result_dirs = glob.glob('results_*')
+            centralized_csv = 'final_results.csv'
             new_completed = set()
             
-            for result_dir in result_dirs:
-                csv_path = os.path.join(result_dir, 'final_results.csv')
-                if not os.path.exists(csv_path):
-                    continue
-                
-                try:
-                    df = pd.read_csv(csv_path)
-                    for _, row in df.iterrows():
-                        sig = self._create_task_signature(row.to_dict())
-                        new_completed.add(sig)
-                except Exception as e:
-                    logging.error(f"Error refreshing {csv_path}: {e}")
+            if not os.path.exists(centralized_csv):
+                continue
+            
+            try:
+                df = pd.read_csv(centralized_csv)
+                for _, row in df.iterrows():
+                    row_dict = row.to_dict()
+                    sig = self._create_task_signature(row_dict)
+                    new_completed.add(sig)
+            except Exception as e:
+                logging.error(f"Error refreshing {centralized_csv}: {e}")
             
             # Update tasks
             with self.lock:
@@ -335,8 +350,8 @@ class ExperimentManager:
                         if sig in newly_completed and task['status'] != 'complete':
                             task['status'] = 'complete'
                             logging.info(f"Task {task_id} marked as complete via CSV refresh")
-                    
-                    self.completed_tasks.update(newly_completed)
+                
+                self.completed_tasks.update(newly_completed)
     
     def get_next_task(self, worker_id: str) -> Optional[dict]:
         """Get next available task for worker"""
@@ -383,39 +398,32 @@ class ExperimentManager:
                 logging.warning(f"Unknown task {task_id} reported complete by {worker_id}")
     
     def save_result(self, task_id: str, result_data: dict):
-        """Save experiment result to all output directories for this task"""
+        """Save experiment result to centralized CSV"""
         with self.lock:
             if task_id not in self.tasks:
                 logging.warning(f"Cannot save result: task {task_id} not found")
                 return
             
-            task = self.tasks[task_id]
-            output_dirs = task.get('output_dirs', [task.get('output_dir')])
-            
-            # Save to all output directories (handles duplicates across configs)
-            for output_dir in output_dirs:
-                try:
-                    os.makedirs(output_dir, exist_ok=True)
-                    csv_path = os.path.join(output_dir, 'final_results.csv')
-                    
-                    # Read existing results
-                    if os.path.exists(csv_path):
-                        df = pd.read_csv(csv_path)
-                        df = pd.concat([df, pd.DataFrame([result_data])], ignore_index=True)
-                    else:
-                        df = pd.DataFrame([result_data])
-                    
-                    # Save updated results
-                    df.to_csv(csv_path, index=False)
-                    logging.info(f"Saved result for {task_id} to {csv_path}")
-                    
-                except Exception as e:
-                    logging.error(f"Error saving result to {csv_path}: {e}")
-            
-            logging.info(
-                f"Result saved to {len(output_dirs)} director{'y' if len(output_dirs) == 1 else 'ies'} "
-                f"for task {task_id}"
-            )
+            try:
+                # Add signature if not present
+                if 'signature' not in result_data:
+                    result_data['signature'] = self._create_result_signature(result_data)
+                
+                centralized_csv = 'final_results.csv'
+                
+                # Read existing centralized results
+                if os.path.exists(centralized_csv):
+                    df_central = pd.read_csv(centralized_csv)
+                    df_central = pd.concat([df_central, pd.DataFrame([result_data])], ignore_index=True)
+                else:
+                    df_central = pd.DataFrame([result_data])
+                
+                # Save to centralized CSV
+                df_central.to_csv(centralized_csv, index=False)
+                logging.info(f"Saved result for {task_id} to {centralized_csv}")
+                
+            except Exception as e:
+                logging.error(f"Error saving result to centralized CSV: {e}")
     
     def mark_failed(self, task_id: str, worker_id: str, error_msg: str, max_retries: int = 3):
         """Mark task as failed and reassign if under retry limit"""
