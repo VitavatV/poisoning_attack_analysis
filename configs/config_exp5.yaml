@@ -13,7 +13,7 @@ defaults:
   num_clients: 10
   fraction_fit: 1.0
   global_rounds: 3000                # Increased for convergence
-  local_epochs: 5
+  local_epochs: 1                    # Reduced for faster training
   batch_size: 128
   
   # Optimization (IEEE standard settings)
@@ -42,7 +42,7 @@ defaults:
 # Defense Comparison: FedAvg vs Byzantine-Robust Aggregation
 exp5_defense_comparison:
   combinations:
-    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
+    - seed: [42]  # Statistical significance [42, 101, 2024, 3141, 9876]
     - model_type: ["lr", "cnn"]                     # Model comparison
     - dataset: ["mnist", "cifar10"]
     - aggregator: ["fedavg", "median"]         # Baseline vs robust aggregation

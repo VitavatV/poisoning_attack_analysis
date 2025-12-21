@@ -13,7 +13,7 @@ defaults:
   num_clients: 10                    # Standard FL setup
   fraction_fit: 1.0                  # All clients participate each round
   global_rounds: 3000                # Increased for convergence guarantee
-  local_epochs: 5                    # Standard for FL literature
+  local_epochs: 1                    # Reduced for faster training
   batch_size: 128                    # Optimized for GPU memory
   
   # Optimization (IEEE standard settings)

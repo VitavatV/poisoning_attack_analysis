@@ -13,7 +13,7 @@ defaults:
   num_clients: 10
   fraction_fit: 1.0
   global_rounds: 3000                # Increased for convergence
-  local_epochs: 5
+  local_epochs: 1                    # Reduced for faster training
   batch_size: 128                    # Default (varied in combinations)
   
   # Optimization (IEEE standard settings)
@@ -42,7 +42,7 @@ defaults:
 # Factorial Design: Batch Size × Data Ordering × Poison Level
 exp2_mechanism_analysis:
   combinations:
-    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
+    - seed: [42]  # Statistical significance [42, 101, 2024, 3141, 9876]
     - model_type: ["lr", "cnn"]                     # Model comparison
     - dataset: ["mnist", "cifar10"]
     - batch_size: [128, 32, 8]                 # Large, medium, small batches

@@ -398,19 +398,26 @@ def run_single_experiment(config, seed, gpu_id):
         global_weights = global_model.state_dict()
         selected_clients = np.random.choice(range(config['num_clients']), m, replace=False)
         
-        # Parallel training
-        num_workers = max(1, cpu_count() - 1)
-        
-        worker_args = [
-            (client_id, global_weights, config, train_ds_only, client_indices_subset, device_str)
-            for client_id in selected_clients
-        ]
-        
-        if num_workers == 1 or len(selected_clients) == 1:
-            local_weights = [train_client_worker(args) for args in worker_args]
-        else:
-            with Pool(processes=min(num_workers, len(selected_clients))) as pool:
-                local_weights = pool.map(train_client_worker, worker_args)
+        # Sequential client training (faster than multiprocessing for GPU)
+        # Parallelization happens at the batch level within each GPU
+        for client_id in selected_clients:
+            local_model = create_model(config, num_classes, in_channels, img_size).to(device)
+            local_model.load_state_dict(global_weights)
+            
+            client_loader = client_dataloaders[client_id]
+            
+            trained_weights = train_client(
+                local_model,
+                client_loader,
+                epochs=config['local_epochs'],
+                lr=config['lr'],
+                device=device,
+                momentum=config.get('momentum', 0.9),
+                weight_decay=float(config.get('weight_decay', 0)),
+                max_grad_norm=config.get('max_grad_norm', 1.0)
+            )
+            
+            local_weights.append(trained_weights)
             
         # Aggregation
         aggregator_name = config.get('aggregator', 'fedavg')
