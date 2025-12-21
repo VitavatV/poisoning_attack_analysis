@@ -86,6 +86,103 @@ class ExperimentManager:
         
         return experiments
     
+    def _calculate_model_params(self, config: dict) -> int:
+        """Calculate approximate model parameters from config"""
+        dataset = config.get('dataset', 'mnist')
+        model_type = config.get('model_type', 'cnn')
+        width_factor = config.get('width_factor', 4)
+        depth = config.get('depth', 4)
+        
+        # Dataset-specific parameters
+        if dataset == 'mnist':
+            num_classes, in_channels, img_size = 10, 1, 28
+        elif dataset == 'cifar10':
+            num_classes, in_channels, img_size = 10, 3, 32
+        elif dataset == 'cifar100':
+            num_classes, in_channels, img_size = 100, 3, 32
+        else:
+            num_classes = config.get('num_classes', 10)
+            in_channels = config.get('in_channels', 3)
+            img_size = config.get('img_size', 32)
+        
+        if model_type == 'lr':
+            # Logistic Regression / MLP parameter calculation
+            input_dim = in_channels * img_size * img_size
+            
+            if depth == 0:
+                # Pure logistic regression
+                params = input_dim * num_classes + num_classes
+            else:
+                # Multi-layer perceptron
+                params = 0
+                current_dim = input_dim
+                
+                # Hidden layers
+                for i in range(depth):
+                    hidden_size = width_factor
+                    # Linear layer
+                    params += current_dim * hidden_size + hidden_size
+                    # BatchNorm1d (gamma + beta)
+                    params += 2 * hidden_size
+                    current_dim = hidden_size
+                
+                # Output layer
+                params += current_dim * num_classes + num_classes
+        else:
+            # CNN parameter calculation
+            params = 0
+            current_channels = in_channels
+            current_spatial_dim = img_size
+            base_channels = 1
+            
+            # Convolutional layers
+            for i in range(depth):
+                out_channels = int(base_channels * width_factor)
+                
+                # Conv2d (kernel_size=3, padding=1)
+                params += current_channels * out_channels * 3 * 3 + out_channels
+                # BatchNorm2d (gamma + beta)
+                params += 2 * out_channels
+                
+                # MaxPool every 2 layers
+                if i % 2 != 0 and current_spatial_dim > 1:
+                    current_spatial_dim //= 2
+                
+                current_channels = out_channels
+            
+            # Classifier
+            flatten_dim = current_channels * (current_spatial_dim ** 2)
+            params += flatten_dim * num_classes + num_classes
+        
+        return params
+    
+    def _calculate_complexity_score(self, config: dict) -> float:
+        """
+        Calculate computational complexity score for task sorting.
+        
+        CNNs benefit more from GPU acceleration due to highly parallelizable
+        convolution operations, so we weight them higher even with fewer params.
+        
+        Returns:
+            Complexity score (higher = more GPU-friendly)
+        """
+        params = self._calculate_model_params(config)
+        model_type = config.get('model_type', 'cnn')
+        
+        # CNN operations are more GPU-friendly
+        # Apply multiplier to prioritize CNNs for GPU workers
+        if model_type == 'cnn':
+            # CNNs get 3x weight due to:
+            # - Highly parallelizable conv operations
+            # - Optimized CUDA kernels (cuDNN)
+            # - Better GPU utilization
+            complexity_score = params * 3.0
+        else:
+            # LR/MLP models (more memory-bound, less GPU-critical)
+            complexity_score = params * 1.0
+        
+        return complexity_score
+    
     def generate_all_tasks(self):
         """Generate all tasks from all config files"""
         configs = self.load_all_configs()
@@ -141,6 +238,10 @@ class ExperimentManager:
                     # Create unique task
                     task_id = f"{phase_name}_{task_counter}_{seed}"
                     
+                    # Calculate model parameters and complexity score for this task
+                    num_params = self._calculate_model_params(exp)
+                    complexity_score = self._calculate_complexity_score(exp)
+                    
                     self.tasks[task_id] = {
                         'task_id': task_id,
                         'phase': phase_name,
@@ -152,7 +253,9 @@ class ExperimentManager:
                         'assigned_to': None,
                         'assigned_at': None,
                         'retry_count': 0,          # Track retry attempts
-                        'last_error': None         # Track last error message
+                        'last_error': None,        # Track last error message
+                        'num_params': num_params,  # Model parameter count
+                        'complexity_score': complexity_score  # Computational complexity for sorting
                     }
                     
                     # Register this signature
@@ -162,6 +265,72 @@ class ExperimentManager:
         logging.info(f"Generated {len(self.tasks)} unique tasks")
         if duplicates_skipped > 0:
             logging.info(f"Skipped {duplicates_skipped} duplicate tasks across configs")
+    
+    def export_task_summary(self, filename='task_summary.csv'):
+        """Export summary of all tasks to CSV for analysis"""
+        import csv
+        
+        if not self.tasks:
+            logging.warning("No tasks to export")
+            return
+        
+        rows = []
+        for task_id, task in sorted(self.tasks.items()):
+            config = task['config']
+            rows.append({
+                'task_id': task_id,
+                'phase': task['phase'],
+                'dataset': config.get('dataset', ''),
+                'model_type': config.get('model_type', 'cnn'),
+                'width_factor': config.get('width_factor', 4),
+                'depth': config.get('depth', 4),
+                'poison_ratio': config.get('poison_ratio', 0),
+                'seed': task['seed'],
+                'num_params': task.get('num_params', 0),
+                'complexity_score': task.get('complexity_score', 0),
+                'status': task['status']
+            })
+        
+        # Save to CSV
+        with open(filename, 'w', newline='', encoding='utf-8') as f:
+            if rows:
+                writer = csv.DictWriter(f, fieldnames=rows[0].keys())
+                writer.writeheader()
+                writer.writerows(rows)
+        
+        logging.info(f"Exported task summary to {filename}")
+        
+        # Print summary statistics
+        total_tasks = len(rows)
+        cnn_tasks = sum(1 for r in rows if r['model_type'] == 'cnn')
+        lr_tasks = sum(1 for r in rows if r['model_type'] == 'lr')
+        
+        total_params = sum(r['num_params'] for r in rows)
+        total_complexity = sum(r['complexity_score'] for r in rows)
+        
+        print("\n" + "="*80)
+        print("TASK SUMMARY")
+        print("="*80)
+        print(f"Total tasks: {total_tasks:,}")
+        print(f"  - CNN tasks: {cnn_tasks:,}")
+        print(f"  - LR tasks:  {lr_tasks:,}")
+        print(f"\nTotal parameters: {total_params:,}")
+        print(f"Total complexity: {total_complexity:,.0f}")
+        print(f"\nTask distribution preview (first 10 by complexity):")
+        print("-"*80)
+        print(f"{'Task ID':<30} {'Type':<5} {'Params':>10} {'Complexity':>12} {'Dataset':<8}")
+        print("-"*80)
+        
+        # Sort by complexity and show top 10
+        sorted_rows = sorted(rows, key=lambda x: x['complexity_score'], reverse=True)[:10]
+        for row in sorted_rows:
+            print(f"{row['task_id']:<30} {row['model_type'].upper():<5} "
+                  f"{row['num_params']:>10,} {row['complexity_score']:>12,.0f} "
+                  f"{row['dataset']:<8}")
+        
+        print("="*80)
+        print(f"Full task list saved to: {filename}")
+        print("="*80 + "\n")
     
     def load_completed_tasks(self):
         """Load completed tasks from centralized CSV"""
@@ -353,8 +522,8 @@ class ExperimentManager:
                 
                 self.completed_tasks.update(newly_completed)
     
-    def get_next_task(self, worker_id: str) -> Optional[dict]:
-        """Get next available task for worker"""
+    def get_next_task(self, worker_id: str, worker_type: str = 'gpu') -> Optional[dict]:
+        """Get next available task for worker, sorted by parameter count based on worker type"""
         with self.lock:
             # Check for stale assignments (>2 hours old)
             current_time = datetime.now()
@@ -366,21 +535,37 @@ class ExperimentManager:
                     self.tasks[task_id]['assigned_to'] = None
                     del self.assigned_tasks[task_id]
             
-            # Find next pending task
-            for task_id, task in self.tasks.items():
-                if task['status'] == 'pending':
-                    task['status'] = 'assigned'
-                    task['assigned_to'] = worker_id
-                    task['assigned_at'] = current_time
-                    self.assigned_tasks[task_id] = task
-                    
-                    logging.info(f"Assigned task {task_id} to {worker_id}")
-                    return task
+            # Get all pending tasks and sort by parameter count
+            pending_tasks = [(task_id, task) for task_id, task in self.tasks.items() 
+                           if task['status'] == 'pending']
             
-            # No pending tasks - check if all tasks are complete
-            self.check_all_complete()
+            if not pending_tasks:
+                # No pending tasks - check if all tasks are complete
+                self.check_all_complete()
+                return None
             
-            return None
+            # Sort by computational complexity score based on worker type
+            # GPU workers: descending (highest complexity first - CNNs prioritized)
+            # CPU workers: ascending (lowest complexity first - small models)
+            # Note: CNNs get 3x multiplier due to better GPU utilization
+            reverse_sort = (worker_type == 'gpu')
+            pending_tasks.sort(key=lambda x: x[1].get('complexity_score', 0), reverse=reverse_sort)
+            
+            # Assign the first task from sorted list
+            task_id, task = pending_tasks[0]
+            task['status'] = 'assigned'
+            task['assigned_to'] = worker_id
+            task['assigned_at'] = current_time
+            self.assigned_tasks[task_id] = task
+            
+            params = task.get('num_params', 0)
+            complexity = task.get('complexity_score', 0)
+            model_type = task['config'].get('model_type', 'cnn')
+            logging.info(
+                f"Assigned task {task_id} to {worker_id} ({worker_type}) - "
+                f"{model_type.upper()}: {params:,} params, complexity: {complexity:,.0f}"
+            )
+            return task
     
     def mark_complete(self, task_id: str, worker_id: str):
         """Mark task as complete"""
@@ -548,7 +733,8 @@ class ExperimentManager:
             
             if request['type'] == 'request_task':
                 worker_id = request['worker_id']
-                task = self.get_next_task(worker_id)
+                worker_type = request.get('worker_type', 'gpu')  # Default to GPU for backward compatibility
+                task = self.get_next_task(worker_id, worker_type)
                 
                 if task:
                     # Create a clean task dict without internal fields
@@ -644,6 +830,9 @@ class ExperimentManager:
         
         # Generate all tasks
         self.generate_all_tasks()
+        
+        # Export task summary CSV
+        self.export_task_summary('task_summary.csv')
         
         # Load completed tasks
         self.load_completed_tasks()

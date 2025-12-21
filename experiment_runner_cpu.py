@@ -1,8 +1,8 @@
 """
-GPU Worker Process
+CPU Worker Process
 
-Requests tasks from experiment_manager and executes them on available GPU.
-Supports dynamic GPU allocation and automatic task completion reporting.
+Requests tasks from experiment_manager and executes them using CPU.
+Uses multiprocessing to parallelize client training for better CPU utilization.
 """
 
 import random
@@ -16,6 +16,7 @@ from torch.utils.data import DataLoader, Subset, random_split
 import logging
 from multiprocessing import Pool, cpu_count
 import sys
+import os
 
 # Import modules
 from models import ScalableCNN, LogisticRegression
@@ -23,105 +24,9 @@ from data_utils import load_global_dataset, partition_data_dirichlet, get_client
 from utils import train_client, evaluate_model, fed_avg, fed_median, EarlyStopping
 
 import pandas as pd
-import os
 
 
-def get_available_gpu() -> int:
-    """
-    Find an available GPU with exclusive lock (one worker per GPU).
-    Uses PID lock files to prevent multiple workers on same GPU.
-    
-    Returns:
-        GPU ID (int) if available, None otherwise
-    """
-    if not torch.cuda.is_available():
-        print("CUDA not available")
-        return None
-    
-    gpu_count = torch.cuda.device_count()
-    print(f"Found {gpu_count} GPUs")
-    
-    # Create locks directory
-    lock_dir = os.path.join(os.getcwd(), '.gpu_locks')
-    os.makedirs(lock_dir, exist_ok=True)
-    
-    pid = os.getpid()
-    
-    # Clean up stale locks (processes that no longer exist)
-    for lock_file in os.listdir(lock_dir):
-        if lock_file.startswith('gpu_') and lock_file.endswith('.lock'):
-            lock_path = os.path.join(lock_dir, lock_file)
-            try:
-                with open(lock_path, 'r') as f:
-                    old_pid = int(f.read().strip())
-                
-                # Check if process still exists
-                try:
-                    os.kill(old_pid, 0)  # Signal 0 checks existence without killing
-                except (OSError, ProcessLookupError):
-                    # Process doesn't exist, remove stale lock
-                    os.remove(lock_path)
-                    print(f"Removed stale lock: {lock_file}")
-            except Exception as e:
-                print(f"Error checking lock {lock_file}: {e}")
-    
-    # Try to claim a GPU
-    for gpu_id in range(gpu_count):
-        try:
-            # Check memory
-            mem_free, mem_total = torch.cuda.mem_get_info(gpu_id)
-            mem_free_gb = mem_free / (1024**3)
-            mem_total_gb = mem_total / (1024**3)
-            
-            print(f"GPU {gpu_id}: {mem_free_gb:.1f}GB free / {mem_total_gb:.1f}GB total")
-            
-            # Require at least 4GB free
-            if mem_free_gb <= 4.0:
-                continue
-            
-            # Check if GPU is already locked
-            lock_file = os.path.join(lock_dir, f'gpu_{gpu_id}.lock')
-            
-            if os.path.exists(lock_file):
-                # GPU already claimed by another worker
-                with open(lock_file, 'r') as f:
-                    lock_pid = int(f.read().strip())
-                print(f"GPU {gpu_id} already claimed by PID {lock_pid}")
-                continue
-            
-            # Try to claim this GPU
-            try:
-                with open(lock_file, 'w') as f:
-                    f.write(str(pid))
-                
-                print(f"✓ Successfully claimed GPU {gpu_id} (PID {pid})")
-                return gpu_id
-            except Exception as e:
-                print(f"Failed to claim GPU {gpu_id}: {e}")
-                continue
-                
-        except Exception as e:
-            print(f"Error checking GPU {gpu_id}: {e}")
-            continue
-    
-    print("No available GPUs (all claimed or insufficient memory)")
-    return None
-
-
-def release_gpu_lock(gpu_id: int):
-    """Release GPU lock when worker exits"""
-    lock_dir = os.path.join(os.getcwd(), '.gpu_locks')
-    lock_file = os.path.join(lock_dir, f'gpu_{gpu_id}.lock')
-    
-    if os.path.exists(lock_file):
-        try:
-            os.remove(lock_file)
-            print(f"Released GPU {gpu_id} lock")
-        except Exception as e:
-            print(f"Error releasing GPU lock: {e}")
-
-
-def request_task_from_manager(worker_id: str, gpu_id: int, host='localhost', port=5000) -> dict:
+def request_task_from_manager(worker_id: str, host='localhost', port=5000) -> dict:
     """
     Request a task from the experiment manager.
     
@@ -135,8 +40,7 @@ def request_task_from_manager(worker_id: str, gpu_id: int, host='localhost', por
         request = {
             'type': 'request_task',
             'worker_id': worker_id,
-            'gpu_id': gpu_id,
-            'worker_type': 'gpu'  # Identify as GPU worker
+            'worker_type': 'cpu'  # Identify as CPU worker
         }
         
         sock.sendall(json.dumps(request).encode('utf-8'))
@@ -265,10 +169,10 @@ def create_model(config, num_classes, in_channels, img_size):
 
 
 def train_client_worker(args):
-    """Worker function for parallel client training"""
+    """Worker function for parallel client training using CPU multiprocessing"""
     client_id, global_weights, config, train_ds_only, client_indices_subset, device_str = args
     
-    from models import ScalableCNN
+    from models import ScalableCNN, LogisticRegression
     from data_utils import get_client_dataloader
     from utils import train_client
     import torch
@@ -312,19 +216,21 @@ def train_client_worker(args):
     return trained_weights
 
 
-def run_single_experiment(config, seed, gpu_id):
-    """Run a single experiment on specified GPU"""
-    # Force specific GPU
-    config['device'] = f'cuda:{gpu_id}'
+def run_single_experiment(config, seed, num_cpu_workers=None):
+    """Run a single experiment on CPU with multiprocessing"""
+    # Force CPU device
+    config['device'] = 'cpu'
     
     # Set all seeds
     random.seed(seed)
     torch.manual_seed(seed)
-    torch.cuda.manual_seed(seed)
     np.random.seed(seed)
-    torch.backends.cudnn.deterministic = True
     
-    print(f"\n>>> RUNNING Seed: {seed} on GPU {gpu_id}")
+    # Determine number of CPU workers for parallel training
+    if num_cpu_workers is None:
+        num_cpu_workers = max(1, cpu_count() - 2)  # Leave 2 cores for system
+    
+    print(f"\n>>> RUNNING Seed: {seed} on CPU (using {num_cpu_workers} workers)")
     print("\n" + "="*60)
 
     device = torch.device(config['device'])
@@ -355,17 +261,6 @@ def run_single_experiment(config, seed, gpu_id):
         # Convert list to tensor (CIFAR-10 case)
         train_ds_only.targets = torch.tensor(train_ds_full.targets)
     
-    client_dataloaders = {}
-    is_victim = config['poison_ratio'] > 0
-    for client_id in range(config['num_clients']):
-        client_config = config.copy()
-        client_dataloaders[client_id] = get_client_dataloader(
-            train_ds_only, 
-            client_indices_subset[client_id], 
-            client_config, 
-            is_attacker=is_victim
-        )
-
     # Initialize model
     if config['dataset'] == 'mnist':
         num_classes, in_channels, img_size = 10, 1, 28
@@ -399,26 +294,42 @@ def run_single_experiment(config, seed, gpu_id):
         global_weights = global_model.state_dict()
         selected_clients = np.random.choice(range(config['num_clients']), m, replace=False)
         
-        # Sequential client training (faster than multiprocessing for GPU)
-        # Parallelization happens at the batch level within each GPU
-        for client_id in selected_clients:
-            local_model = create_model(config, num_classes, in_channels, img_size).to(device)
-            local_model.load_state_dict(global_weights)
-            
-            client_loader = client_dataloaders[client_id]
-            
-            trained_weights = train_client(
-                local_model,
-                client_loader,
-                epochs=config['local_epochs'],
-                lr=config['lr'],
-                device=device,
-                momentum=config.get('momentum', 0.9),
-                weight_decay=float(config.get('weight_decay', 0)),
-                max_grad_norm=config.get('max_grad_norm', 1.0)
-            )
-            
-            local_weights.append(trained_weights)
+        # Parallel client training using multiprocessing
+        workers_to_use = min(len(selected_clients), num_cpu_workers)
+        
+        if workers_to_use > 1:
+            # Use multiprocessing for parallel training
+            with Pool(workers_to_use) as pool:
+                args = [(client_id, global_weights, config, train_ds_only, 
+                         client_indices_subset, device_str) 
+                        for client_id in selected_clients]
+                local_weights = pool.map(train_client_worker, args)
+        else:
+            # Sequential training for single worker
+            for client_id in selected_clients:
+                local_model = create_model(config, num_classes, in_channels, img_size).to(device)
+                local_model.load_state_dict(global_weights)
+                
+                is_victim = config['poison_ratio'] > 0
+                client_loader = get_client_dataloader(
+                    train_ds_only, 
+                    client_indices_subset[client_id], 
+                    config, 
+                    is_attacker=is_victim
+                )
+                
+                trained_weights = train_client(
+                    local_model,
+                    client_loader,
+                    epochs=config['local_epochs'],
+                    lr=config['lr'],
+                    device=device,
+                    momentum=config.get('momentum', 0.9),
+                    weight_decay=float(config.get('weight_decay', 0)),
+                    max_grad_norm=config.get('max_grad_norm', 1.0)
+                )
+                
+                local_weights.append(trained_weights)
             
         # Aggregation
         aggregator_name = config.get('aggregator', 'fedavg')
@@ -461,7 +372,7 @@ def run_single_experiment(config, seed, gpu_id):
     return test_acc, test_loss, best_acc, best_loss, best_epoch, num_params, global_model
 
 
-def run_task(task: dict, gpu_id: int):
+def run_task(task: dict, worker_id: str, num_cpu_workers=None):
     """Execute a single task"""
     config = task['config']
     seed = task['seed']
@@ -487,7 +398,9 @@ def run_task(task: dict, gpu_id: int):
     
     try:
         # Run experiment
-        t_acc, t_loss, v_acc, v_loss, best_epoch, num_params, model = run_single_experiment(config, seed, gpu_id)
+        t_acc, t_loss, v_acc, v_loss, best_epoch, num_params, model = run_single_experiment(
+            config, seed, num_cpu_workers
+        )
         
         # Check if results contain NaN/Inf (training failed)
         if np.isnan(t_acc) or np.isinf(t_acc) or np.isnan(t_loss) or np.isinf(t_loss):
@@ -521,7 +434,7 @@ def run_task(task: dict, gpu_id: int):
         }
         
         # Submit result to manager (manager will save to all output directories)
-        success = submit_result_to_manager(task['task_id'], f"gpu{gpu_id}", result_entry)
+        success = submit_result_to_manager(task['task_id'], worker_id, result_entry)
         
         if not success:
             # Fallback: save locally if manager submission failed
@@ -548,12 +461,12 @@ def run_task(task: dict, gpu_id: int):
         traceback.print_exc()
         
         # Notify manager that task failed so it can be reassigned
-        notify_task_failed(task['task_id'], f"gpu{gpu_id}", error_msg)
+        notify_task_failed(task['task_id'], worker_id, error_msg)
         
         return False
 
 
-def worker_loop(manager_host='localhost', manager_port=5000):
+def worker_loop(manager_host='localhost', manager_port=5000, num_cpu_workers=None):
     """Main worker loop"""
     import multiprocessing
     
@@ -564,31 +477,27 @@ def worker_loop(manager_host='localhost', manager_port=5000):
         pass
     
     print("="*60)
-    print("GPU Worker Starting")
+    print("CPU Worker Starting")
     print("="*60)
     
-    # 1. Check for available GPU
-    gpu_id = get_available_gpu()
-    if gpu_id is None:
-        print("No available GPU found. Exiting.")
-        sys.exit(0)
+    pid = os.getpid()
+    worker_id = f"cpu_worker_{pid}"
     
-    # Register cleanup handler to release GPU lock on exit
-    import atexit
-    atexit.register(release_gpu_lock, gpu_id)
+    # Determine CPU workers
+    if num_cpu_workers is None:
+        num_cpu_workers = max(1, cpu_count() - 2)
     
-    worker_id = f"gpu{gpu_id}"
     print(f"\nWorker ID: {worker_id}")
-    print(f"Using GPU: {gpu_id}")
+    print(f"Using CPU with {num_cpu_workers} parallel workers")
     print(f"Manager: {manager_host}:{manager_port}")
     print("="*60)
     
     task_count = 0
     
     while True:
-        # 2. Request task
+        # Request task
         print(f"\n[{worker_id}] Requesting task from manager...")
-        task = request_task_from_manager(worker_id, gpu_id, manager_host, manager_port)
+        task = request_task_from_manager(worker_id, manager_host, manager_port)
         
         if task is None:
             print(f"[{worker_id}] No more tasks available. Shutting down.")
@@ -597,14 +506,14 @@ def worker_loop(manager_host='localhost', manager_port=5000):
         task_count += 1
         print(f"\n[{worker_id}] Received task {task['task_id']} (Task #{task_count})")
         
-        # 3. Execute task
-        success = run_task(task, gpu_id)
+        # Execute task
+        success = run_task(task, worker_id, num_cpu_workers)
         
-        # 4. Notify completion
+        # Notify completion
         if success:
             notify_task_complete(task['task_id'], worker_id, manager_host, manager_port)
         
-        # 5. Wait before next request
+        # Wait before next request
         print(f"\n[{worker_id}] Waiting 10 seconds before next request...")
         time.sleep(10)
     
@@ -612,8 +521,9 @@ def worker_loop(manager_host='localhost', manager_port=5000):
 
 
 if __name__ == "__main__":
-    # Parse command-line args for manager host/port
+    # Parse command-line args for manager host/port and CPU workers
     manager_host = sys.argv[1] if len(sys.argv) > 1 else 'localhost'
     manager_port = int(sys.argv[2]) if len(sys.argv) > 2 else 5000
+    num_cpu_workers = int(sys.argv[3]) if len(sys.argv) > 3 else None
     
-    worker_loop(manager_host, manager_port)
+    worker_loop(manager_host, manager_port, num_cpu_workers)
