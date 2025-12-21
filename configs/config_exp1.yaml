@@ -15,7 +15,6 @@ defaults:
   global_rounds: 3000                # Increased for convergence guarantee
   local_epochs: 5                    # Standard for FL literature
   batch_size: 128                    # Optimized for GPU memory
-  num_parallel_workers: 1
   
   # Optimization (IEEE standard settings)
   optimizer: "sgd"
@@ -42,7 +41,7 @@ defaults:
 # Comprehensive Grid Search
 exp1_vary_width:
   combinations:
-    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance
+    - seed: [42]  # Statistical significance [42, 101, 2024, 3141, 9876]
     - model_type: ["lr", "cnn"]               # Model comparison: CNN vs Logistic Regression
     - dataset: ["mnist", "cifar10"]
     - width_factor: [1, 4, 16, 64]              # Narrow to wide models (CNN only)

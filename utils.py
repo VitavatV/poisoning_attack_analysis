@@ -68,6 +68,8 @@ def train_client(model, train_loader, epochs, lr, device, momentum=0.9, weight_d
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum, weight_decay=weight_decay)
     
     nan_detected = False
+    extreme_gradient_counter = 0
+    extreme_gradient_threshold = 10  # Stop after 10 extreme gradients
     
     for epoch in range(epochs):
         for batch_idx, batch in enumerate(train_loader):
@@ -98,21 +100,36 @@ def train_client(model, train_loader, epochs, lr, device, momentum=0.9, weight_d
             
             loss.backward()
             
-            # Gradient Clipping
+            # Gradient Clipping with silent extreme gradient tracking
             if max_grad_norm is not None:
                 total_norm = torch.nn.utils.clip_grad_norm_(model.parameters(), max_grad_norm)
                 
-                # Log if gradients were very large
-                if total_norm > max_grad_norm * 2:
-                    # logging.warning(f"⚠️ Large gradients detected! Norm: {total_norm:.3f} (clipped to {max_grad_norm})")
-                    pass
+                # Silently count extreme gradients (no warnings to avoid spam)
+                if total_norm > max_grad_norm * 10:
+                    extreme_gradient_counter += 1
+                    
+                    # Abort if too many extreme gradients (no intermediate logging)
+                    if extreme_gradient_counter >= extreme_gradient_threshold:
+                        logging.error(f"🛑 Training aborted: {extreme_gradient_threshold} extreme gradients detected.")
+                        nan_detected = True
+                        break
+                
+                # Check for NaN in gradients
+                for name, param in model.named_parameters():
+                    if param.grad is not None and (torch.isnan(param.grad).any() or torch.isinf(param.grad).any()):
+                        logging.error(f"🚨 NaN/Inf in gradients! Layer: {name}")
+                        nan_detected = True
+                        break
+                
+                if nan_detected:
+                    break
             
             optimizer.step()
             
-            # Check for NaN in model weights after update
+            # Check for NaN/Inf in model weights after update
             for name, param in model.named_parameters():
                 if torch.isnan(param).any() or torch.isinf(param).any():
-                    logging.error(f"🚨 NaN/Inf in weights after update! Layer: {name}")
+                    logging.error(f"🚨 NaN/Inf in weights! Layer: {name}")
                     nan_detected = True
                     break
             
@@ -120,7 +137,7 @@ def train_client(model, train_loader, epochs, lr, device, momentum=0.9, weight_d
                 break
         
         if nan_detected:
-            logging.error("🛑 Training stopped due to NaN/Inf. Returning current weights.")
+            logging.error("🛑 Training stopped: NaN/Inf or severe instability detected.")
             break
             
     return model.state_dict()

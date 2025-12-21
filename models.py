@@ -11,6 +11,7 @@ class ScalableCNN(nn.Module):
             in_channels: Number of input channels (3 for RGB, 1 for Grayscale)
         """
         super(ScalableCNN, self).__init__()
+        
         self.layers = nn.ModuleList()
         
         # Base channels configuration

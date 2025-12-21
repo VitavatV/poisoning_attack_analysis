@@ -23,7 +23,6 @@ test_config = {
         'global_rounds': 5,  # Very short for testing
         'local_epochs': 1,
         'batch_size': 32,
-        'num_parallel_workers': 1,
         'optimizer': 'sgd',
         'lr': 0.01,
         'momentum': 0.9,

@@ -15,7 +15,6 @@ defaults:
   global_rounds: 3000                # Increased for convergence
   local_epochs: 5
   batch_size: 128
-  num_parallel_workers: 1
   
   # Optimization (IEEE standard settings)
   optimizer: "sgd"

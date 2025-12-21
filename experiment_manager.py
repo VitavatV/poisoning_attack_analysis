@@ -398,11 +398,13 @@ class ExperimentManager:
                 logging.warning(f"Unknown task {task_id} reported complete by {worker_id}")
     
     def save_result(self, task_id: str, result_data: dict):
-        """Save experiment result to centralized CSV"""
+        """Save experiment result to centralized CSV with duplicates for all relevant phases"""
         with self.lock:
             if task_id not in self.tasks:
                 logging.warning(f"Cannot save result: task {task_id} not found")
                 return
+            
+            task = self.tasks[task_id]
             
             try:
                 # Add signature if not present
@@ -414,16 +416,61 @@ class ExperimentManager:
                 # Read existing centralized results
                 if os.path.exists(centralized_csv):
                     df_central = pd.read_csv(centralized_csv)
-                    df_central = pd.concat([df_central, pd.DataFrame([result_data])], ignore_index=True)
                 else:
-                    df_central = pd.DataFrame([result_data])
+                    df_central = pd.DataFrame()
                 
-                # Save to centralized CSV
-                df_central.to_csv(centralized_csv, index=False)
-                logging.info(f"Saved result for {task_id} to {centralized_csv}")
+                # Get all phases that need this result (from output_dirs mapping)
+                output_dirs = task.get('output_dirs', [task.get('output_dir')])
+                phases_needed = []
+                
+                for output_dir in output_dirs:
+                    if not output_dir:
+                        continue
+                    # Extract phase from output_dir pattern (e.g., "results_exp2_mnist" -> "exp2_...")
+                    # Match against known phase names
+                    for phase in ['exp1_vary_width', 'exp2_mechanism_analysis', 'exp3_attack_types',
+                                  'exp4_iid_vs_noniid', 'exp5_defense_comparison']:
+                        phase_prefix = phase.split('_')[0]  # exp1, exp2, etc.
+                        if phase_prefix in output_dir:
+                            phases_needed.append(phase)
+                            break
+                
+                # If no phases detected, use the task's phase
+                if not phases_needed:
+                    phases_needed = [task['phase']]
+                
+                # Create duplicate rows for each needed phase
+                rows_to_add = []
+                for phase in phases_needed:
+                    # Check if this phase+signature combo already exists
+                    if len(df_central) > 0:
+                        existing = df_central[
+                            (df_central['phase'] == phase) & 
+                            (df_central['signature'] == result_data['signature'])
+                        ]
+                        if len(existing) > 0:
+                            logging.debug(f"Result for {phase} with signature {result_data['signature'][:30]}... already exists")
+                            continue
+                    
+                    # Create duplicate row with this phase
+                    row = result_data.copy()
+                    row['phase'] = phase
+                    rows_to_add.append(row)
+                
+                if rows_to_add:
+                    df_new = pd.DataFrame(rows_to_add)
+                    df_central = pd.concat([df_central, df_new], ignore_index=True)
+                    
+                    # Save to centralized CSV
+                    df_central.to_csv(centralized_csv, index=False)
+                    
+                    phases_str = ', '.join([r['phase'] for r in rows_to_add])
+                    logging.info(f"Saved result for {task_id} to {centralized_csv} (phases: {phases_str})")
+                else:
+                    logging.info(f"Result for {task_id} already exists in all needed phases")
                 
             except Exception as e:
-                logging.error(f"Error saving result to centralized CSV: {e}")
+                logging.error(f"Error saving result: {e}")
     
     def mark_failed(self, task_id: str, worker_id: str, error_msg: str, max_retries: int = 3):
         """Mark task as failed and reassign if under retry limit"""
@@ -459,6 +506,8 @@ class ExperimentManager:
         # Note: Should be called while holding self.lock
         total = len(self.tasks)
         complete = sum(1 for t in self.tasks.values() if t['status'] == 'complete')
+        
+        logging.info(f"Updated status: {complete}/{total}")
         
         if total > 0 and complete == total:
             logging.info("="*60)
@@ -585,6 +634,13 @@ class ExperimentManager:
     def start(self):
         """Start the experiment manager"""
         logging.info("Starting Experiment Manager")
+        
+        # Migrate existing results to individual directories (safety check)
+        try:
+            from migrate_results_to_dirs import migrate_results
+            migrate_results(quiet=True)  # Quiet mode to reduce log noise
+        except Exception as e:
+            logging.warning(f"Result migration skipped: {e}")
         
         # Generate all tasks
         self.generate_all_tasks()

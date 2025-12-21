@@ -315,7 +315,6 @@ def run_single_experiment(config, seed, gpu_id):
     """Run a single experiment on specified GPU"""
     # Force specific GPU
     config['device'] = f'cuda:{gpu_id}'
-    config['num_parallel_workers'] = 3
     
     # Set all seeds
     random.seed(seed)
@@ -348,7 +347,13 @@ def run_single_experiment(config, seed, gpu_id):
     client_indices_subset = partition_data_dirichlet(train_ds_only, config['num_clients'], 
                                                      alpha=config['alpha'])
 
-    train_ds_only.targets = torch.tensor(train_ds_full.targets)
+    # Handle both tensor (MNIST) and list (CIFAR-10) targets
+    if isinstance(train_ds_full.targets, torch.Tensor):
+        train_ds_only.targets = train_ds_full.targets.clone().detach()
+    else:
+        # Convert list to tensor (CIFAR-10 case)
+        train_ds_only.targets = torch.tensor(train_ds_full.targets)
+    
     client_dataloaders = {}
     is_victim = config['poison_ratio'] > 0
     for client_id in range(config['num_clients']):
@@ -394,10 +399,7 @@ def run_single_experiment(config, seed, gpu_id):
         selected_clients = np.random.choice(range(config['num_clients']), m, replace=False)
         
         # Parallel training
-        num_workers = config.get('num_parallel_workers', -1)
-        if num_workers == -1:
-            num_workers = max(1, cpu_count() - 1)
-        num_workers = max(1, min(num_workers, cpu_count()))
+        num_workers = max(1, cpu_count() - 1)
         
         worker_args = [
             (client_id, global_weights, config, train_ds_only, client_indices_subset, device_str)
@@ -420,6 +422,14 @@ def run_single_experiment(config, seed, gpu_id):
         
         # Validation
         val_loss, val_acc = evaluate_model(global_model, val_loader, device)
+        
+        # Check if validation returns NaN (all clients failed to train)
+        if np.isnan(val_loss) or np.isinf(val_loss):
+            logging.error(f"🛑 EXPERIMENT FAILED: Validation returned NaN/Inf at round {round_idx+1}")
+            logging.error(f"   This indicates severe training instability across all clients.")
+            logging.error(f"   Stopping experiment early. Returning NaN results.")
+            # Return NaN results
+            return np.nan, np.nan, np.nan, np.nan, round_idx, sum(p.numel() for p in global_model.parameters()), global_model
         
         print(f"Round {round_idx+1}/{config['global_rounds']} | Val Loss: {val_loss:.4f} | Val Acc: {val_acc:.4f}")
         
@@ -471,7 +481,11 @@ def run_task(task: dict, gpu_id: int):
         # Run experiment
         t_acc, t_loss, v_acc, v_loss, best_epoch, num_params, model = run_single_experiment(config, seed, gpu_id)
         
-         # Save result
+        # Check if results contain NaN/Inf (training failed)
+        if np.isnan(t_acc) or np.isinf(t_acc) or np.isnan(t_loss) or np.isinf(t_loss):
+            logging.warning("⚠️ Training resulted in NaN/Inf values. Recording as failed experiment.")
+        
+        # Save result (including NaN if training failed)
         result_entry = {
             "phase": phase,
             "signature": f"{config['dataset']}|{config.get('model_type', 'cnn')}|{config.get('width_factor', 4)}|{config.get('depth', 4)}|{config['poison_ratio']}|{config.get('poison_type', 'label_flip')}|{config['alpha']}|{config.get('data_ordering', 'shuffle')}|{config.get('aggregator', 'fedavg')}|{config.get('batch_size', 64)}|{seed}",
@@ -485,13 +499,13 @@ def run_task(task: dict, gpu_id: int):
             "data_ordering": config.get('data_ordering', 'shuffle'),
             "aggregator": config.get('aggregator', 'fedavg'),
             "batch_size": config.get('batch_size', 64),
-            "mean_test_acc": t_acc,
-            "std_test_acc": 0.0,  # Single seed
-            "mean_test_loss": t_loss,
+            "mean_test_acc": float(t_acc) if not np.isnan(t_acc) else np.nan,
+            "std_test_acc": 0.0,
+            "mean_test_loss": float(t_loss) if not np.isnan(t_loss) else np.nan,
             "std_test_loss": 0.0,
-            "mean_val_acc": v_acc,
+            "mean_val_acc": float(v_acc) if not np.isnan(v_acc) else np.nan,
             "std_val_acc": 0.0,
-            "mean_val_loss": v_loss,
+            "mean_val_loss": float(v_loss) if not np.isnan(v_loss) else np.nan,
             "std_val_loss": 0.0,
             "num_parameters": num_params,
             "best_epoch": best_epoch,
