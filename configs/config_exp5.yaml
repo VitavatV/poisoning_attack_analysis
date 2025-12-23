@@ -42,7 +42,7 @@ defaults:
 # Defense Comparison: FedAvg vs Byzantine-Robust Aggregation
 exp5_defense_comparison:
   combinations:
-    - seed: [42]  # Statistical significance [42, 101, 2024, 3141, 9876]
+    - seed: [101]  # Statistical significance [42, 101, 2024, 3141, 9876]
     - model_type: ["lr", "cnn"]                     # Model comparison
     - dataset: ["mnist", "cifar10"]
     - aggregator: ["fedavg", "median"]         # Baseline vs robust aggregation
