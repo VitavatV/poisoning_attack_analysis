@@ -42,7 +42,7 @@ defaults:
 # Data Heterogeneity Analysis: Dirichlet alpha exploration
 exp4_iid_vs_noniid:
   combinations:
-    - seed: [101]  # Statistical significance [42, 101, 2024, 3141, 9876]
+    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance [42, 101, 2024, 3141, 9876]
     - model_type: ["lr", "cnn"]                     # Model comparison
     - dataset: ["mnist", "cifar10"]
     - alpha: [100.0, 10.0, 1.0, 0.1]           # IID → Highly Non-IID

@@ -487,8 +487,32 @@ def worker_loop(manager_host='localhost', manager_port=5000, num_cpu_workers=Non
     if num_cpu_workers is None:
         num_cpu_workers = max(1, cpu_count() - 2)
     
+    # Automatic thread control to optimize CPU utilization
+    # Calculate optimal threads per worker to avoid oversubscription
+    total_cpus = cpu_count()
+    
+    if num_cpu_workers == 1:
+        # Single worker: use most of the CPU (leave some for system)
+        optimal_threads = max(1, int(total_cpus * 0.7))
+    else:
+        # Multiple workers: distribute threads evenly
+        optimal_threads = max(1, (total_cpus * 0.7) // num_cpu_workers)
+    
+    # Set PyTorch thread limits
+    torch.set_num_threads(optimal_threads)
+    torch.set_num_interop_threads(optimal_threads)
+    
+    # Also set environment variables for BLAS/MKL libraries
+    os.environ['OMP_NUM_THREADS'] = str(optimal_threads)
+    os.environ['MKL_NUM_THREADS'] = str(optimal_threads)
+    os.environ['OPENBLAS_NUM_THREADS'] = str(optimal_threads)
+    os.environ['VECLIB_MAXIMUM_THREADS'] = str(optimal_threads)
+    os.environ['NUMEXPR_NUM_THREADS'] = str(optimal_threads)
+    
     print(f"\nWorker ID: {worker_id}")
     print(f"Using CPU with {num_cpu_workers} parallel workers")
+    print(f"Threads per worker: {optimal_threads} (Total CPUs: {total_cpus})")
+    print(f"Expected CPU utilization: ~{min(100, (num_cpu_workers * optimal_threads / total_cpus) * 100):.0f}%")
     print(f"Manager: {manager_host}:{manager_port}")
     print("="*60)
     

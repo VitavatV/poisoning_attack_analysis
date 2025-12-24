@@ -41,7 +41,7 @@ defaults:
 # Comprehensive Grid Search
 exp1_vary_width:
   combinations:
-    - seed: [101]  # Statistical significance [42, 101, 2024, 3141, 9876]
+    - seed: [42, 101, 2024, 3141, 9876]  # Statistical significance [42, 101, 2024, 3141, 9876]
     - model_type: ["lr", "cnn"]               # Model comparison: CNN vs Logistic Regression
     - dataset: ["mnist", "cifar10"]
     - width_factor: [1, 4, 16, 64]              # Narrow to wide models (CNN only)

@@ -193,7 +193,8 @@ def get_client_dataloader(dataset, client_indices, config, is_attacker=False):
         num_workers = 0
         pin_memory = False
     else:
-        num_workers = 0
+        # Use 4 workers for parallel data loading (reduces I/O bottleneck)
+        num_workers = 4
         pin_memory = True if device_config != 'cpu' else False
     
     loader = DataLoader(
