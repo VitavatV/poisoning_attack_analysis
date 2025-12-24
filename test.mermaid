@@ -1,0 +1,64 @@
+graph LR
+    %% กำหนด Styles
+    classDef input fill:#e3f2fd,stroke:#1565c0,stroke-width:2px;
+    classDef conv fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
+    classDef pool fill:#ffe0b2,stroke:#f57c00,stroke-width:2px;
+    classDef dense fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px;
+    classDef norm fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px;
+    classDef out fill:#ffccbc,stroke:#d84315,stroke-width:2px;
+
+    %% ------------------------------
+    %% 1. CNN Architecture
+    %% ------------------------------
+    subgraph CNN_Model ["CNN Architecture"]
+        direction LR
+        
+        C_In["Input HxWxC"]:::input
+        
+        %% Convolutional Block
+        subgraph C_Block ["Conv Block (Repeated D times)"]
+            direction LR
+            C_Conv["Conv2D <br/> k=3, p=1"]:::conv
+            C_BN["BatchNorm2D"]:::norm
+            C_ReLU["ReLU"]:::norm
+            C_Pool["MaxPool* <br/> every 2 blocks"]:::pool
+            
+            C_Conv --> C_ReLU --> C_BN --> C_Pool
+        end
+        
+        C_Flat["Flatten"]:::norm
+        C_Lin["Linear Classifier"]:::dense
+        C_Out["Output Classes"]:::out
+
+        %% Connections
+        C_In --> C_Conv
+        C_Pool --> C_Flat
+        C_Flat --> C_Lin --> C_Out
+    end
+
+    %% ------------------------------
+    %% 2. LR / MLP Architecture
+    %% ------------------------------
+    subgraph LR_Model ["LR / MLP Architecture"]
+        direction LR
+        
+        L_In["Input"]:::input
+        L_Flat["Flatten <br/> 2D to 1D"]:::norm
+        
+        %% Hidden Block
+        subgraph L_Block ["Hidden Layer (Repeated D times)"]
+            direction LR
+            L_Lin["Linear <br/> Weights W"]:::dense
+            L_ReLU["ReLU"]:::norm
+            L_BN["BatchNorm1D"]:::norm
+            
+            L_Lin --> L_ReLU --> L_BN
+        end
+        
+        L_OutLin["Linear Output"]:::dense
+        L_Out["Output Classes"]:::out
+
+        %% Connections
+        L_In --> L_Flat --> L_Lin
+        L_BN --> L_OutLin --> L_Out
+    end

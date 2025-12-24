@@ -1,0 +1,97 @@
+graph LR
+    subgraph LR_Model ["LR / MLP Architecture"]
+
+    %% --- 1. Input Layer ---
+    subgraph Input_Layer ["Input Layer"]
+        direction TB
+        i1((x1-10)):::input
+    end
+
+    %% --- 2. Hidden Layer ---
+    subgraph Hidden_Layer1 ["Hidden Layer1"]
+        direction TB
+        h11((h11)):::hidden
+        h21((h21)):::hidden
+        h31((h31)):::hidden
+        h41((h41)):::hidden
+    end
+
+    %% --- 2. Hidden Layer ---
+    subgraph Hidden_Layer2 ["Hidden Layer2"]
+        direction TB
+        h12((h12)):::hidden
+        h22((h22)):::hidden
+        h32((h32)):::hidden
+        h42((h42)):::hidden
+    end
+
+    %% --- 2. Hidden Layer ---
+    subgraph Hidden_Layer3 ["Hidden Layer3"]
+        direction TB
+        h13((h13)):::hidden
+        h23((h23)):::hidden
+        h33((h33)):::hidden
+        h43((h43)):::hidden
+    end
+
+    %% --- 2. Hidden Layer ---
+    subgraph Hidden_Layer4 ["Hidden Layer4"]
+        direction TB
+        h14((h14)):::hidden
+        h24((h24)):::hidden
+        h34((h34)):::hidden
+        h44((h44)):::hidden
+    end
+
+    %% --- 3. Output Layer ---
+    subgraph Output_Layer ["Output Layer"]
+        direction TB
+        o1((y1-10)):::output
+    end
+
+    %% --- Connections (เส้นเชื่อม) ---
+    %% เชื่อม Input ไป Hidden
+    i1 --> h11 & h21 & h31 & h41
+
+    %% เชื่อม Input ไป Hidden
+    h11 & h21 & h31 & h41 --> h12 & h22 & h32 & h42
+
+    %% เชื่อม Input ไป Hidden
+    h12 & h22 & h32 & h42 --> h13 & h23 & h33 & h43
+
+    %% เชื่อม Input ไป Hidden
+    h13 & h23 & h33 & h43 --> h14 & h24 & h34 & h44
+    
+    %% เชื่อม Hidden ไป Output
+    h14 & h24 & h34 & h44 --> o1
+    end
+
+    subgraph CNN_Model ["CNN Architecture"]
+    In[Input Image] --> Conv11[Conv2D + ReLU]
+    In[Input Image] --> Conv21[Conv2D + ReLU]
+    In[Input Image] --> Conv31[Conv2D + ReLU]
+    In[Input Image] --> Conv41[Conv2D + ReLU]
+    Conv11 --> Conv12[Conv2D + ReLU]
+    Conv21 --> Conv22[Conv2D + ReLU]
+    Conv31 --> Conv32[Conv2D + ReLU]
+    Conv41 --> Conv42[Conv2D + ReLU]
+    Conv12 --> Pool2[Max Pooling]
+    Conv22 --> Pool2[Max Pooling]
+    Conv32 --> Pool2[Max Pooling]
+    Conv42 --> Pool2[Max Pooling]
+    Pool2 --> Conv13[Conv2D + ReLU]
+    Pool2 --> Conv23[Conv2D + ReLU]
+    Pool2 --> Conv33[Conv2D + ReLU]
+    Pool2 --> Conv43[Conv2D + ReLU]
+    Conv13 --> Conv14[Conv2D + ReLU]
+    Conv23 --> Conv24[Conv2D + ReLU]
+    Conv33 --> Conv34[Conv2D + ReLU]
+    Conv43 --> Conv44[Conv2D + ReLU]
+    Conv14 --> Pool4[Max Pooling]
+    Conv24 --> Pool4[Max Pooling]
+    Conv34 --> Pool4[Max Pooling]
+    Conv44 --> Pool4[Max Pooling]
+    Pool4 --> Flat[Flatten]
+    Flat --> Dense1[Dense 10]
+    Dense1 --> Out[Softmax Output]
+    end

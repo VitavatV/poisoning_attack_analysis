@@ -1,0 +1,34 @@
+%%{init: {'theme': 'base', 'flowchart': {'nodeSpacing': 10, 'rankSpacing': 30, 'curve': 'linear'}} }%%
+graph LR
+    %% --- Styles ---
+    classDef conv fill:#fff9c4,stroke:#fbc02d,stroke-width:2px;
+    classDef pool fill:#ffe0b2,stroke:#f57c00,stroke-width:2px;
+    classDef desc fill:none,stroke:none,color:#666;
+
+    %% ==========================================
+    %% 1. Traditional / Old School
+    %% ==========================================
+    subgraph Old_Style ["Traditional: Conv (5x5) -> Pool"]
+        direction LR
+        O_In("Input") --> O_C1["Conv 5x5"]:::conv 
+        O_C1 --> O_P1["MaxPool"]:::pool
+        
+        %% คำอธิบาย (ใส่ Quote "..." เพื่อป้องกัน Error)
+        O_Desc["Params: 25<br/>Non-linearity: 1"]:::desc
+        O_P1 -.-> O_Desc
+    end
+
+    %% ==========================================
+    %% 2. VGG Style
+    %% ==========================================
+    subgraph VGG_Style ["VGG Style: Stacked 3x3"]
+        direction LR
+        V_In("Input") --> V_C1["Conv 3x3"]:::conv
+        V_C1 --> V_Relu(("ReLU")):::desc
+        V_Relu --> V_C2["Conv 3x3"]:::conv
+        V_C2 --> V_P1["MaxPool"]:::pool
+        
+        %% คำอธิบาย (ใส่ Quote "..." เพื่อป้องกัน Error)
+        V_Desc["Params: 18 (Better!)<br/>Non-linearity: 2 (Smarter!)"]:::desc
+        V_P1 -.-> V_Desc
+    end
