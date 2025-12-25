@@ -170,7 +170,7 @@ def create_model(config, num_classes, in_channels, img_size):
 
 def train_client_worker(args):
     """Worker function for parallel client training using CPU multiprocessing"""
-    client_id, global_weights, config, train_ds_only, client_indices_subset, device_str = args
+    client_id, global_weights, config, train_ds_only, client_indices_subset, device_str, malicious_clients = args
     
     from models import ScalableCNN, LogisticRegression
     from data_utils import get_client_dataloader
@@ -179,12 +179,12 @@ def train_client_worker(args):
     
     device = torch.device(device_str)
     
-    is_victim = config['poison_ratio'] > 0
+    is_malicious = client_id in malicious_clients
     train_loader = get_client_dataloader(
         train_ds_only,
         client_indices_subset[client_id],
         config,
-        is_attacker=is_victim
+        is_malicious_client=is_malicious
     )
     
     if config['dataset'] == 'mnist':
@@ -261,6 +261,18 @@ def run_single_experiment(config, seed, num_cpu_workers=None):
         # Convert list to tensor (CIFAR-10 case)
         train_ds_only.targets = torch.tensor(train_ds_full.targets)
     
+    # Select malicious clients based on poison_ratio (client-level poisoning)
+    from data_utils import select_malicious_clients
+    malicious_clients = select_malicious_clients(
+        config['num_clients'], 
+        config['poison_ratio'], 
+        seed
+    )
+    
+    print(f"Malicious clients: {len(malicious_clients)}/{config['num_clients']} ({config['poison_ratio']*100:.0f}%)")
+    if len(malicious_clients) > 0:
+        print(f"IDs: {malicious_clients}")
+    
     # Initialize model
     if config['dataset'] == 'mnist':
         num_classes, in_channels, img_size = 10, 1, 28
@@ -301,7 +313,7 @@ def run_single_experiment(config, seed, num_cpu_workers=None):
             # Use multiprocessing for parallel training
             with Pool(workers_to_use) as pool:
                 args = [(client_id, global_weights, config, train_ds_only, 
-                         client_indices_subset, device_str) 
+                         client_indices_subset, device_str, malicious_clients) 
                         for client_id in selected_clients]
                 local_weights = pool.map(train_client_worker, args)
         else:
@@ -310,12 +322,12 @@ def run_single_experiment(config, seed, num_cpu_workers=None):
                 local_model = create_model(config, num_classes, in_channels, img_size).to(device)
                 local_model.load_state_dict(global_weights)
                 
-                is_victim = config['poison_ratio'] > 0
+                is_malicious = client_id in malicious_clients
                 client_loader = get_client_dataloader(
                     train_ds_only, 
                     client_indices_subset[client_id], 
                     config, 
-                    is_attacker=is_victim
+                    is_malicious_client=is_malicious
                 )
                 
                 trained_weights = train_client(

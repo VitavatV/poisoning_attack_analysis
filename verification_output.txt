@@ -1,0 +1,28 @@
+================================================================================
+POISONING DATA VERIFICATION
+================================================================================
+
+File: poisoning_data/exp1_cifar10_config002_seed42_alpha100.0_poison0.3_label_flip.csv
+
+Total samples: 50000
+Poisoned samples: 15329
+Poison percentage: 30.7%
+
+================================================================================
+SAMPLE ROWS (showing poisoned samples)
+================================================================================
+    Sample_Index  GT  Training_Class  Training_Client  Is_Poisoned
+0              0   3               6                5         True
+2              2   9               0                5         True
+3              3   7               2                8         True
+4              4   9               0                8         True
+8              8   4               5                8         True
+11            11   5               4                5         True
+15            15   2               7                1         True
+18            18   9               0                1         True
+22            22   1               8                1         True
+25            25   7               2                5         True
+
+================================================================================
+LABEL FLIP VERIFICATION (should be complementary)
+================================================================================

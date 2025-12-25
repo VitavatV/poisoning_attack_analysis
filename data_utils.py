@@ -85,7 +85,65 @@ def partition_data_dirichlet(dataset, num_clients, alpha=0.5, seed=42):
     
     return client_idcs
 
-# --- 3. Poisoning Logic ---
+# --- 3. Client-Level Poisoning Selection ---
+def select_malicious_clients(num_clients: int, poison_ratio: float, seed: int):
+    """
+    Select which clients are malicious based on poison_ratio.
+    
+    Args:
+        num_clients: Total number of clients
+        poison_ratio: Percentage of clients to be malicious (0.0 to 1.0)
+        seed: Random seed
+    
+    Returns:
+        List of malicious client IDs
+    """
+    if poison_ratio <= 0.0:
+        return []
+    
+    np.random.seed(seed)
+    num_malicious = max(1, int(num_clients * poison_ratio))
+    malicious_clients = np.random.choice(num_clients, num_malicious, replace=False).tolist()
+    
+    return malicious_clients
+
+
+def apply_label_flip_poisoning(gt_label: int, num_classes: int = 10) -> int:
+    """
+    Apply complementary label flip.
+    0→9, 1→8, 2→7, 3→6, 4→5, 5→4, 6→3, 7→2, 8→1, 9→0
+    
+    Args:
+        gt_label: Ground truth label
+        num_classes: Total number of classes
+    
+    Returns:
+        Flipped label
+    """
+    return (num_classes - 1) - gt_label
+
+
+def apply_random_noise_poisoning(gt_label: int, num_classes: int = 10, seed: int = None) -> int:
+    """
+    Apply random noise: select random class except the correct class.
+    
+    Args:
+        gt_label: Ground truth label
+        num_classes: Total number of classes
+        seed: Random seed for reproducibility
+    
+    Returns:
+        Random label (not equal to gt_label)
+    """
+    if seed is not None:
+        np.random.seed(seed)
+    
+    # Get all possible classes except the ground truth
+    possible_labels = [i for i in range(num_classes) if i != gt_label]
+    return np.random.choice(possible_labels)
+
+
+# --- 4. Legacy Poisoning Logic (Deprecated) ---
 def apply_poisoning(dataset, client_indices, poison_ratio, target_class, poison_label, seed=42):
     """Fixed version with better error handling"""
     random.seed(seed)
@@ -114,37 +172,49 @@ def apply_poisoning(dataset, client_indices, poison_ratio, target_class, poison_
     
     return poison_map, clean_indices_list, poisoned_indices_list
 
-# --- 4. Main Loader Builder (The Mechanism) ---
-def get_client_dataloader(dataset, client_indices, config, is_attacker=False):
+# --- 5. Main Loader Builder (The Mechanism) ---
+def get_client_dataloader(dataset, client_indices, config, is_malicious_client=False):
     """
     สร้าง DataLoader ที่รองรับทั้ง Label Flip และ Random Noise
+    Client-level poisoning: malicious clients poison 100% of their data
     """
     poison_map = {}
     clean_idxs = client_indices
     poison_idxs = []
     
-    # ตรวจสอบว่าเป็น Attacker และมี Poison Ratio หรือไม่
-    if is_attacker and config['poison_ratio'] > 0:
+    # Get dataset info for poisoning functions
+    if hasattr(dataset, 'targets'):
+        all_targets = np.array(dataset.targets)
+    elif hasattr(dataset, 'y'):
+        all_targets = np.array(dataset.y)
+    else:
+        all_targets = np.array([y for _, y in dataset])
+    
+    num_classes = len(np.unique(all_targets))
+    
+    # Check if this client is malicious
+    if is_malicious_client:
+        # Malicious clients poison 100% of their data
+        poison_type = config.get('poison_type', 'label_flip')
         
-        # [UPDATE] เช็คประเภท Poison
-        poison_type = config.get('poison_type', 'label_flip') # Default คือ label_flip
+        # Create poison map for ALL indices of this client
+        for idx in client_indices:
+            gt_label = all_targets[idx]
+            
+            if poison_type == 'label_flip':
+                # Apply complementary label flip
+                poison_map[idx] = apply_label_flip_poisoning(gt_label, num_classes)
+            elif poison_type == 'random_noise':
+                # Apply random noise
+                seed = config.get('seed', 42) + idx  # Use index for deterministic randomness
+                poison_map[idx] = apply_random_noise_poisoning(gt_label, num_classes, seed)
+            else:
+                # Default to label flip
+                poison_map[idx] = apply_label_flip_poisoning(gt_label, num_classes)
         
-        if poison_type == 'random_noise':
-            # เรียกใช้ฟังก์ชันใหม่
-            poison_map, clean_idxs, poison_idxs = apply_random_poisoning(
-                dataset, 
-                client_indices, 
-                config['poison_ratio']
-            )
-        else:
-            # เรียกใช้ฟังก์ชันเดิม (Label Flip / Targeted)
-            poison_map, clean_idxs, poison_idxs = apply_poisoning(
-                dataset, 
-                client_indices, 
-                config['poison_ratio'], 
-                config['target_class'], 
-                config['poison_label']
-            )
+        # All indices are poisoned for malicious clients
+        poison_idxs = list(client_indices)
+        clean_idxs = []
     
     # ส่วนจัดการ Ordering (เหมือนเดิม)
     final_indices = []

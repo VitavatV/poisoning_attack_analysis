@@ -355,15 +355,26 @@ def run_single_experiment(config, seed, gpu_id):
         # Convert list to tensor (CIFAR-10 case)
         train_ds_only.targets = torch.tensor(train_ds_full.targets)
     
+    # Select malicious clients based on poison_ratio (client-level poisoning)
+    from data_utils import select_malicious_clients
+    malicious_clients = select_malicious_clients(
+        config['num_clients'], 
+        config['poison_ratio'], 
+        seed
+    )
+    
+    print(f"Malicious clients: {len(malicious_clients)}/{config['num_clients']} ({config['poison_ratio']*100:.0f}%)")
+    if len(malicious_clients) > 0:
+        print(f"IDs: {malicious_clients}")
+    
     client_dataloaders = {}
-    is_victim = config['poison_ratio'] > 0
     for client_id in range(config['num_clients']):
-        client_config = config.copy()
+        is_malicious = client_id in malicious_clients
         client_dataloaders[client_id] = get_client_dataloader(
             train_ds_only, 
             client_indices_subset[client_id], 
-            client_config, 
-            is_attacker=is_victim
+            config, 
+            is_malicious_client=is_malicious
         )
 
     # Initialize model
