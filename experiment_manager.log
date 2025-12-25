@@ -2555,3 +2555,1486 @@
 2025-12-25 06:21:00,134 - INFO - Task exp1_vary_width_586_3141 completed by cpu_worker_21460
 2025-12-25 06:21:00,135 - INFO - Updated status: 1598/1980
 2025-12-25 06:21:10,137 - INFO - Assigned task exp1_vary_width_587_3141 to cpu_worker_21460 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-25 20:18:48,003 - INFO - Starting Experiment Manager
+2025-12-25 20:18:48,092 - INFO - Loaded config: configs\config_exp1.yaml
+2025-12-25 20:18:48,096 - INFO - Generated 640 unique tasks
+2025-12-25 20:18:48,099 - INFO - Exported task summary to task_summary.csv
+2025-12-25 20:18:48,168 - INFO - Loaded 1633 completed experiments from final_results.csv
+2025-12-25 20:18:48,170 - INFO - Marked 136 tasks as already completed
+2025-12-25 20:18:48,170 - INFO - Initial status: 136/640 (21.2%)
+2025-12-25 20:18:48,174 - INFO - Experiment Manager listening on localhost:5000
+2025-12-25 20:18:57,250 - INFO - Shutting down...
+2025-12-25 20:19:12,600 - INFO - Starting Experiment Manager
+2025-12-25 20:19:12,603 - INFO - Loaded config: configs\config_exp1.yaml
+2025-12-25 20:19:12,607 - INFO - Generated 640 unique tasks
+2025-12-25 20:19:12,611 - INFO - Exported task summary to task_summary.csv
+2025-12-25 20:19:12,614 - INFO - No centralized final_results.csv found - starting fresh
+2025-12-25 20:19:12,614 - INFO - Initial status: 0/640 (0.0%)
+2025-12-25 20:19:12,618 - INFO - Experiment Manager listening on localhost:5000
+2025-12-25 20:19:31,516 - INFO - Assigned task exp1_vary_width_630_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:19:43,452 - INFO - Assigned task exp1_vary_width_340_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:22:29,008 - INFO - Saved result for exp1_vary_width_630_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:22:29,010 - INFO - Task exp1_vary_width_630_42 completed by gpu0
+2025-12-25 20:22:29,011 - INFO - Updated status: 1/640
+2025-12-25 20:22:29,015 - INFO - Task exp1_vary_width_630_42 completed by gpu0
+2025-12-25 20:22:29,016 - INFO - Updated status: 1/640
+2025-12-25 20:22:39,020 - INFO - Assigned task exp1_vary_width_631_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:22:46,731 - INFO - Saved result for exp1_vary_width_340_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:22:46,731 - INFO - Task exp1_vary_width_340_42 completed by cpu_worker_15808
+2025-12-25 20:22:46,732 - INFO - Updated status: 2/640
+2025-12-25 20:22:46,734 - INFO - Task exp1_vary_width_340_42 completed by cpu_worker_15808
+2025-12-25 20:22:46,734 - INFO - Updated status: 2/640
+2025-12-25 20:22:56,738 - INFO - Assigned task exp1_vary_width_341_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:25:26,789 - INFO - Saved result for exp1_vary_width_631_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:25:26,790 - INFO - Task exp1_vary_width_631_42 completed by gpu0
+2025-12-25 20:25:26,790 - INFO - Updated status: 3/640
+2025-12-25 20:25:26,794 - INFO - Task exp1_vary_width_631_42 completed by gpu0
+2025-12-25 20:25:26,794 - INFO - Updated status: 3/640
+2025-12-25 20:25:36,797 - INFO - Assigned task exp1_vary_width_632_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:26:41,605 - INFO - Saved result for exp1_vary_width_341_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:26:41,605 - INFO - Task exp1_vary_width_341_42 completed by cpu_worker_15808
+2025-12-25 20:26:41,605 - INFO - Updated status: 4/640
+2025-12-25 20:26:41,607 - INFO - Task exp1_vary_width_341_42 completed by cpu_worker_15808
+2025-12-25 20:26:41,607 - INFO - Updated status: 4/640
+2025-12-25 20:26:51,609 - INFO - Assigned task exp1_vary_width_342_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:28:24,603 - INFO - Saved result for exp1_vary_width_632_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:28:24,604 - INFO - Task exp1_vary_width_632_42 completed by gpu0
+2025-12-25 20:28:24,604 - INFO - Updated status: 5/640
+2025-12-25 20:28:24,608 - INFO - Task exp1_vary_width_632_42 completed by gpu0
+2025-12-25 20:28:24,608 - INFO - Updated status: 5/640
+2025-12-25 20:28:34,611 - INFO - Assigned task exp1_vary_width_633_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:29:35,531 - INFO - Saved result for exp1_vary_width_342_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:29:35,531 - INFO - Task exp1_vary_width_342_42 completed by cpu_worker_15808
+2025-12-25 20:29:35,531 - INFO - Updated status: 6/640
+2025-12-25 20:29:35,533 - INFO - Task exp1_vary_width_342_42 completed by cpu_worker_15808
+2025-12-25 20:29:35,533 - INFO - Updated status: 6/640
+2025-12-25 20:29:45,537 - INFO - Assigned task exp1_vary_width_343_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:31:23,171 - INFO - Saved result for exp1_vary_width_633_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:31:23,172 - INFO - Task exp1_vary_width_633_42 completed by gpu0
+2025-12-25 20:31:23,172 - INFO - Updated status: 7/640
+2025-12-25 20:31:23,175 - INFO - Task exp1_vary_width_633_42 completed by gpu0
+2025-12-25 20:31:23,175 - INFO - Updated status: 7/640
+2025-12-25 20:31:33,178 - INFO - Assigned task exp1_vary_width_634_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:33:05,732 - INFO - Saved result for exp1_vary_width_343_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:33:05,733 - INFO - Task exp1_vary_width_343_42 completed by cpu_worker_15808
+2025-12-25 20:33:05,733 - INFO - Updated status: 8/640
+2025-12-25 20:33:05,735 - INFO - Task exp1_vary_width_343_42 completed by cpu_worker_15808
+2025-12-25 20:33:05,737 - INFO - Updated status: 8/640
+2025-12-25 20:33:15,741 - INFO - Assigned task exp1_vary_width_344_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:34:24,670 - INFO - Saved result for exp1_vary_width_634_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:34:24,671 - INFO - Task exp1_vary_width_634_42 completed by gpu0
+2025-12-25 20:34:24,671 - INFO - Updated status: 9/640
+2025-12-25 20:34:24,673 - INFO - Task exp1_vary_width_634_42 completed by gpu0
+2025-12-25 20:34:24,674 - INFO - Updated status: 9/640
+2025-12-25 20:34:34,676 - INFO - Assigned task exp1_vary_width_635_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:36:25,787 - INFO - Saved result for exp1_vary_width_344_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:36:25,788 - INFO - Task exp1_vary_width_344_42 completed by cpu_worker_15808
+2025-12-25 20:36:25,788 - INFO - Updated status: 10/640
+2025-12-25 20:36:25,790 - INFO - Task exp1_vary_width_344_42 completed by cpu_worker_15808
+2025-12-25 20:36:25,791 - INFO - Updated status: 10/640
+2025-12-25 20:36:35,798 - INFO - Assigned task exp1_vary_width_345_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:37:29,701 - INFO - Saved result for exp1_vary_width_635_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:37:29,702 - INFO - Task exp1_vary_width_635_42 completed by gpu0
+2025-12-25 20:37:29,702 - INFO - Updated status: 11/640
+2025-12-25 20:37:29,706 - INFO - Task exp1_vary_width_635_42 completed by gpu0
+2025-12-25 20:37:29,706 - INFO - Updated status: 11/640
+2025-12-25 20:37:39,710 - INFO - Assigned task exp1_vary_width_636_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:39:20,443 - INFO - Saved result for exp1_vary_width_345_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:39:20,443 - INFO - Task exp1_vary_width_345_42 completed by cpu_worker_15808
+2025-12-25 20:39:20,443 - INFO - Updated status: 12/640
+2025-12-25 20:39:20,445 - INFO - Task exp1_vary_width_345_42 completed by cpu_worker_15808
+2025-12-25 20:39:20,445 - INFO - Updated status: 12/640
+2025-12-25 20:39:30,448 - INFO - Assigned task exp1_vary_width_346_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:40:35,503 - INFO - Saved result for exp1_vary_width_636_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:40:35,503 - INFO - Task exp1_vary_width_636_42 completed by gpu0
+2025-12-25 20:40:35,504 - INFO - Updated status: 13/640
+2025-12-25 20:40:35,506 - INFO - Task exp1_vary_width_636_42 completed by gpu0
+2025-12-25 20:40:35,507 - INFO - Updated status: 13/640
+2025-12-25 20:40:45,511 - INFO - Assigned task exp1_vary_width_637_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:42:25,670 - INFO - Saved result for exp1_vary_width_346_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:42:25,670 - INFO - Task exp1_vary_width_346_42 completed by cpu_worker_15808
+2025-12-25 20:42:25,670 - INFO - Updated status: 14/640
+2025-12-25 20:42:25,671 - INFO - Task exp1_vary_width_346_42 completed by cpu_worker_15808
+2025-12-25 20:42:25,672 - INFO - Updated status: 14/640
+2025-12-25 20:42:35,675 - INFO - Assigned task exp1_vary_width_347_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:43:41,924 - INFO - Saved result for exp1_vary_width_637_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:43:41,925 - INFO - Task exp1_vary_width_637_42 completed by gpu0
+2025-12-25 20:43:41,925 - INFO - Updated status: 15/640
+2025-12-25 20:43:41,930 - INFO - Task exp1_vary_width_637_42 completed by gpu0
+2025-12-25 20:43:41,930 - INFO - Updated status: 15/640
+2025-12-25 20:43:51,934 - INFO - Assigned task exp1_vary_width_638_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:45:24,235 - INFO - Saved result for exp1_vary_width_347_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:45:24,236 - INFO - Task exp1_vary_width_347_42 completed by cpu_worker_15808
+2025-12-25 20:45:24,236 - INFO - Updated status: 16/640
+2025-12-25 20:45:24,238 - INFO - Task exp1_vary_width_347_42 completed by cpu_worker_15808
+2025-12-25 20:45:24,243 - INFO - Updated status: 16/640
+2025-12-25 20:45:34,248 - INFO - Assigned task exp1_vary_width_348_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:46:50,799 - INFO - Saved result for exp1_vary_width_638_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:46:50,799 - INFO - Task exp1_vary_width_638_42 completed by gpu0
+2025-12-25 20:46:50,799 - INFO - Updated status: 17/640
+2025-12-25 20:46:50,802 - INFO - Task exp1_vary_width_638_42 completed by gpu0
+2025-12-25 20:46:50,802 - INFO - Updated status: 17/640
+2025-12-25 20:47:00,805 - INFO - Assigned task exp1_vary_width_639_42 to gpu0 (gpu) - CNN: 2,337,098 params, complexity: 7,011,294
+2025-12-25 20:49:17,529 - INFO - Saved result for exp1_vary_width_348_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:49:17,529 - INFO - Task exp1_vary_width_348_42 completed by cpu_worker_15808
+2025-12-25 20:49:17,529 - INFO - Updated status: 18/640
+2025-12-25 20:49:17,538 - INFO - Task exp1_vary_width_348_42 completed by cpu_worker_15808
+2025-12-25 20:49:17,539 - INFO - Updated status: 18/640
+2025-12-25 20:49:27,541 - INFO - Assigned task exp1_vary_width_349_42 to cpu_worker_15808 (cpu) - CNN: 212 params, complexity: 636
+2025-12-25 20:50:00,163 - INFO - Saved result for exp1_vary_width_639_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:50:00,164 - INFO - Task exp1_vary_width_639_42 completed by gpu0
+2025-12-25 20:50:00,164 - INFO - Updated status: 19/640
+2025-12-25 20:50:00,167 - INFO - Task exp1_vary_width_639_42 completed by gpu0
+2025-12-25 20:50:00,168 - INFO - Updated status: 19/640
+2025-12-25 20:50:10,172 - INFO - Assigned task exp1_vary_width_470_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 20:52:05,097 - INFO - Saved result for exp1_vary_width_349_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:52:05,097 - INFO - Task exp1_vary_width_349_42 completed by cpu_worker_15808
+2025-12-25 20:52:05,097 - INFO - Updated status: 20/640
+2025-12-25 20:52:05,099 - INFO - Task exp1_vary_width_349_42 completed by cpu_worker_15808
+2025-12-25 20:52:05,099 - INFO - Updated status: 20/640
+2025-12-25 20:52:15,102 - INFO - Assigned task exp1_vary_width_500_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 20:53:02,722 - INFO - Saved result for exp1_vary_width_470_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:53:02,722 - INFO - Task exp1_vary_width_470_42 completed by gpu0
+2025-12-25 20:53:02,722 - INFO - Updated status: 21/640
+2025-12-25 20:53:02,726 - INFO - Task exp1_vary_width_470_42 completed by gpu0
+2025-12-25 20:53:02,726 - INFO - Updated status: 21/640
+2025-12-25 20:53:12,728 - INFO - Assigned task exp1_vary_width_471_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 20:56:01,729 - INFO - Saved result for exp1_vary_width_471_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:56:01,729 - INFO - Task exp1_vary_width_471_42 completed by gpu0
+2025-12-25 20:56:01,729 - INFO - Updated status: 22/640
+2025-12-25 20:56:01,731 - INFO - Task exp1_vary_width_471_42 completed by gpu0
+2025-12-25 20:56:01,731 - INFO - Updated status: 22/640
+2025-12-25 20:56:11,734 - INFO - Assigned task exp1_vary_width_472_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 20:56:37,822 - INFO - Saved result for exp1_vary_width_500_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:56:37,822 - INFO - Task exp1_vary_width_500_42 completed by cpu_worker_15808
+2025-12-25 20:56:37,822 - INFO - Updated status: 23/640
+2025-12-25 20:56:37,824 - INFO - Task exp1_vary_width_500_42 completed by cpu_worker_15808
+2025-12-25 20:56:37,825 - INFO - Updated status: 23/640
+2025-12-25 20:56:47,827 - INFO - Assigned task exp1_vary_width_501_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 20:58:53,757 - INFO - Saved result for exp1_vary_width_472_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 20:58:53,757 - INFO - Task exp1_vary_width_472_42 completed by gpu0
+2025-12-25 20:58:53,758 - INFO - Updated status: 24/640
+2025-12-25 20:58:53,762 - INFO - Task exp1_vary_width_472_42 completed by gpu0
+2025-12-25 20:58:53,764 - INFO - Updated status: 24/640
+2025-12-25 20:59:03,767 - INFO - Assigned task exp1_vary_width_473_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:01:51,959 - INFO - Saved result for exp1_vary_width_473_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:01:51,959 - INFO - Task exp1_vary_width_473_42 completed by gpu0
+2025-12-25 21:01:51,959 - INFO - Updated status: 25/640
+2025-12-25 21:01:51,962 - INFO - Task exp1_vary_width_473_42 completed by gpu0
+2025-12-25 21:01:51,962 - INFO - Updated status: 25/640
+2025-12-25 21:02:01,966 - INFO - Assigned task exp1_vary_width_474_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:03:37,002 - INFO - Saved result for exp1_vary_width_501_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:03:37,002 - INFO - Task exp1_vary_width_501_42 completed by cpu_worker_15808
+2025-12-25 21:03:37,002 - INFO - Updated status: 26/640
+2025-12-25 21:03:37,005 - INFO - Task exp1_vary_width_501_42 completed by cpu_worker_15808
+2025-12-25 21:03:37,005 - INFO - Updated status: 26/640
+2025-12-25 21:03:47,007 - INFO - Assigned task exp1_vary_width_502_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 21:04:44,018 - INFO - Saved result for exp1_vary_width_474_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:04:44,019 - INFO - Task exp1_vary_width_474_42 completed by gpu0
+2025-12-25 21:04:44,019 - INFO - Updated status: 27/640
+2025-12-25 21:04:44,021 - INFO - Task exp1_vary_width_474_42 completed by gpu0
+2025-12-25 21:04:44,021 - INFO - Updated status: 27/640
+2025-12-25 21:04:54,023 - INFO - Assigned task exp1_vary_width_475_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:07:43,813 - INFO - Saved result for exp1_vary_width_475_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:07:43,813 - INFO - Task exp1_vary_width_475_42 completed by gpu0
+2025-12-25 21:07:43,813 - INFO - Updated status: 28/640
+2025-12-25 21:07:43,816 - INFO - Task exp1_vary_width_475_42 completed by gpu0
+2025-12-25 21:07:43,817 - INFO - Updated status: 28/640
+2025-12-25 21:07:53,819 - INFO - Assigned task exp1_vary_width_476_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:10:41,014 - INFO - Saved result for exp1_vary_width_476_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:10:41,014 - INFO - Task exp1_vary_width_476_42 completed by gpu0
+2025-12-25 21:10:41,014 - INFO - Updated status: 29/640
+2025-12-25 21:10:41,019 - INFO - Task exp1_vary_width_476_42 completed by gpu0
+2025-12-25 21:10:41,019 - INFO - Updated status: 29/640
+2025-12-25 21:10:51,022 - INFO - Assigned task exp1_vary_width_477_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:13:42,599 - INFO - Saved result for exp1_vary_width_477_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:13:42,599 - INFO - Task exp1_vary_width_477_42 completed by gpu0
+2025-12-25 21:13:42,599 - INFO - Updated status: 30/640
+2025-12-25 21:13:42,601 - INFO - Task exp1_vary_width_477_42 completed by gpu0
+2025-12-25 21:13:42,601 - INFO - Updated status: 30/640
+2025-12-25 21:13:52,604 - INFO - Assigned task exp1_vary_width_478_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:16:41,182 - INFO - Saved result for exp1_vary_width_478_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:16:41,182 - INFO - Task exp1_vary_width_478_42 completed by gpu0
+2025-12-25 21:16:41,183 - INFO - Updated status: 31/640
+2025-12-25 21:16:41,185 - INFO - Task exp1_vary_width_478_42 completed by gpu0
+2025-12-25 21:16:41,186 - INFO - Updated status: 31/640
+2025-12-25 21:16:51,188 - INFO - Assigned task exp1_vary_width_479_42 to gpu0 (gpu) - CNN: 2,335,946 params, complexity: 7,007,838
+2025-12-25 21:19:40,943 - INFO - Saved result for exp1_vary_width_479_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:19:40,944 - INFO - Task exp1_vary_width_479_42 completed by gpu0
+2025-12-25 21:19:40,944 - INFO - Updated status: 32/640
+2025-12-25 21:19:40,948 - INFO - Task exp1_vary_width_479_42 completed by gpu0
+2025-12-25 21:19:40,948 - INFO - Updated status: 32/640
+2025-12-25 21:19:50,950 - INFO - Assigned task exp1_vary_width_600_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:22:23,361 - INFO - Saved result for exp1_vary_width_502_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:22:23,362 - INFO - Task exp1_vary_width_502_42 completed by cpu_worker_15808
+2025-12-25 21:22:23,362 - INFO - Updated status: 33/640
+2025-12-25 21:22:23,364 - INFO - Task exp1_vary_width_502_42 completed by cpu_worker_15808
+2025-12-25 21:22:23,364 - INFO - Updated status: 33/640
+2025-12-25 21:22:33,366 - INFO - Assigned task exp1_vary_width_503_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 21:23:17,834 - INFO - Saved result for exp1_vary_width_600_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:23:17,834 - INFO - Task exp1_vary_width_600_42 completed by gpu0
+2025-12-25 21:23:17,834 - INFO - Updated status: 34/640
+2025-12-25 21:23:17,836 - INFO - Task exp1_vary_width_600_42 completed by gpu0
+2025-12-25 21:23:17,836 - INFO - Updated status: 34/640
+2025-12-25 21:23:27,838 - INFO - Assigned task exp1_vary_width_601_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:27:02,135 - INFO - Saved result for exp1_vary_width_601_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:27:02,135 - INFO - Task exp1_vary_width_601_42 completed by gpu0
+2025-12-25 21:27:02,135 - INFO - Updated status: 35/640
+2025-12-25 21:27:02,137 - INFO - Task exp1_vary_width_601_42 completed by gpu0
+2025-12-25 21:27:02,138 - INFO - Updated status: 35/640
+2025-12-25 21:27:12,141 - INFO - Assigned task exp1_vary_width_602_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:31:08,669 - INFO - Saved result for exp1_vary_width_602_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:31:08,670 - INFO - Task exp1_vary_width_602_42 completed by gpu0
+2025-12-25 21:31:08,670 - INFO - Updated status: 36/640
+2025-12-25 21:31:08,673 - INFO - Task exp1_vary_width_602_42 completed by gpu0
+2025-12-25 21:31:08,674 - INFO - Updated status: 36/640
+2025-12-25 21:31:18,677 - INFO - Assigned task exp1_vary_width_603_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:34:54,721 - INFO - Saved result for exp1_vary_width_603_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:34:54,721 - INFO - Task exp1_vary_width_603_42 completed by gpu0
+2025-12-25 21:34:54,721 - INFO - Updated status: 37/640
+2025-12-25 21:34:54,723 - INFO - Task exp1_vary_width_603_42 completed by gpu0
+2025-12-25 21:34:54,724 - INFO - Updated status: 37/640
+2025-12-25 21:35:04,726 - INFO - Assigned task exp1_vary_width_604_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:37:14,101 - INFO - Saved result for exp1_vary_width_604_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:37:14,101 - INFO - Task exp1_vary_width_604_42 completed by gpu0
+2025-12-25 21:37:14,101 - INFO - Updated status: 38/640
+2025-12-25 21:37:14,103 - INFO - Task exp1_vary_width_604_42 completed by gpu0
+2025-12-25 21:37:14,103 - INFO - Updated status: 38/640
+2025-12-25 21:37:24,106 - INFO - Assigned task exp1_vary_width_605_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:40:16,467 - INFO - Saved result for exp1_vary_width_605_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:40:16,467 - INFO - Task exp1_vary_width_605_42 completed by gpu0
+2025-12-25 21:40:16,467 - INFO - Updated status: 39/640
+2025-12-25 21:40:16,469 - INFO - Task exp1_vary_width_605_42 completed by gpu0
+2025-12-25 21:40:16,469 - INFO - Updated status: 39/640
+2025-12-25 21:40:26,471 - INFO - Assigned task exp1_vary_width_606_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:42:01,538 - INFO - Saved result for exp1_vary_width_606_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:42:01,539 - INFO - Task exp1_vary_width_606_42 completed by gpu0
+2025-12-25 21:42:01,540 - INFO - Updated status: 40/640
+2025-12-25 21:42:01,543 - INFO - Task exp1_vary_width_606_42 completed by gpu0
+2025-12-25 21:42:01,544 - INFO - Updated status: 40/640
+2025-12-25 21:42:11,546 - INFO - Assigned task exp1_vary_width_607_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:43:10,845 - INFO - Saved result for exp1_vary_width_607_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:43:10,845 - INFO - Task exp1_vary_width_607_42 completed by gpu0
+2025-12-25 21:43:10,846 - INFO - Updated status: 41/640
+2025-12-25 21:43:10,850 - INFO - Task exp1_vary_width_607_42 completed by gpu0
+2025-12-25 21:43:10,851 - INFO - Updated status: 41/640
+2025-12-25 21:43:20,889 - INFO - Assigned task exp1_vary_width_608_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:43:56,848 - INFO - Saved result for exp1_vary_width_608_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:43:56,848 - INFO - Task exp1_vary_width_608_42 completed by gpu0
+2025-12-25 21:43:56,848 - INFO - Updated status: 42/640
+2025-12-25 21:43:56,850 - INFO - Task exp1_vary_width_608_42 completed by gpu0
+2025-12-25 21:43:56,850 - INFO - Updated status: 42/640
+2025-12-25 21:44:06,853 - INFO - Assigned task exp1_vary_width_609_42 to gpu0 (gpu) - CNN: 657,290 params, complexity: 1,971,870
+2025-12-25 21:44:43,284 - INFO - Saved result for exp1_vary_width_609_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:44:43,285 - INFO - Task exp1_vary_width_609_42 completed by gpu0
+2025-12-25 21:44:43,285 - INFO - Updated status: 43/640
+2025-12-25 21:44:43,287 - INFO - Task exp1_vary_width_609_42 completed by gpu0
+2025-12-25 21:44:43,287 - INFO - Updated status: 43/640
+2025-12-25 21:44:53,290 - INFO - Assigned task exp1_vary_width_620_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 21:54:51,585 - INFO - Saved result for exp1_vary_width_620_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 21:54:51,585 - INFO - Task exp1_vary_width_620_42 completed by gpu0
+2025-12-25 21:54:51,587 - INFO - Updated status: 44/640
+2025-12-25 21:54:51,590 - INFO - Task exp1_vary_width_620_42 completed by gpu0
+2025-12-25 21:54:51,591 - INFO - Updated status: 44/640
+2025-12-25 21:55:01,595 - INFO - Assigned task exp1_vary_width_621_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:05:02,872 - INFO - Saved result for exp1_vary_width_621_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:05:02,873 - INFO - Task exp1_vary_width_621_42 completed by gpu0
+2025-12-25 22:05:02,873 - INFO - Updated status: 45/640
+2025-12-25 22:05:02,876 - INFO - Task exp1_vary_width_621_42 completed by gpu0
+2025-12-25 22:05:02,877 - INFO - Updated status: 45/640
+2025-12-25 22:05:12,879 - INFO - Assigned task exp1_vary_width_622_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:12:51,432 - INFO - Saved result for exp1_vary_width_503_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:12:51,432 - INFO - Task exp1_vary_width_503_42 completed by cpu_worker_15808
+2025-12-25 22:12:51,433 - INFO - Updated status: 46/640
+2025-12-25 22:12:51,435 - INFO - Task exp1_vary_width_503_42 completed by cpu_worker_15808
+2025-12-25 22:12:51,435 - INFO - Updated status: 46/640
+2025-12-25 22:13:01,438 - INFO - Assigned task exp1_vary_width_504_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 22:13:34,686 - INFO - Saved result for exp1_vary_width_622_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:13:34,686 - INFO - Task exp1_vary_width_622_42 completed by gpu0
+2025-12-25 22:13:34,687 - INFO - Updated status: 47/640
+2025-12-25 22:13:34,689 - INFO - Task exp1_vary_width_622_42 completed by gpu0
+2025-12-25 22:13:34,689 - INFO - Updated status: 47/640
+2025-12-25 22:13:44,692 - INFO - Assigned task exp1_vary_width_623_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:17:14,352 - INFO - Saved result for exp1_vary_width_504_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:17:14,352 - INFO - Task exp1_vary_width_504_42 completed by cpu_worker_15808
+2025-12-25 22:17:14,353 - INFO - Updated status: 48/640
+2025-12-25 22:17:14,355 - INFO - Task exp1_vary_width_504_42 completed by cpu_worker_15808
+2025-12-25 22:17:14,355 - INFO - Updated status: 48/640
+2025-12-25 22:17:24,357 - INFO - Assigned task exp1_vary_width_505_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 22:23:55,027 - INFO - Saved result for exp1_vary_width_505_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:23:55,027 - INFO - Task exp1_vary_width_505_42 completed by cpu_worker_15808
+2025-12-25 22:23:55,027 - INFO - Updated status: 49/640
+2025-12-25 22:23:55,029 - INFO - Task exp1_vary_width_505_42 completed by cpu_worker_15808
+2025-12-25 22:23:55,029 - INFO - Updated status: 49/640
+2025-12-25 22:24:05,032 - INFO - Assigned task exp1_vary_width_506_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 22:24:13,639 - INFO - Saved result for exp1_vary_width_623_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:24:13,639 - INFO - Task exp1_vary_width_623_42 completed by gpu0
+2025-12-25 22:24:13,640 - INFO - Updated status: 50/640
+2025-12-25 22:24:13,642 - INFO - Task exp1_vary_width_623_42 completed by gpu0
+2025-12-25 22:24:13,642 - INFO - Updated status: 50/640
+2025-12-25 22:24:23,644 - INFO - Assigned task exp1_vary_width_624_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:29:22,292 - INFO - Saved result for exp1_vary_width_624_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:29:22,292 - INFO - Task exp1_vary_width_624_42 completed by gpu0
+2025-12-25 22:29:22,292 - INFO - Updated status: 51/640
+2025-12-25 22:29:22,294 - INFO - Task exp1_vary_width_624_42 completed by gpu0
+2025-12-25 22:29:22,294 - INFO - Updated status: 51/640
+2025-12-25 22:29:32,296 - INFO - Assigned task exp1_vary_width_625_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:31:09,613 - INFO - Saved result for exp1_vary_width_506_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:31:09,614 - INFO - Task exp1_vary_width_506_42 completed by cpu_worker_15808
+2025-12-25 22:31:09,614 - INFO - Updated status: 52/640
+2025-12-25 22:31:09,617 - INFO - Task exp1_vary_width_506_42 completed by cpu_worker_15808
+2025-12-25 22:31:09,617 - INFO - Updated status: 52/640
+2025-12-25 22:31:19,619 - INFO - Assigned task exp1_vary_width_507_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 22:34:41,751 - INFO - Saved result for exp1_vary_width_625_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:34:41,752 - INFO - Task exp1_vary_width_625_42 completed by gpu0
+2025-12-25 22:34:41,752 - INFO - Updated status: 53/640
+2025-12-25 22:34:41,755 - INFO - Task exp1_vary_width_625_42 completed by gpu0
+2025-12-25 22:34:41,756 - INFO - Updated status: 53/640
+2025-12-25 22:34:51,759 - INFO - Assigned task exp1_vary_width_626_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:36:47,825 - INFO - Saved result for exp1_vary_width_507_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:36:47,825 - INFO - Task exp1_vary_width_507_42 completed by cpu_worker_15808
+2025-12-25 22:36:47,825 - INFO - Updated status: 54/640
+2025-12-25 22:36:47,827 - INFO - Task exp1_vary_width_507_42 completed by cpu_worker_15808
+2025-12-25 22:36:47,827 - INFO - Updated status: 54/640
+2025-12-25 22:36:57,829 - INFO - Assigned task exp1_vary_width_508_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 22:40:14,799 - INFO - Saved result for exp1_vary_width_626_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:40:14,800 - INFO - Task exp1_vary_width_626_42 completed by gpu0
+2025-12-25 22:40:14,800 - INFO - Updated status: 55/640
+2025-12-25 22:40:14,803 - INFO - Task exp1_vary_width_626_42 completed by gpu0
+2025-12-25 22:40:14,803 - INFO - Updated status: 55/640
+2025-12-25 22:40:24,805 - INFO - Assigned task exp1_vary_width_627_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:41:41,036 - INFO - Saved result for exp1_vary_width_508_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:41:41,036 - INFO - Task exp1_vary_width_508_42 completed by cpu_worker_15808
+2025-12-25 22:41:41,036 - INFO - Updated status: 56/640
+2025-12-25 22:41:41,038 - INFO - Task exp1_vary_width_508_42 completed by cpu_worker_15808
+2025-12-25 22:41:41,038 - INFO - Updated status: 56/640
+2025-12-25 22:41:51,040 - INFO - Assigned task exp1_vary_width_509_42 to cpu_worker_15808 (cpu) - CNN: 230 params, complexity: 690
+2025-12-25 22:46:09,672 - INFO - Saved result for exp1_vary_width_509_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:46:09,672 - INFO - Task exp1_vary_width_509_42 completed by cpu_worker_15808
+2025-12-25 22:46:09,672 - INFO - Updated status: 57/640
+2025-12-25 22:46:09,674 - INFO - Task exp1_vary_width_509_42 completed by cpu_worker_15808
+2025-12-25 22:46:09,675 - INFO - Updated status: 57/640
+2025-12-25 22:46:19,677 - INFO - Assigned task exp1_vary_width_0_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-25 22:46:36,678 - INFO - Saved result for exp1_vary_width_627_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:46:36,678 - INFO - Task exp1_vary_width_627_42 completed by gpu0
+2025-12-25 22:46:36,678 - INFO - Updated status: 58/640
+2025-12-25 22:46:36,680 - INFO - Task exp1_vary_width_627_42 completed by gpu0
+2025-12-25 22:46:36,681 - INFO - Updated status: 58/640
+2025-12-25 22:46:46,684 - INFO - Assigned task exp1_vary_width_628_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:48:07,471 - INFO - Saved result for exp1_vary_width_628_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:48:07,472 - INFO - Task exp1_vary_width_628_42 completed by gpu0
+2025-12-25 22:48:07,515 - INFO - Updated status: 59/640
+2025-12-25 22:48:07,541 - INFO - Task exp1_vary_width_628_42 completed by gpu0
+2025-12-25 22:48:07,541 - INFO - Updated status: 59/640
+2025-12-25 22:48:17,548 - INFO - Assigned task exp1_vary_width_629_42 to gpu0 (gpu) - CNN: 558,410 params, complexity: 1,675,230
+2025-12-25 22:49:37,955 - INFO - Saved result for exp1_vary_width_629_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 22:49:37,955 - INFO - Task exp1_vary_width_629_42 completed by gpu0
+2025-12-25 22:49:37,955 - INFO - Updated status: 60/640
+2025-12-25 22:49:37,957 - INFO - Task exp1_vary_width_629_42 completed by gpu0
+2025-12-25 22:49:37,957 - INFO - Updated status: 60/640
+2025-12-25 22:49:47,960 - INFO - Assigned task exp1_vary_width_460_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-25 23:04:36,148 - INFO - Saved result for exp1_vary_width_460_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:04:36,149 - INFO - Task exp1_vary_width_460_42 completed by gpu0
+2025-12-25 23:04:36,149 - INFO - Updated status: 61/640
+2025-12-25 23:04:36,159 - INFO - Task exp1_vary_width_460_42 completed by gpu0
+2025-12-25 23:04:36,162 - INFO - Updated status: 61/640
+2025-12-25 23:04:46,165 - INFO - Assigned task exp1_vary_width_461_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-25 23:16:20,414 - INFO - Saved result for exp1_vary_width_0_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:16:20,414 - INFO - Task exp1_vary_width_0_42 completed by cpu_worker_15808
+2025-12-25 23:16:20,414 - INFO - Updated status: 62/640
+2025-12-25 23:16:20,417 - INFO - Task exp1_vary_width_0_42 completed by cpu_worker_15808
+2025-12-25 23:16:20,417 - INFO - Updated status: 62/640
+2025-12-25 23:16:30,420 - INFO - Assigned task exp1_vary_width_1_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-25 23:19:29,459 - INFO - Saved result for exp1_vary_width_461_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:19:29,459 - INFO - Task exp1_vary_width_461_42 completed by gpu0
+2025-12-25 23:19:29,459 - INFO - Updated status: 63/640
+2025-12-25 23:19:29,461 - INFO - Task exp1_vary_width_461_42 completed by gpu0
+2025-12-25 23:19:29,462 - INFO - Updated status: 63/640
+2025-12-25 23:19:39,464 - INFO - Assigned task exp1_vary_width_462_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-25 23:30:50,261 - INFO - Saved result for exp1_vary_width_1_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:30:50,261 - INFO - Task exp1_vary_width_1_42 completed by cpu_worker_15808
+2025-12-25 23:30:50,261 - INFO - Updated status: 64/640
+2025-12-25 23:30:50,263 - INFO - Task exp1_vary_width_1_42 completed by cpu_worker_15808
+2025-12-25 23:30:50,263 - INFO - Updated status: 64/640
+2025-12-25 23:31:00,265 - INFO - Assigned task exp1_vary_width_2_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-25 23:37:14,230 - INFO - Saved result for exp1_vary_width_462_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:37:14,231 - INFO - Task exp1_vary_width_462_42 completed by gpu0
+2025-12-25 23:37:14,231 - INFO - Updated status: 65/640
+2025-12-25 23:37:14,234 - INFO - Task exp1_vary_width_462_42 completed by gpu0
+2025-12-25 23:37:14,235 - INFO - Updated status: 65/640
+2025-12-25 23:37:24,241 - INFO - Assigned task exp1_vary_width_463_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-25 23:41:36,427 - INFO - Saved result for exp1_vary_width_2_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:41:36,427 - INFO - Task exp1_vary_width_2_42 completed by cpu_worker_15808
+2025-12-25 23:41:36,427 - INFO - Updated status: 66/640
+2025-12-25 23:41:36,429 - INFO - Task exp1_vary_width_2_42 completed by cpu_worker_15808
+2025-12-25 23:41:36,429 - INFO - Updated status: 66/640
+2025-12-25 23:41:46,432 - INFO - Assigned task exp1_vary_width_3_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-25 23:53:14,200 - INFO - Saved result for exp1_vary_width_463_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:53:14,201 - INFO - Task exp1_vary_width_463_42 completed by gpu0
+2025-12-25 23:53:14,202 - INFO - Updated status: 67/640
+2025-12-25 23:53:14,208 - INFO - Task exp1_vary_width_463_42 completed by gpu0
+2025-12-25 23:53:14,208 - INFO - Updated status: 67/640
+2025-12-25 23:53:24,211 - INFO - Assigned task exp1_vary_width_464_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-25 23:54:02,224 - INFO - Saved result for exp1_vary_width_3_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:54:02,224 - INFO - Task exp1_vary_width_3_42 completed by cpu_worker_15808
+2025-12-25 23:54:02,224 - INFO - Updated status: 68/640
+2025-12-25 23:54:02,226 - INFO - Task exp1_vary_width_3_42 completed by cpu_worker_15808
+2025-12-25 23:54:02,226 - INFO - Updated status: 68/640
+2025-12-25 23:54:12,228 - INFO - Assigned task exp1_vary_width_4_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-25 23:56:24,124 - INFO - Saved result for exp1_vary_width_4_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:56:24,124 - INFO - Task exp1_vary_width_4_42 completed by cpu_worker_15808
+2025-12-25 23:56:24,125 - INFO - Updated status: 69/640
+2025-12-25 23:56:24,128 - INFO - Task exp1_vary_width_4_42 completed by cpu_worker_15808
+2025-12-25 23:56:24,128 - INFO - Updated status: 69/640
+2025-12-25 23:56:34,130 - INFO - Assigned task exp1_vary_width_5_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-25 23:58:08,553 - INFO - Saved result for exp1_vary_width_5_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-25 23:58:08,553 - INFO - Task exp1_vary_width_5_42 completed by cpu_worker_15808
+2025-12-25 23:58:08,553 - INFO - Updated status: 70/640
+2025-12-25 23:58:08,555 - INFO - Task exp1_vary_width_5_42 completed by cpu_worker_15808
+2025-12-25 23:58:08,555 - INFO - Updated status: 70/640
+2025-12-25 23:58:18,558 - INFO - Assigned task exp1_vary_width_6_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-26 00:00:52,604 - INFO - Saved result for exp1_vary_width_464_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:00:52,604 - INFO - Task exp1_vary_width_464_42 completed by gpu0
+2025-12-26 00:00:52,604 - INFO - Updated status: 71/640
+2025-12-26 00:00:52,606 - INFO - Task exp1_vary_width_464_42 completed by gpu0
+2025-12-26 00:00:52,607 - INFO - Updated status: 71/640
+2025-12-26 00:01:02,609 - INFO - Assigned task exp1_vary_width_465_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-26 00:01:23,899 - INFO - Saved result for exp1_vary_width_6_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:01:23,900 - INFO - Task exp1_vary_width_6_42 completed by cpu_worker_15808
+2025-12-26 00:01:23,900 - INFO - Updated status: 72/640
+2025-12-26 00:01:23,901 - INFO - Task exp1_vary_width_6_42 completed by cpu_worker_15808
+2025-12-26 00:01:23,902 - INFO - Updated status: 72/640
+2025-12-26 00:01:33,904 - INFO - Assigned task exp1_vary_width_7_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-26 00:04:51,617 - INFO - Saved result for exp1_vary_width_7_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:04:51,617 - INFO - Task exp1_vary_width_7_42 completed by cpu_worker_15808
+2025-12-26 00:04:51,618 - INFO - Updated status: 73/640
+2025-12-26 00:04:51,619 - INFO - Task exp1_vary_width_7_42 completed by cpu_worker_15808
+2025-12-26 00:04:51,620 - INFO - Updated status: 73/640
+2025-12-26 00:05:01,623 - INFO - Assigned task exp1_vary_width_8_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-26 00:07:39,492 - INFO - Saved result for exp1_vary_width_8_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:07:39,493 - INFO - Task exp1_vary_width_8_42 completed by cpu_worker_15808
+2025-12-26 00:07:39,493 - INFO - Updated status: 74/640
+2025-12-26 00:07:39,496 - INFO - Task exp1_vary_width_8_42 completed by cpu_worker_15808
+2025-12-26 00:07:39,496 - INFO - Updated status: 74/640
+2025-12-26 00:07:49,498 - INFO - Assigned task exp1_vary_width_9_42 to cpu_worker_15808 (cpu) - LR: 807 params, complexity: 807
+2025-12-26 00:08:59,621 - INFO - Saved result for exp1_vary_width_465_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:08:59,621 - INFO - Task exp1_vary_width_465_42 completed by gpu0
+2025-12-26 00:08:59,621 - INFO - Updated status: 75/640
+2025-12-26 00:08:59,623 - INFO - Task exp1_vary_width_465_42 completed by gpu0
+2025-12-26 00:08:59,623 - INFO - Updated status: 75/640
+2025-12-26 00:09:09,626 - INFO - Assigned task exp1_vary_width_466_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-26 00:10:16,853 - INFO - Saved result for exp1_vary_width_9_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:10:16,854 - INFO - Task exp1_vary_width_9_42 completed by cpu_worker_15808
+2025-12-26 00:10:16,854 - INFO - Updated status: 76/640
+2025-12-26 00:10:16,856 - INFO - Task exp1_vary_width_9_42 completed by cpu_worker_15808
+2025-12-26 00:10:16,856 - INFO - Updated status: 76/640
+2025-12-26 00:10:26,858 - INFO - Assigned task exp1_vary_width_10_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:12:40,110 - INFO - Saved result for exp1_vary_width_10_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:12:40,111 - INFO - Task exp1_vary_width_10_42 completed by cpu_worker_15808
+2025-12-26 00:12:40,111 - INFO - Updated status: 77/640
+2025-12-26 00:12:40,113 - INFO - Task exp1_vary_width_10_42 completed by cpu_worker_15808
+2025-12-26 00:12:40,113 - INFO - Updated status: 77/640
+2025-12-26 00:12:50,118 - INFO - Assigned task exp1_vary_width_11_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:14:42,056 - INFO - Saved result for exp1_vary_width_466_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:14:42,057 - INFO - Task exp1_vary_width_466_42 completed by gpu0
+2025-12-26 00:14:42,057 - INFO - Updated status: 78/640
+2025-12-26 00:14:42,059 - INFO - Task exp1_vary_width_466_42 completed by gpu0
+2025-12-26 00:14:42,059 - INFO - Updated status: 78/640
+2025-12-26 00:14:52,062 - INFO - Assigned task exp1_vary_width_467_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-26 00:15:56,627 - INFO - Saved result for exp1_vary_width_11_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:15:56,628 - INFO - Task exp1_vary_width_11_42 completed by cpu_worker_15808
+2025-12-26 00:15:56,628 - INFO - Updated status: 79/640
+2025-12-26 00:15:56,629 - INFO - Task exp1_vary_width_11_42 completed by cpu_worker_15808
+2025-12-26 00:15:56,630 - INFO - Updated status: 79/640
+2025-12-26 00:16:06,632 - INFO - Assigned task exp1_vary_width_12_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:18:52,433 - INFO - Saved result for exp1_vary_width_12_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:18:52,433 - INFO - Task exp1_vary_width_12_42 completed by cpu_worker_15808
+2025-12-26 00:18:52,433 - INFO - Updated status: 80/640
+2025-12-26 00:18:52,435 - INFO - Task exp1_vary_width_12_42 completed by cpu_worker_15808
+2025-12-26 00:18:52,435 - INFO - Updated status: 80/640
+2025-12-26 00:19:02,437 - INFO - Assigned task exp1_vary_width_13_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:20:14,324 - INFO - Saved result for exp1_vary_width_467_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:20:14,324 - INFO - Task exp1_vary_width_467_42 completed by gpu0
+2025-12-26 00:20:14,325 - INFO - Updated status: 81/640
+2025-12-26 00:20:14,327 - INFO - Task exp1_vary_width_467_42 completed by gpu0
+2025-12-26 00:20:14,327 - INFO - Updated status: 81/640
+2025-12-26 00:20:24,330 - INFO - Assigned task exp1_vary_width_468_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-26 00:21:13,682 - INFO - Saved result for exp1_vary_width_13_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:21:13,682 - INFO - Task exp1_vary_width_13_42 completed by cpu_worker_15808
+2025-12-26 00:21:13,682 - INFO - Updated status: 82/640
+2025-12-26 00:21:13,683 - INFO - Task exp1_vary_width_13_42 completed by cpu_worker_15808
+2025-12-26 00:21:13,684 - INFO - Updated status: 82/640
+2025-12-26 00:21:23,686 - INFO - Assigned task exp1_vary_width_14_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:21:34,990 - INFO - Saved result for exp1_vary_width_468_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:21:34,993 - INFO - Task exp1_vary_width_468_42 completed by gpu0
+2025-12-26 00:21:34,993 - INFO - Updated status: 83/640
+2025-12-26 00:21:34,996 - INFO - Task exp1_vary_width_468_42 completed by gpu0
+2025-12-26 00:21:34,996 - INFO - Updated status: 83/640
+2025-12-26 00:21:44,999 - INFO - Assigned task exp1_vary_width_469_42 to gpu0 (gpu) - CNN: 557,258 params, complexity: 1,671,774
+2025-12-26 00:23:03,590 - INFO - Saved result for exp1_vary_width_469_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:23:03,591 - INFO - Task exp1_vary_width_469_42 completed by gpu0
+2025-12-26 00:23:03,591 - INFO - Updated status: 84/640
+2025-12-26 00:23:03,593 - INFO - Task exp1_vary_width_469_42 completed by gpu0
+2025-12-26 00:23:03,594 - INFO - Updated status: 84/640
+2025-12-26 00:23:13,597 - INFO - Assigned task exp1_vary_width_440_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:23:28,960 - INFO - Saved result for exp1_vary_width_14_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:23:28,960 - INFO - Task exp1_vary_width_14_42 completed by cpu_worker_15808
+2025-12-26 00:23:28,961 - INFO - Updated status: 85/640
+2025-12-26 00:23:28,962 - INFO - Task exp1_vary_width_14_42 completed by cpu_worker_15808
+2025-12-26 00:23:28,962 - INFO - Updated status: 85/640
+2025-12-26 00:23:38,965 - INFO - Assigned task exp1_vary_width_15_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:26:04,794 - INFO - Saved result for exp1_vary_width_15_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:26:04,794 - INFO - Task exp1_vary_width_15_42 completed by cpu_worker_15808
+2025-12-26 00:26:04,795 - INFO - Updated status: 86/640
+2025-12-26 00:26:04,796 - INFO - Task exp1_vary_width_15_42 completed by cpu_worker_15808
+2025-12-26 00:26:04,796 - INFO - Updated status: 86/640
+2025-12-26 00:26:14,798 - INFO - Assigned task exp1_vary_width_16_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:26:58,256 - INFO - Saved result for exp1_vary_width_440_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:26:58,256 - INFO - Task exp1_vary_width_440_42 completed by gpu0
+2025-12-26 00:26:58,256 - INFO - Updated status: 87/640
+2025-12-26 00:26:58,258 - INFO - Task exp1_vary_width_440_42 completed by gpu0
+2025-12-26 00:26:58,258 - INFO - Updated status: 87/640
+2025-12-26 00:27:08,260 - INFO - Assigned task exp1_vary_width_441_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:28:36,700 - INFO - Saved result for exp1_vary_width_16_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:28:36,700 - INFO - Task exp1_vary_width_16_42 completed by cpu_worker_15808
+2025-12-26 00:28:36,700 - INFO - Updated status: 88/640
+2025-12-26 00:28:36,702 - INFO - Task exp1_vary_width_16_42 completed by cpu_worker_15808
+2025-12-26 00:28:36,702 - INFO - Updated status: 88/640
+2025-12-26 00:28:46,704 - INFO - Assigned task exp1_vary_width_17_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:30:57,715 - INFO - Saved result for exp1_vary_width_17_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:30:57,715 - INFO - Task exp1_vary_width_17_42 completed by cpu_worker_15808
+2025-12-26 00:30:57,716 - INFO - Updated status: 89/640
+2025-12-26 00:30:57,717 - INFO - Task exp1_vary_width_17_42 completed by cpu_worker_15808
+2025-12-26 00:30:57,717 - INFO - Updated status: 89/640
+2025-12-26 00:31:02,273 - INFO - Saved result for exp1_vary_width_441_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:31:02,274 - INFO - Task exp1_vary_width_441_42 completed by gpu0
+2025-12-26 00:31:02,274 - INFO - Updated status: 90/640
+2025-12-26 00:31:02,275 - INFO - Task exp1_vary_width_441_42 completed by gpu0
+2025-12-26 00:31:02,275 - INFO - Updated status: 90/640
+2025-12-26 00:31:07,720 - INFO - Assigned task exp1_vary_width_18_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:31:12,278 - INFO - Assigned task exp1_vary_width_442_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:33:29,618 - INFO - Saved result for exp1_vary_width_18_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:33:29,618 - INFO - Task exp1_vary_width_18_42 completed by cpu_worker_15808
+2025-12-26 00:33:29,618 - INFO - Updated status: 91/640
+2025-12-26 00:33:29,620 - INFO - Task exp1_vary_width_18_42 completed by cpu_worker_15808
+2025-12-26 00:33:29,620 - INFO - Updated status: 91/640
+2025-12-26 00:33:33,752 - INFO - Saved result for exp1_vary_width_442_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:33:33,753 - INFO - Task exp1_vary_width_442_42 completed by gpu0
+2025-12-26 00:33:33,753 - INFO - Updated status: 92/640
+2025-12-26 00:33:33,755 - INFO - Task exp1_vary_width_442_42 completed by gpu0
+2025-12-26 00:33:33,756 - INFO - Updated status: 92/640
+2025-12-26 00:33:39,622 - INFO - Assigned task exp1_vary_width_19_42 to cpu_worker_15808 (cpu) - LR: 819 params, complexity: 819
+2025-12-26 00:33:43,757 - INFO - Assigned task exp1_vary_width_443_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:35:42,849 - INFO - Saved result for exp1_vary_width_443_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:35:42,850 - INFO - Task exp1_vary_width_443_42 completed by gpu0
+2025-12-26 00:35:42,850 - INFO - Updated status: 93/640
+2025-12-26 00:35:42,852 - INFO - Task exp1_vary_width_443_42 completed by gpu0
+2025-12-26 00:35:42,852 - INFO - Updated status: 93/640
+2025-12-26 00:35:52,855 - INFO - Assigned task exp1_vary_width_444_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:36:56,219 - INFO - Saved result for exp1_vary_width_19_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:36:56,219 - INFO - Task exp1_vary_width_19_42 completed by cpu_worker_15808
+2025-12-26 00:36:56,219 - INFO - Updated status: 94/640
+2025-12-26 00:36:56,221 - INFO - Task exp1_vary_width_19_42 completed by cpu_worker_15808
+2025-12-26 00:36:56,221 - INFO - Updated status: 94/640
+2025-12-26 00:37:06,223 - INFO - Assigned task exp1_vary_width_20_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:37:20,722 - INFO - Saved result for exp1_vary_width_444_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:37:20,722 - INFO - Task exp1_vary_width_444_42 completed by gpu0
+2025-12-26 00:37:20,722 - INFO - Updated status: 95/640
+2025-12-26 00:37:20,724 - INFO - Task exp1_vary_width_444_42 completed by gpu0
+2025-12-26 00:37:20,724 - INFO - Updated status: 95/640
+2025-12-26 00:37:30,727 - INFO - Assigned task exp1_vary_width_445_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:38:39,184 - INFO - Saved result for exp1_vary_width_20_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:38:39,184 - INFO - Task exp1_vary_width_20_42 completed by cpu_worker_15808
+2025-12-26 00:38:39,184 - INFO - Updated status: 96/640
+2025-12-26 00:38:39,187 - INFO - Task exp1_vary_width_20_42 completed by cpu_worker_15808
+2025-12-26 00:38:39,187 - INFO - Updated status: 96/640
+2025-12-26 00:38:41,039 - INFO - Saved result for exp1_vary_width_445_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:38:41,039 - INFO - Task exp1_vary_width_445_42 completed by gpu0
+2025-12-26 00:38:41,040 - INFO - Updated status: 97/640
+2025-12-26 00:38:41,042 - INFO - Task exp1_vary_width_445_42 completed by gpu0
+2025-12-26 00:38:41,042 - INFO - Updated status: 97/640
+2025-12-26 00:38:49,189 - INFO - Assigned task exp1_vary_width_21_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:38:51,045 - INFO - Assigned task exp1_vary_width_446_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:40:22,306 - INFO - Saved result for exp1_vary_width_21_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:40:22,307 - INFO - Task exp1_vary_width_21_42 completed by cpu_worker_15808
+2025-12-26 00:40:22,307 - INFO - Updated status: 98/640
+2025-12-26 00:40:22,309 - INFO - Task exp1_vary_width_21_42 completed by cpu_worker_15808
+2025-12-26 00:40:22,309 - INFO - Updated status: 98/640
+2025-12-26 00:40:32,312 - INFO - Assigned task exp1_vary_width_22_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:40:46,093 - INFO - Saved result for exp1_vary_width_446_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:40:46,093 - INFO - Task exp1_vary_width_446_42 completed by gpu0
+2025-12-26 00:40:46,093 - INFO - Updated status: 99/640
+2025-12-26 00:40:46,095 - INFO - Task exp1_vary_width_446_42 completed by gpu0
+2025-12-26 00:40:46,095 - INFO - Updated status: 99/640
+2025-12-26 00:40:56,099 - INFO - Assigned task exp1_vary_width_447_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:42:04,431 - INFO - Saved result for exp1_vary_width_22_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:42:04,431 - INFO - Task exp1_vary_width_22_42 completed by cpu_worker_15808
+2025-12-26 00:42:04,431 - INFO - Updated status: 100/640
+2025-12-26 00:42:04,434 - INFO - Task exp1_vary_width_22_42 completed by cpu_worker_15808
+2025-12-26 00:42:04,434 - INFO - Updated status: 100/640
+2025-12-26 00:42:14,436 - INFO - Assigned task exp1_vary_width_23_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:42:34,386 - INFO - Saved result for exp1_vary_width_447_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:42:34,386 - INFO - Task exp1_vary_width_447_42 completed by gpu0
+2025-12-26 00:42:34,386 - INFO - Updated status: 101/640
+2025-12-26 00:42:34,388 - INFO - Task exp1_vary_width_447_42 completed by gpu0
+2025-12-26 00:42:34,388 - INFO - Updated status: 101/640
+2025-12-26 00:42:44,390 - INFO - Assigned task exp1_vary_width_448_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:43:24,908 - INFO - Saved result for exp1_vary_width_448_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:43:24,908 - INFO - Task exp1_vary_width_448_42 completed by gpu0
+2025-12-26 00:43:24,908 - INFO - Updated status: 102/640
+2025-12-26 00:43:24,911 - INFO - Task exp1_vary_width_448_42 completed by gpu0
+2025-12-26 00:43:24,911 - INFO - Updated status: 102/640
+2025-12-26 00:43:34,914 - INFO - Assigned task exp1_vary_width_449_42 to gpu0 (gpu) - CNN: 502,538 params, complexity: 1,507,614
+2025-12-26 00:43:44,165 - INFO - Saved result for exp1_vary_width_23_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:43:44,165 - INFO - Task exp1_vary_width_23_42 completed by cpu_worker_15808
+2025-12-26 00:43:44,165 - INFO - Updated status: 103/640
+2025-12-26 00:43:44,168 - INFO - Task exp1_vary_width_23_42 completed by cpu_worker_15808
+2025-12-26 00:43:44,168 - INFO - Updated status: 103/640
+2025-12-26 00:43:54,173 - INFO - Assigned task exp1_vary_width_24_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:44:20,029 - INFO - Saved result for exp1_vary_width_449_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:44:20,030 - INFO - Task exp1_vary_width_449_42 completed by gpu0
+2025-12-26 00:44:20,031 - INFO - Updated status: 104/640
+2025-12-26 00:44:20,033 - INFO - Task exp1_vary_width_449_42 completed by gpu0
+2025-12-26 00:44:20,034 - INFO - Updated status: 104/640
+2025-12-26 00:44:30,038 - INFO - Assigned task exp1_vary_width_560_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 00:45:26,545 - INFO - Saved result for exp1_vary_width_24_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:45:26,546 - INFO - Task exp1_vary_width_24_42 completed by cpu_worker_15808
+2025-12-26 00:45:26,546 - INFO - Updated status: 105/640
+2025-12-26 00:45:26,548 - INFO - Task exp1_vary_width_24_42 completed by cpu_worker_15808
+2025-12-26 00:45:26,548 - INFO - Updated status: 105/640
+2025-12-26 00:45:36,551 - INFO - Assigned task exp1_vary_width_25_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:47:13,335 - INFO - Saved result for exp1_vary_width_25_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:47:13,335 - INFO - Task exp1_vary_width_25_42 completed by cpu_worker_15808
+2025-12-26 00:47:13,335 - INFO - Updated status: 106/640
+2025-12-26 00:47:13,338 - INFO - Task exp1_vary_width_25_42 completed by cpu_worker_15808
+2025-12-26 00:47:13,338 - INFO - Updated status: 106/640
+2025-12-26 00:47:23,340 - INFO - Assigned task exp1_vary_width_26_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:48:08,137 - INFO - Saved result for exp1_vary_width_560_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:48:08,137 - INFO - Task exp1_vary_width_560_42 completed by gpu0
+2025-12-26 00:48:08,137 - INFO - Updated status: 107/640
+2025-12-26 00:48:08,139 - INFO - Task exp1_vary_width_560_42 completed by gpu0
+2025-12-26 00:48:08,140 - INFO - Updated status: 107/640
+2025-12-26 00:48:18,142 - INFO - Assigned task exp1_vary_width_561_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 00:48:55,913 - INFO - Saved result for exp1_vary_width_26_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:48:55,913 - INFO - Task exp1_vary_width_26_42 completed by cpu_worker_15808
+2025-12-26 00:48:55,914 - INFO - Updated status: 108/640
+2025-12-26 00:48:55,915 - INFO - Task exp1_vary_width_26_42 completed by cpu_worker_15808
+2025-12-26 00:48:55,915 - INFO - Updated status: 108/640
+2025-12-26 00:49:05,918 - INFO - Assigned task exp1_vary_width_27_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:50:42,436 - INFO - Saved result for exp1_vary_width_27_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:50:42,436 - INFO - Task exp1_vary_width_27_42 completed by cpu_worker_15808
+2025-12-26 00:50:42,437 - INFO - Updated status: 109/640
+2025-12-26 00:50:42,439 - INFO - Task exp1_vary_width_27_42 completed by cpu_worker_15808
+2025-12-26 00:50:42,439 - INFO - Updated status: 109/640
+2025-12-26 00:50:52,441 - INFO - Assigned task exp1_vary_width_28_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:51:54,447 - INFO - Saved result for exp1_vary_width_561_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:51:54,447 - INFO - Task exp1_vary_width_561_42 completed by gpu0
+2025-12-26 00:51:54,447 - INFO - Updated status: 110/640
+2025-12-26 00:51:54,450 - INFO - Task exp1_vary_width_561_42 completed by gpu0
+2025-12-26 00:51:54,451 - INFO - Updated status: 110/640
+2025-12-26 00:52:04,453 - INFO - Assigned task exp1_vary_width_562_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 00:52:24,772 - INFO - Saved result for exp1_vary_width_28_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:52:24,772 - INFO - Task exp1_vary_width_28_42 completed by cpu_worker_15808
+2025-12-26 00:52:24,772 - INFO - Updated status: 111/640
+2025-12-26 00:52:24,775 - INFO - Task exp1_vary_width_28_42 completed by cpu_worker_15808
+2025-12-26 00:52:24,775 - INFO - Updated status: 111/640
+2025-12-26 00:52:34,778 - INFO - Assigned task exp1_vary_width_29_42 to cpu_worker_15808 (cpu) - LR: 867 params, complexity: 867
+2025-12-26 00:54:20,501 - INFO - Saved result for exp1_vary_width_29_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:54:20,502 - INFO - Task exp1_vary_width_29_42 completed by cpu_worker_15808
+2025-12-26 00:54:20,502 - INFO - Updated status: 112/640
+2025-12-26 00:54:20,506 - INFO - Task exp1_vary_width_29_42 completed by cpu_worker_15808
+2025-12-26 00:54:20,506 - INFO - Updated status: 112/640
+2025-12-26 00:54:30,509 - INFO - Assigned task exp1_vary_width_30_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 00:56:22,822 - INFO - Saved result for exp1_vary_width_562_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:56:22,822 - INFO - Task exp1_vary_width_562_42 completed by gpu0
+2025-12-26 00:56:22,823 - INFO - Updated status: 113/640
+2025-12-26 00:56:22,825 - INFO - Task exp1_vary_width_562_42 completed by gpu0
+2025-12-26 00:56:22,826 - INFO - Updated status: 113/640
+2025-12-26 00:56:32,828 - INFO - Assigned task exp1_vary_width_563_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 00:57:29,448 - INFO - Saved result for exp1_vary_width_30_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 00:57:29,448 - INFO - Task exp1_vary_width_30_42 completed by cpu_worker_15808
+2025-12-26 00:57:29,448 - INFO - Updated status: 114/640
+2025-12-26 00:57:29,453 - INFO - Task exp1_vary_width_30_42 completed by cpu_worker_15808
+2025-12-26 00:57:29,453 - INFO - Updated status: 114/640
+2025-12-26 00:57:39,455 - INFO - Assigned task exp1_vary_width_31_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:00:00,068 - INFO - Saved result for exp1_vary_width_563_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:00:00,068 - INFO - Task exp1_vary_width_563_42 completed by gpu0
+2025-12-26 01:00:00,068 - INFO - Updated status: 115/640
+2025-12-26 01:00:00,071 - INFO - Task exp1_vary_width_563_42 completed by gpu0
+2025-12-26 01:00:00,071 - INFO - Updated status: 115/640
+2025-12-26 01:00:10,074 - INFO - Assigned task exp1_vary_width_564_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 01:00:18,715 - INFO - Saved result for exp1_vary_width_31_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:00:18,715 - INFO - Task exp1_vary_width_31_42 completed by cpu_worker_15808
+2025-12-26 01:00:18,715 - INFO - Updated status: 116/640
+2025-12-26 01:00:18,720 - INFO - Task exp1_vary_width_31_42 completed by cpu_worker_15808
+2025-12-26 01:00:18,720 - INFO - Updated status: 116/640
+2025-12-26 01:00:28,722 - INFO - Assigned task exp1_vary_width_32_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:02:36,549 - INFO - Saved result for exp1_vary_width_564_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:02:36,549 - INFO - Task exp1_vary_width_564_42 completed by gpu0
+2025-12-26 01:02:36,549 - INFO - Updated status: 117/640
+2025-12-26 01:02:36,551 - INFO - Task exp1_vary_width_564_42 completed by gpu0
+2025-12-26 01:02:36,551 - INFO - Updated status: 117/640
+2025-12-26 01:02:46,553 - INFO - Assigned task exp1_vary_width_565_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 01:03:17,178 - INFO - Saved result for exp1_vary_width_32_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:03:17,178 - INFO - Task exp1_vary_width_32_42 completed by cpu_worker_15808
+2025-12-26 01:03:17,178 - INFO - Updated status: 118/640
+2025-12-26 01:03:17,183 - INFO - Task exp1_vary_width_32_42 completed by cpu_worker_15808
+2025-12-26 01:03:17,184 - INFO - Updated status: 118/640
+2025-12-26 01:03:27,186 - INFO - Assigned task exp1_vary_width_33_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:05:04,185 - INFO - Saved result for exp1_vary_width_565_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:05:04,186 - INFO - Task exp1_vary_width_565_42 completed by gpu0
+2025-12-26 01:05:04,186 - INFO - Updated status: 119/640
+2025-12-26 01:05:04,188 - INFO - Task exp1_vary_width_565_42 completed by gpu0
+2025-12-26 01:05:04,216 - INFO - Updated status: 119/640
+2025-12-26 01:05:14,219 - INFO - Assigned task exp1_vary_width_566_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 01:06:36,774 - INFO - Saved result for exp1_vary_width_33_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:06:36,775 - INFO - Task exp1_vary_width_33_42 completed by cpu_worker_15808
+2025-12-26 01:06:36,775 - INFO - Updated status: 120/640
+2025-12-26 01:06:36,781 - INFO - Task exp1_vary_width_33_42 completed by cpu_worker_15808
+2025-12-26 01:06:36,782 - INFO - Updated status: 120/640
+2025-12-26 01:06:46,784 - INFO - Assigned task exp1_vary_width_34_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:06:55,243 - INFO - Saved result for exp1_vary_width_566_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:06:55,243 - INFO - Task exp1_vary_width_566_42 completed by gpu0
+2025-12-26 01:06:55,244 - INFO - Updated status: 121/640
+2025-12-26 01:06:55,246 - INFO - Task exp1_vary_width_566_42 completed by gpu0
+2025-12-26 01:06:55,247 - INFO - Updated status: 121/640
+2025-12-26 01:07:05,249 - INFO - Assigned task exp1_vary_width_567_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 01:08:44,437 - INFO - Saved result for exp1_vary_width_567_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:08:44,437 - INFO - Task exp1_vary_width_567_42 completed by gpu0
+2025-12-26 01:08:44,438 - INFO - Updated status: 122/640
+2025-12-26 01:08:44,440 - INFO - Task exp1_vary_width_567_42 completed by gpu0
+2025-12-26 01:08:44,440 - INFO - Updated status: 122/640
+2025-12-26 01:08:54,442 - INFO - Assigned task exp1_vary_width_568_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 01:09:42,572 - INFO - Saved result for exp1_vary_width_568_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:09:42,573 - INFO - Task exp1_vary_width_568_42 completed by gpu0
+2025-12-26 01:09:42,573 - INFO - Updated status: 123/640
+2025-12-26 01:09:42,575 - INFO - Task exp1_vary_width_568_42 completed by gpu0
+2025-12-26 01:09:42,575 - INFO - Updated status: 123/640
+2025-12-26 01:09:52,578 - INFO - Assigned task exp1_vary_width_569_42 to gpu0 (gpu) - CNN: 164,330 params, complexity: 492,990
+2025-12-26 01:10:41,201 - INFO - Saved result for exp1_vary_width_34_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:10:41,201 - INFO - Task exp1_vary_width_34_42 completed by cpu_worker_15808
+2025-12-26 01:10:41,201 - INFO - Updated status: 124/640
+2025-12-26 01:10:41,209 - INFO - Task exp1_vary_width_34_42 completed by cpu_worker_15808
+2025-12-26 01:10:41,210 - INFO - Updated status: 124/640
+2025-12-26 01:10:43,056 - INFO - Saved result for exp1_vary_width_569_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:10:43,056 - INFO - Task exp1_vary_width_569_42 completed by gpu0
+2025-12-26 01:10:43,056 - INFO - Updated status: 125/640
+2025-12-26 01:10:43,058 - INFO - Task exp1_vary_width_569_42 completed by gpu0
+2025-12-26 01:10:43,058 - INFO - Updated status: 125/640
+2025-12-26 01:10:51,212 - INFO - Assigned task exp1_vary_width_35_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:10:53,060 - INFO - Assigned task exp1_vary_width_310_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:13:46,330 - INFO - Saved result for exp1_vary_width_35_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:13:46,330 - INFO - Task exp1_vary_width_35_42 completed by cpu_worker_15808
+2025-12-26 01:13:46,331 - INFO - Updated status: 126/640
+2025-12-26 01:13:46,337 - INFO - Task exp1_vary_width_35_42 completed by cpu_worker_15808
+2025-12-26 01:13:46,337 - INFO - Updated status: 126/640
+2025-12-26 01:13:56,339 - INFO - Assigned task exp1_vary_width_36_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:13:56,819 - INFO - Saved result for exp1_vary_width_310_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:13:56,819 - INFO - Task exp1_vary_width_310_42 completed by gpu0
+2025-12-26 01:13:56,819 - INFO - Updated status: 127/640
+2025-12-26 01:13:56,821 - INFO - Task exp1_vary_width_310_42 completed by gpu0
+2025-12-26 01:13:56,821 - INFO - Updated status: 127/640
+2025-12-26 01:14:06,823 - INFO - Assigned task exp1_vary_width_311_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:17:16,590 - INFO - Saved result for exp1_vary_width_311_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:17:16,590 - INFO - Task exp1_vary_width_311_42 completed by gpu0
+2025-12-26 01:17:16,590 - INFO - Updated status: 128/640
+2025-12-26 01:17:16,592 - INFO - Task exp1_vary_width_311_42 completed by gpu0
+2025-12-26 01:17:16,592 - INFO - Updated status: 128/640
+2025-12-26 01:17:26,594 - INFO - Assigned task exp1_vary_width_312_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:17:47,784 - INFO - Saved result for exp1_vary_width_36_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:17:47,784 - INFO - Task exp1_vary_width_36_42 completed by cpu_worker_15808
+2025-12-26 01:17:47,784 - INFO - Updated status: 129/640
+2025-12-26 01:17:47,787 - INFO - Task exp1_vary_width_36_42 completed by cpu_worker_15808
+2025-12-26 01:17:47,787 - INFO - Updated status: 129/640
+2025-12-26 01:17:57,789 - INFO - Assigned task exp1_vary_width_37_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:20:27,626 - INFO - Saved result for exp1_vary_width_312_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:20:27,628 - INFO - Task exp1_vary_width_312_42 completed by gpu0
+2025-12-26 01:20:27,629 - INFO - Updated status: 130/640
+2025-12-26 01:20:27,632 - INFO - Task exp1_vary_width_312_42 completed by gpu0
+2025-12-26 01:20:27,632 - INFO - Updated status: 130/640
+2025-12-26 01:20:37,635 - INFO - Assigned task exp1_vary_width_313_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:21:24,548 - INFO - Saved result for exp1_vary_width_37_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:21:24,548 - INFO - Task exp1_vary_width_37_42 completed by cpu_worker_15808
+2025-12-26 01:21:24,548 - INFO - Updated status: 131/640
+2025-12-26 01:21:24,553 - INFO - Task exp1_vary_width_37_42 completed by cpu_worker_15808
+2025-12-26 01:21:24,553 - INFO - Updated status: 131/640
+2025-12-26 01:21:34,555 - INFO - Assigned task exp1_vary_width_38_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:23:40,189 - INFO - Saved result for exp1_vary_width_313_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:23:40,189 - INFO - Task exp1_vary_width_313_42 completed by gpu0
+2025-12-26 01:23:40,189 - INFO - Updated status: 132/640
+2025-12-26 01:23:40,192 - INFO - Task exp1_vary_width_313_42 completed by gpu0
+2025-12-26 01:23:40,192 - INFO - Updated status: 132/640
+2025-12-26 01:23:50,195 - INFO - Assigned task exp1_vary_width_314_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:24:48,390 - INFO - Saved result for exp1_vary_width_38_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:24:48,390 - INFO - Task exp1_vary_width_38_42 completed by cpu_worker_15808
+2025-12-26 01:24:48,390 - INFO - Updated status: 133/640
+2025-12-26 01:24:48,394 - INFO - Task exp1_vary_width_38_42 completed by cpu_worker_15808
+2025-12-26 01:24:48,395 - INFO - Updated status: 133/640
+2025-12-26 01:24:58,399 - INFO - Assigned task exp1_vary_width_39_42 to cpu_worker_15808 (cpu) - LR: 1,059 params, complexity: 1,059
+2025-12-26 01:26:51,283 - INFO - Saved result for exp1_vary_width_314_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:26:51,284 - INFO - Task exp1_vary_width_314_42 completed by gpu0
+2025-12-26 01:26:51,284 - INFO - Updated status: 134/640
+2025-12-26 01:26:51,285 - INFO - Task exp1_vary_width_314_42 completed by gpu0
+2025-12-26 01:26:51,286 - INFO - Updated status: 134/640
+2025-12-26 01:27:01,288 - INFO - Assigned task exp1_vary_width_315_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:29:08,378 - INFO - Saved result for exp1_vary_width_39_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:29:08,379 - INFO - Task exp1_vary_width_39_42 completed by cpu_worker_15808
+2025-12-26 01:29:08,379 - INFO - Updated status: 135/640
+2025-12-26 01:29:08,385 - INFO - Task exp1_vary_width_39_42 completed by cpu_worker_15808
+2025-12-26 01:29:08,385 - INFO - Updated status: 135/640
+2025-12-26 01:29:18,390 - INFO - Assigned task exp1_vary_width_330_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 01:30:08,746 - INFO - Saved result for exp1_vary_width_315_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:30:08,747 - INFO - Task exp1_vary_width_315_42 completed by gpu0
+2025-12-26 01:30:08,747 - INFO - Updated status: 136/640
+2025-12-26 01:30:08,749 - INFO - Task exp1_vary_width_315_42 completed by gpu0
+2025-12-26 01:30:08,750 - INFO - Updated status: 136/640
+2025-12-26 01:30:18,752 - INFO - Assigned task exp1_vary_width_316_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:33:37,213 - INFO - Saved result for exp1_vary_width_316_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:33:37,214 - INFO - Task exp1_vary_width_316_42 completed by gpu0
+2025-12-26 01:33:37,214 - INFO - Updated status: 137/640
+2025-12-26 01:33:37,217 - INFO - Task exp1_vary_width_316_42 completed by gpu0
+2025-12-26 01:33:37,218 - INFO - Updated status: 137/640
+2025-12-26 01:33:47,222 - INFO - Assigned task exp1_vary_width_317_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:37:05,589 - INFO - Saved result for exp1_vary_width_317_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:37:05,590 - INFO - Task exp1_vary_width_317_42 completed by gpu0
+2025-12-26 01:37:05,590 - INFO - Updated status: 138/640
+2025-12-26 01:37:05,592 - INFO - Task exp1_vary_width_317_42 completed by gpu0
+2025-12-26 01:37:05,593 - INFO - Updated status: 138/640
+2025-12-26 01:37:15,595 - INFO - Assigned task exp1_vary_width_318_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:40:35,110 - INFO - Saved result for exp1_vary_width_318_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:40:35,110 - INFO - Task exp1_vary_width_318_42 completed by gpu0
+2025-12-26 01:40:35,110 - INFO - Updated status: 139/640
+2025-12-26 01:40:35,114 - INFO - Task exp1_vary_width_318_42 completed by gpu0
+2025-12-26 01:40:35,115 - INFO - Updated status: 139/640
+2025-12-26 01:40:45,119 - INFO - Assigned task exp1_vary_width_319_42 to gpu0 (gpu) - LR: 467,594 params, complexity: 467,594
+2025-12-26 01:43:32,461 - INFO - Saved result for exp1_vary_width_330_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:43:32,462 - INFO - Task exp1_vary_width_330_42 completed by cpu_worker_15808
+2025-12-26 01:43:32,462 - INFO - Updated status: 140/640
+2025-12-26 01:43:32,463 - INFO - Task exp1_vary_width_330_42 completed by cpu_worker_15808
+2025-12-26 01:43:32,463 - INFO - Updated status: 140/640
+2025-12-26 01:43:42,466 - INFO - Assigned task exp1_vary_width_331_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 01:43:55,869 - INFO - Saved result for exp1_vary_width_319_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:43:55,870 - INFO - Task exp1_vary_width_319_42 completed by gpu0
+2025-12-26 01:43:55,871 - INFO - Updated status: 141/640
+2025-12-26 01:43:55,874 - INFO - Task exp1_vary_width_319_42 completed by gpu0
+2025-12-26 01:43:55,875 - INFO - Updated status: 141/640
+2025-12-26 01:44:05,878 - INFO - Assigned task exp1_vary_width_610_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 01:53:48,673 - INFO - Saved result for exp1_vary_width_610_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:53:48,674 - INFO - Task exp1_vary_width_610_42 completed by gpu0
+2025-12-26 01:53:48,675 - INFO - Updated status: 142/640
+2025-12-26 01:53:48,677 - INFO - Task exp1_vary_width_610_42 completed by gpu0
+2025-12-26 01:53:48,677 - INFO - Updated status: 142/640
+2025-12-26 01:53:58,681 - INFO - Assigned task exp1_vary_width_611_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 01:58:19,640 - INFO - Saved result for exp1_vary_width_331_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 01:58:19,640 - INFO - Task exp1_vary_width_331_42 completed by cpu_worker_15808
+2025-12-26 01:58:19,641 - INFO - Updated status: 143/640
+2025-12-26 01:58:19,642 - INFO - Task exp1_vary_width_331_42 completed by cpu_worker_15808
+2025-12-26 01:58:19,643 - INFO - Updated status: 143/640
+2025-12-26 01:58:29,645 - INFO - Assigned task exp1_vary_width_332_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:03:45,379 - INFO - Saved result for exp1_vary_width_611_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:03:45,379 - INFO - Task exp1_vary_width_611_42 completed by gpu0
+2025-12-26 02:03:45,380 - INFO - Updated status: 144/640
+2025-12-26 02:03:45,382 - INFO - Task exp1_vary_width_611_42 completed by gpu0
+2025-12-26 02:03:45,383 - INFO - Updated status: 144/640
+2025-12-26 02:03:55,385 - INFO - Assigned task exp1_vary_width_612_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:12:30,896 - INFO - Saved result for exp1_vary_width_612_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:12:30,896 - INFO - Task exp1_vary_width_612_42 completed by gpu0
+2025-12-26 02:12:30,897 - INFO - Updated status: 145/640
+2025-12-26 02:12:30,899 - INFO - Task exp1_vary_width_612_42 completed by gpu0
+2025-12-26 02:12:30,900 - INFO - Updated status: 145/640
+2025-12-26 02:12:40,903 - INFO - Assigned task exp1_vary_width_613_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:15:55,832 - INFO - Saved result for exp1_vary_width_332_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:15:55,832 - INFO - Task exp1_vary_width_332_42 completed by cpu_worker_15808
+2025-12-26 02:15:55,832 - INFO - Updated status: 146/640
+2025-12-26 02:15:55,835 - INFO - Task exp1_vary_width_332_42 completed by cpu_worker_15808
+2025-12-26 02:15:55,835 - INFO - Updated status: 146/640
+2025-12-26 02:16:05,837 - INFO - Assigned task exp1_vary_width_333_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:21:17,541 - INFO - Saved result for exp1_vary_width_333_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:21:17,542 - INFO - Task exp1_vary_width_333_42 completed by cpu_worker_15808
+2025-12-26 02:21:17,542 - INFO - Updated status: 147/640
+2025-12-26 02:21:17,543 - INFO - Task exp1_vary_width_333_42 completed by cpu_worker_15808
+2025-12-26 02:21:17,544 - INFO - Updated status: 147/640
+2025-12-26 02:21:27,546 - INFO - Assigned task exp1_vary_width_334_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:22:18,281 - INFO - Saved result for exp1_vary_width_613_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:22:18,292 - INFO - Task exp1_vary_width_613_42 completed by gpu0
+2025-12-26 02:22:18,293 - INFO - Updated status: 148/640
+2025-12-26 02:22:18,299 - INFO - Task exp1_vary_width_613_42 completed by gpu0
+2025-12-26 02:22:18,302 - INFO - Updated status: 148/640
+2025-12-26 02:22:28,317 - INFO - Assigned task exp1_vary_width_614_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:23:57,512 - INFO - Saved result for exp1_vary_width_334_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:23:57,513 - INFO - Task exp1_vary_width_334_42 completed by cpu_worker_15808
+2025-12-26 02:23:57,513 - INFO - Updated status: 149/640
+2025-12-26 02:23:57,514 - INFO - Task exp1_vary_width_334_42 completed by cpu_worker_15808
+2025-12-26 02:23:57,514 - INFO - Updated status: 149/640
+2025-12-26 02:24:07,516 - INFO - Assigned task exp1_vary_width_335_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:26:31,459 - INFO - Saved result for exp1_vary_width_335_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:26:31,459 - INFO - Task exp1_vary_width_335_42 completed by cpu_worker_15808
+2025-12-26 02:26:31,459 - INFO - Updated status: 150/640
+2025-12-26 02:26:31,461 - INFO - Task exp1_vary_width_335_42 completed by cpu_worker_15808
+2025-12-26 02:26:31,461 - INFO - Updated status: 150/640
+2025-12-26 02:26:41,463 - INFO - Assigned task exp1_vary_width_336_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:28:45,353 - INFO - Saved result for exp1_vary_width_336_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:28:45,354 - INFO - Task exp1_vary_width_336_42 completed by cpu_worker_15808
+2025-12-26 02:28:45,354 - INFO - Updated status: 151/640
+2025-12-26 02:28:45,356 - INFO - Task exp1_vary_width_336_42 completed by cpu_worker_15808
+2025-12-26 02:28:45,356 - INFO - Updated status: 151/640
+2025-12-26 02:28:55,358 - INFO - Assigned task exp1_vary_width_337_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:29:12,301 - INFO - Saved result for exp1_vary_width_614_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:29:12,301 - INFO - Task exp1_vary_width_614_42 completed by gpu0
+2025-12-26 02:29:12,301 - INFO - Updated status: 152/640
+2025-12-26 02:29:12,303 - INFO - Task exp1_vary_width_614_42 completed by gpu0
+2025-12-26 02:29:12,304 - INFO - Updated status: 152/640
+2025-12-26 02:29:22,306 - INFO - Assigned task exp1_vary_width_615_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:31:06,967 - INFO - Saved result for exp1_vary_width_337_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:31:06,967 - INFO - Task exp1_vary_width_337_42 completed by cpu_worker_15808
+2025-12-26 02:31:06,968 - INFO - Updated status: 153/640
+2025-12-26 02:31:06,969 - INFO - Task exp1_vary_width_337_42 completed by cpu_worker_15808
+2025-12-26 02:31:06,969 - INFO - Updated status: 153/640
+2025-12-26 02:31:16,972 - INFO - Assigned task exp1_vary_width_338_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:34:38,984 - INFO - Saved result for exp1_vary_width_338_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:34:38,985 - INFO - Task exp1_vary_width_338_42 completed by cpu_worker_15808
+2025-12-26 02:34:38,985 - INFO - Updated status: 154/640
+2025-12-26 02:34:38,987 - INFO - Task exp1_vary_width_338_42 completed by cpu_worker_15808
+2025-12-26 02:34:38,987 - INFO - Updated status: 154/640
+2025-12-26 02:34:48,990 - INFO - Assigned task exp1_vary_width_339_42 to cpu_worker_15808 (cpu) - CNN: 548 params, complexity: 1,644
+2025-12-26 02:39:24,305 - INFO - Saved result for exp1_vary_width_339_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:39:24,305 - INFO - Task exp1_vary_width_339_42 completed by cpu_worker_15808
+2025-12-26 02:39:24,306 - INFO - Updated status: 155/640
+2025-12-26 02:39:24,308 - INFO - Task exp1_vary_width_339_42 completed by cpu_worker_15808
+2025-12-26 02:39:24,308 - INFO - Updated status: 155/640
+2025-12-26 02:39:34,310 - INFO - Assigned task exp1_vary_width_490_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 02:39:43,839 - INFO - Saved result for exp1_vary_width_615_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:39:43,839 - INFO - Task exp1_vary_width_615_42 completed by gpu0
+2025-12-26 02:39:43,839 - INFO - Updated status: 156/640
+2025-12-26 02:39:43,841 - INFO - Task exp1_vary_width_615_42 completed by gpu0
+2025-12-26 02:39:43,841 - INFO - Updated status: 156/640
+2025-12-26 02:39:53,844 - INFO - Assigned task exp1_vary_width_616_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:46:10,318 - INFO - Saved result for exp1_vary_width_616_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:46:10,318 - INFO - Task exp1_vary_width_616_42 completed by gpu0
+2025-12-26 02:46:10,318 - INFO - Updated status: 157/640
+2025-12-26 02:46:10,320 - INFO - Task exp1_vary_width_616_42 completed by gpu0
+2025-12-26 02:46:10,320 - INFO - Updated status: 157/640
+2025-12-26 02:46:20,323 - INFO - Assigned task exp1_vary_width_617_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:52:06,165 - INFO - Saved result for exp1_vary_width_617_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:52:06,165 - INFO - Task exp1_vary_width_617_42 completed by gpu0
+2025-12-26 02:52:06,166 - INFO - Updated status: 158/640
+2025-12-26 02:52:06,167 - INFO - Task exp1_vary_width_617_42 completed by gpu0
+2025-12-26 02:52:06,168 - INFO - Updated status: 158/640
+2025-12-26 02:52:16,170 - INFO - Assigned task exp1_vary_width_618_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:54:32,161 - INFO - Saved result for exp1_vary_width_618_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:54:32,161 - INFO - Task exp1_vary_width_618_42 completed by gpu0
+2025-12-26 02:54:32,162 - INFO - Updated status: 159/640
+2025-12-26 02:54:32,164 - INFO - Task exp1_vary_width_618_42 completed by gpu0
+2025-12-26 02:54:32,164 - INFO - Updated status: 159/640
+2025-12-26 02:54:42,167 - INFO - Assigned task exp1_vary_width_619_42 to gpu0 (gpu) - CNN: 154,058 params, complexity: 462,174
+2025-12-26 02:56:43,489 - INFO - Saved result for exp1_vary_width_619_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:56:43,489 - INFO - Task exp1_vary_width_619_42 completed by gpu0
+2025-12-26 02:56:43,489 - INFO - Updated status: 160/640
+2025-12-26 02:56:43,491 - INFO - Task exp1_vary_width_619_42 completed by gpu0
+2025-12-26 02:56:43,491 - INFO - Updated status: 160/640
+2025-12-26 02:56:53,493 - INFO - Assigned task exp1_vary_width_590_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 02:57:16,880 - INFO - Saved result for exp1_vary_width_490_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:57:16,880 - INFO - Task exp1_vary_width_490_42 completed by cpu_worker_15808
+2025-12-26 02:57:16,881 - INFO - Updated status: 161/640
+2025-12-26 02:57:16,882 - INFO - Task exp1_vary_width_490_42 completed by cpu_worker_15808
+2025-12-26 02:57:16,883 - INFO - Updated status: 161/640
+2025-12-26 02:57:26,884 - INFO - Assigned task exp1_vary_width_491_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 02:59:35,549 - INFO - Saved result for exp1_vary_width_590_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 02:59:35,550 - INFO - Task exp1_vary_width_590_42 completed by gpu0
+2025-12-26 02:59:35,550 - INFO - Updated status: 162/640
+2025-12-26 02:59:35,554 - INFO - Task exp1_vary_width_590_42 completed by gpu0
+2025-12-26 02:59:35,554 - INFO - Updated status: 162/640
+2025-12-26 02:59:45,557 - INFO - Assigned task exp1_vary_width_591_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:02:30,770 - INFO - Saved result for exp1_vary_width_591_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:02:30,770 - INFO - Task exp1_vary_width_591_42 completed by gpu0
+2025-12-26 03:02:30,770 - INFO - Updated status: 163/640
+2025-12-26 03:02:30,774 - INFO - Task exp1_vary_width_591_42 completed by gpu0
+2025-12-26 03:02:30,774 - INFO - Updated status: 163/640
+2025-12-26 03:02:40,777 - INFO - Assigned task exp1_vary_width_592_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:05:25,792 - INFO - Saved result for exp1_vary_width_592_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:05:25,792 - INFO - Task exp1_vary_width_592_42 completed by gpu0
+2025-12-26 03:05:25,793 - INFO - Updated status: 164/640
+2025-12-26 03:05:25,795 - INFO - Task exp1_vary_width_592_42 completed by gpu0
+2025-12-26 03:05:25,795 - INFO - Updated status: 164/640
+2025-12-26 03:05:35,797 - INFO - Assigned task exp1_vary_width_593_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:08:20,085 - INFO - Saved result for exp1_vary_width_593_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:08:20,085 - INFO - Task exp1_vary_width_593_42 completed by gpu0
+2025-12-26 03:08:20,086 - INFO - Updated status: 165/640
+2025-12-26 03:08:20,089 - INFO - Task exp1_vary_width_593_42 completed by gpu0
+2025-12-26 03:08:20,090 - INFO - Updated status: 165/640
+2025-12-26 03:08:30,092 - INFO - Assigned task exp1_vary_width_594_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:11:14,093 - INFO - Saved result for exp1_vary_width_594_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:11:14,093 - INFO - Task exp1_vary_width_594_42 completed by gpu0
+2025-12-26 03:11:14,094 - INFO - Updated status: 166/640
+2025-12-26 03:11:14,095 - INFO - Task exp1_vary_width_594_42 completed by gpu0
+2025-12-26 03:11:14,096 - INFO - Updated status: 166/640
+2025-12-26 03:11:24,098 - INFO - Assigned task exp1_vary_width_595_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:14:11,701 - INFO - Saved result for exp1_vary_width_595_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:14:11,701 - INFO - Task exp1_vary_width_595_42 completed by gpu0
+2025-12-26 03:14:11,701 - INFO - Updated status: 167/640
+2025-12-26 03:14:11,704 - INFO - Task exp1_vary_width_595_42 completed by gpu0
+2025-12-26 03:14:11,704 - INFO - Updated status: 167/640
+2025-12-26 03:14:21,706 - INFO - Assigned task exp1_vary_width_596_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:15:37,631 - INFO - Saved result for exp1_vary_width_491_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:15:37,632 - INFO - Task exp1_vary_width_491_42 completed by cpu_worker_15808
+2025-12-26 03:15:37,632 - INFO - Updated status: 168/640
+2025-12-26 03:15:37,634 - INFO - Task exp1_vary_width_491_42 completed by cpu_worker_15808
+2025-12-26 03:15:37,634 - INFO - Updated status: 168/640
+2025-12-26 03:15:47,637 - INFO - Assigned task exp1_vary_width_492_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 03:16:59,329 - INFO - Saved result for exp1_vary_width_596_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:16:59,329 - INFO - Task exp1_vary_width_596_42 completed by gpu0
+2025-12-26 03:16:59,329 - INFO - Updated status: 169/640
+2025-12-26 03:16:59,331 - INFO - Task exp1_vary_width_596_42 completed by gpu0
+2025-12-26 03:16:59,332 - INFO - Updated status: 169/640
+2025-12-26 03:17:09,334 - INFO - Assigned task exp1_vary_width_597_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:19:52,994 - INFO - Saved result for exp1_vary_width_597_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:19:52,995 - INFO - Task exp1_vary_width_597_42 completed by gpu0
+2025-12-26 03:19:52,995 - INFO - Updated status: 170/640
+2025-12-26 03:19:53,002 - INFO - Task exp1_vary_width_597_42 completed by gpu0
+2025-12-26 03:19:53,006 - INFO - Updated status: 170/640
+2025-12-26 03:20:03,013 - INFO - Assigned task exp1_vary_width_598_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:22:49,557 - INFO - Saved result for exp1_vary_width_598_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:22:49,558 - INFO - Task exp1_vary_width_598_42 completed by gpu0
+2025-12-26 03:22:49,558 - INFO - Updated status: 171/640
+2025-12-26 03:22:49,561 - INFO - Task exp1_vary_width_598_42 completed by gpu0
+2025-12-26 03:22:49,562 - INFO - Updated status: 171/640
+2025-12-26 03:22:59,564 - INFO - Assigned task exp1_vary_width_599_42 to gpu0 (gpu) - CNN: 148,826 params, complexity: 446,478
+2025-12-26 03:25:44,757 - INFO - Saved result for exp1_vary_width_599_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:25:44,757 - INFO - Task exp1_vary_width_599_42 completed by gpu0
+2025-12-26 03:25:44,757 - INFO - Updated status: 172/640
+2025-12-26 03:25:44,759 - INFO - Task exp1_vary_width_599_42 completed by gpu0
+2025-12-26 03:25:44,759 - INFO - Updated status: 172/640
+2025-12-26 03:25:54,761 - INFO - Assigned task exp1_vary_width_430_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:26:02,571 - INFO - Saved result for exp1_vary_width_492_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:26:02,571 - INFO - Task exp1_vary_width_492_42 completed by cpu_worker_15808
+2025-12-26 03:26:02,572 - INFO - Updated status: 173/640
+2025-12-26 03:26:02,573 - INFO - Task exp1_vary_width_492_42 completed by cpu_worker_15808
+2025-12-26 03:26:02,573 - INFO - Updated status: 173/640
+2025-12-26 03:26:12,578 - INFO - Assigned task exp1_vary_width_493_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 03:28:29,636 - INFO - Saved result for exp1_vary_width_430_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:28:29,636 - INFO - Task exp1_vary_width_430_42 completed by gpu0
+2025-12-26 03:28:29,636 - INFO - Updated status: 174/640
+2025-12-26 03:28:29,638 - INFO - Task exp1_vary_width_430_42 completed by gpu0
+2025-12-26 03:28:29,638 - INFO - Updated status: 174/640
+2025-12-26 03:28:39,640 - INFO - Assigned task exp1_vary_width_431_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:31:22,032 - INFO - Saved result for exp1_vary_width_431_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:31:22,033 - INFO - Task exp1_vary_width_431_42 completed by gpu0
+2025-12-26 03:31:22,033 - INFO - Updated status: 175/640
+2025-12-26 03:31:22,036 - INFO - Task exp1_vary_width_431_42 completed by gpu0
+2025-12-26 03:31:22,036 - INFO - Updated status: 175/640
+2025-12-26 03:31:32,039 - INFO - Assigned task exp1_vary_width_432_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:34:14,028 - INFO - Saved result for exp1_vary_width_432_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:34:14,029 - INFO - Task exp1_vary_width_432_42 completed by gpu0
+2025-12-26 03:34:14,029 - INFO - Updated status: 176/640
+2025-12-26 03:34:14,034 - INFO - Task exp1_vary_width_432_42 completed by gpu0
+2025-12-26 03:34:14,034 - INFO - Updated status: 176/640
+2025-12-26 03:34:24,037 - INFO - Assigned task exp1_vary_width_433_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:35:36,884 - INFO - Saved result for exp1_vary_width_493_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:35:36,884 - INFO - Task exp1_vary_width_493_42 completed by cpu_worker_15808
+2025-12-26 03:35:36,885 - INFO - Updated status: 177/640
+2025-12-26 03:35:36,886 - INFO - Task exp1_vary_width_493_42 completed by cpu_worker_15808
+2025-12-26 03:35:36,886 - INFO - Updated status: 177/640
+2025-12-26 03:35:46,888 - INFO - Assigned task exp1_vary_width_494_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 03:37:00,138 - INFO - Saved result for exp1_vary_width_433_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:37:00,139 - INFO - Task exp1_vary_width_433_42 completed by gpu0
+2025-12-26 03:37:00,139 - INFO - Updated status: 178/640
+2025-12-26 03:37:00,142 - INFO - Task exp1_vary_width_433_42 completed by gpu0
+2025-12-26 03:37:00,142 - INFO - Updated status: 178/640
+2025-12-26 03:37:10,145 - INFO - Assigned task exp1_vary_width_434_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:39:54,656 - INFO - Saved result for exp1_vary_width_434_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:39:54,656 - INFO - Task exp1_vary_width_434_42 completed by gpu0
+2025-12-26 03:39:54,656 - INFO - Updated status: 179/640
+2025-12-26 03:39:54,658 - INFO - Task exp1_vary_width_434_42 completed by gpu0
+2025-12-26 03:39:54,658 - INFO - Updated status: 179/640
+2025-12-26 03:40:04,660 - INFO - Assigned task exp1_vary_width_435_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:42:47,561 - INFO - Saved result for exp1_vary_width_435_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:42:47,561 - INFO - Task exp1_vary_width_435_42 completed by gpu0
+2025-12-26 03:42:47,562 - INFO - Updated status: 180/640
+2025-12-26 03:42:47,565 - INFO - Task exp1_vary_width_435_42 completed by gpu0
+2025-12-26 03:42:47,565 - INFO - Updated status: 180/640
+2025-12-26 03:42:57,567 - INFO - Assigned task exp1_vary_width_436_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:45:38,312 - INFO - Saved result for exp1_vary_width_436_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:45:38,312 - INFO - Task exp1_vary_width_436_42 completed by gpu0
+2025-12-26 03:45:38,312 - INFO - Updated status: 181/640
+2025-12-26 03:45:38,314 - INFO - Task exp1_vary_width_436_42 completed by gpu0
+2025-12-26 03:45:38,314 - INFO - Updated status: 181/640
+2025-12-26 03:45:48,316 - INFO - Assigned task exp1_vary_width_437_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:46:33,958 - INFO - Saved result for exp1_vary_width_494_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:46:33,959 - INFO - Task exp1_vary_width_494_42 completed by cpu_worker_15808
+2025-12-26 03:46:33,959 - INFO - Updated status: 182/640
+2025-12-26 03:46:33,960 - INFO - Task exp1_vary_width_494_42 completed by cpu_worker_15808
+2025-12-26 03:46:33,961 - INFO - Updated status: 182/640
+2025-12-26 03:46:43,964 - INFO - Assigned task exp1_vary_width_495_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 03:48:22,636 - INFO - Saved result for exp1_vary_width_437_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:48:22,636 - INFO - Task exp1_vary_width_437_42 completed by gpu0
+2025-12-26 03:48:22,636 - INFO - Updated status: 183/640
+2025-12-26 03:48:22,638 - INFO - Task exp1_vary_width_437_42 completed by gpu0
+2025-12-26 03:48:22,638 - INFO - Updated status: 183/640
+2025-12-26 03:48:32,641 - INFO - Assigned task exp1_vary_width_438_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:51:13,343 - INFO - Saved result for exp1_vary_width_438_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:51:13,343 - INFO - Task exp1_vary_width_438_42 completed by gpu0
+2025-12-26 03:51:13,343 - INFO - Updated status: 184/640
+2025-12-26 03:51:13,345 - INFO - Task exp1_vary_width_438_42 completed by gpu0
+2025-12-26 03:51:13,345 - INFO - Updated status: 184/640
+2025-12-26 03:51:23,347 - INFO - Assigned task exp1_vary_width_439_42 to gpu0 (gpu) - CNN: 148,538 params, complexity: 445,614
+2025-12-26 03:54:03,959 - INFO - Saved result for exp1_vary_width_439_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 03:54:03,959 - INFO - Task exp1_vary_width_439_42 completed by gpu0
+2025-12-26 03:54:03,959 - INFO - Updated status: 185/640
+2025-12-26 03:54:03,961 - INFO - Task exp1_vary_width_439_42 completed by gpu0
+2025-12-26 03:54:03,961 - INFO - Updated status: 185/640
+2025-12-26 03:54:13,963 - INFO - Assigned task exp1_vary_width_450_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:01:35,446 - INFO - Saved result for exp1_vary_width_495_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:01:35,446 - INFO - Task exp1_vary_width_495_42 completed by cpu_worker_15808
+2025-12-26 04:01:35,446 - INFO - Updated status: 186/640
+2025-12-26 04:01:35,448 - INFO - Task exp1_vary_width_495_42 completed by cpu_worker_15808
+2025-12-26 04:01:35,448 - INFO - Updated status: 186/640
+2025-12-26 04:01:45,451 - INFO - Assigned task exp1_vary_width_496_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 04:04:25,127 - INFO - Saved result for exp1_vary_width_450_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:04:25,127 - INFO - Task exp1_vary_width_450_42 completed by gpu0
+2025-12-26 04:04:25,127 - INFO - Updated status: 187/640
+2025-12-26 04:04:25,130 - INFO - Task exp1_vary_width_450_42 completed by gpu0
+2025-12-26 04:04:25,130 - INFO - Updated status: 187/640
+2025-12-26 04:04:35,133 - INFO - Assigned task exp1_vary_width_451_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:13:05,745 - INFO - Saved result for exp1_vary_width_496_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:13:05,746 - INFO - Task exp1_vary_width_496_42 completed by cpu_worker_15808
+2025-12-26 04:13:05,746 - INFO - Updated status: 188/640
+2025-12-26 04:13:05,747 - INFO - Task exp1_vary_width_496_42 completed by cpu_worker_15808
+2025-12-26 04:13:05,747 - INFO - Updated status: 188/640
+2025-12-26 04:13:15,750 - INFO - Assigned task exp1_vary_width_497_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 04:14:50,441 - INFO - Saved result for exp1_vary_width_451_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:14:50,442 - INFO - Task exp1_vary_width_451_42 completed by gpu0
+2025-12-26 04:14:50,442 - INFO - Updated status: 189/640
+2025-12-26 04:14:50,444 - INFO - Task exp1_vary_width_451_42 completed by gpu0
+2025-12-26 04:14:50,444 - INFO - Updated status: 189/640
+2025-12-26 04:15:00,446 - INFO - Assigned task exp1_vary_width_452_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:18:59,270 - INFO - Saved result for exp1_vary_width_497_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:18:59,270 - INFO - Task exp1_vary_width_497_42 completed by cpu_worker_15808
+2025-12-26 04:18:59,270 - INFO - Updated status: 190/640
+2025-12-26 04:18:59,272 - INFO - Task exp1_vary_width_497_42 completed by cpu_worker_15808
+2025-12-26 04:18:59,272 - INFO - Updated status: 190/640
+2025-12-26 04:19:09,274 - INFO - Assigned task exp1_vary_width_498_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 04:20:11,596 - INFO - Saved result for exp1_vary_width_452_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:20:11,597 - INFO - Task exp1_vary_width_452_42 completed by gpu0
+2025-12-26 04:20:11,597 - INFO - Updated status: 191/640
+2025-12-26 04:20:11,599 - INFO - Task exp1_vary_width_452_42 completed by gpu0
+2025-12-26 04:20:11,599 - INFO - Updated status: 191/640
+2025-12-26 04:20:21,602 - INFO - Assigned task exp1_vary_width_453_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:22:14,202 - INFO - Saved result for exp1_vary_width_453_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:22:14,202 - INFO - Task exp1_vary_width_453_42 completed by gpu0
+2025-12-26 04:22:14,202 - INFO - Updated status: 192/640
+2025-12-26 04:22:14,204 - INFO - Task exp1_vary_width_453_42 completed by gpu0
+2025-12-26 04:22:14,205 - INFO - Updated status: 192/640
+2025-12-26 04:22:24,207 - INFO - Assigned task exp1_vary_width_454_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:23:26,497 - INFO - Saved result for exp1_vary_width_498_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:23:26,497 - INFO - Task exp1_vary_width_498_42 completed by cpu_worker_15808
+2025-12-26 04:23:26,497 - INFO - Updated status: 193/640
+2025-12-26 04:23:26,499 - INFO - Task exp1_vary_width_498_42 completed by cpu_worker_15808
+2025-12-26 04:23:26,499 - INFO - Updated status: 193/640
+2025-12-26 04:23:36,501 - INFO - Assigned task exp1_vary_width_499_42 to cpu_worker_15808 (cpu) - CNN: 716 params, complexity: 2,148
+2025-12-26 04:26:14,612 - INFO - Saved result for exp1_vary_width_454_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:26:14,613 - INFO - Task exp1_vary_width_454_42 completed by gpu0
+2025-12-26 04:26:14,613 - INFO - Updated status: 194/640
+2025-12-26 04:26:14,616 - INFO - Task exp1_vary_width_454_42 completed by gpu0
+2025-12-26 04:26:14,618 - INFO - Updated status: 194/640
+2025-12-26 04:26:24,623 - INFO - Assigned task exp1_vary_width_455_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:32:13,741 - INFO - Saved result for exp1_vary_width_455_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:32:13,741 - INFO - Task exp1_vary_width_455_42 completed by gpu0
+2025-12-26 04:32:13,741 - INFO - Updated status: 195/640
+2025-12-26 04:32:13,743 - INFO - Task exp1_vary_width_455_42 completed by gpu0
+2025-12-26 04:32:13,743 - INFO - Updated status: 195/640
+2025-12-26 04:32:23,745 - INFO - Assigned task exp1_vary_width_456_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:38:06,846 - INFO - Saved result for exp1_vary_width_499_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:38:06,846 - INFO - Task exp1_vary_width_499_42 completed by cpu_worker_15808
+2025-12-26 04:38:06,846 - INFO - Updated status: 196/640
+2025-12-26 04:38:06,848 - INFO - Task exp1_vary_width_499_42 completed by cpu_worker_15808
+2025-12-26 04:38:06,848 - INFO - Updated status: 196/640
+2025-12-26 04:38:16,850 - INFO - Assigned task exp1_vary_width_350_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 04:39:14,662 - INFO - Saved result for exp1_vary_width_456_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:39:14,662 - INFO - Task exp1_vary_width_456_42 completed by gpu0
+2025-12-26 04:39:14,662 - INFO - Updated status: 197/640
+2025-12-26 04:39:14,665 - INFO - Task exp1_vary_width_456_42 completed by gpu0
+2025-12-26 04:39:14,665 - INFO - Updated status: 197/640
+2025-12-26 04:39:24,668 - INFO - Assigned task exp1_vary_width_457_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:44:44,669 - INFO - Saved result for exp1_vary_width_457_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:44:44,669 - INFO - Task exp1_vary_width_457_42 completed by gpu0
+2025-12-26 04:44:44,670 - INFO - Updated status: 198/640
+2025-12-26 04:44:44,671 - INFO - Task exp1_vary_width_457_42 completed by gpu0
+2025-12-26 04:44:44,672 - INFO - Updated status: 198/640
+2025-12-26 04:44:54,675 - INFO - Assigned task exp1_vary_width_458_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:46:45,415 - INFO - Saved result for exp1_vary_width_350_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:46:45,416 - INFO - Task exp1_vary_width_350_42 completed by cpu_worker_15808
+2025-12-26 04:46:45,416 - INFO - Updated status: 199/640
+2025-12-26 04:46:45,421 - INFO - Task exp1_vary_width_350_42 completed by cpu_worker_15808
+2025-12-26 04:46:45,421 - INFO - Updated status: 199/640
+2025-12-26 04:46:55,423 - INFO - Assigned task exp1_vary_width_351_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 04:49:36,635 - INFO - Saved result for exp1_vary_width_458_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:49:36,636 - INFO - Task exp1_vary_width_458_42 completed by gpu0
+2025-12-26 04:49:36,636 - INFO - Updated status: 200/640
+2025-12-26 04:49:36,638 - INFO - Task exp1_vary_width_458_42 completed by gpu0
+2025-12-26 04:49:36,638 - INFO - Updated status: 200/640
+2025-12-26 04:49:46,641 - INFO - Assigned task exp1_vary_width_459_42 to gpu0 (gpu) - CNN: 143,306 params, complexity: 429,918
+2025-12-26 04:51:17,822 - INFO - Saved result for exp1_vary_width_351_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:51:17,822 - INFO - Task exp1_vary_width_351_42 completed by cpu_worker_15808
+2025-12-26 04:51:17,822 - INFO - Updated status: 201/640
+2025-12-26 04:51:17,829 - INFO - Task exp1_vary_width_351_42 completed by cpu_worker_15808
+2025-12-26 04:51:17,830 - INFO - Updated status: 201/640
+2025-12-26 04:51:27,831 - INFO - Assigned task exp1_vary_width_352_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 04:52:17,632 - INFO - Saved result for exp1_vary_width_459_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:52:17,632 - INFO - Task exp1_vary_width_459_42 completed by gpu0
+2025-12-26 04:52:17,632 - INFO - Updated status: 202/640
+2025-12-26 04:52:17,634 - INFO - Task exp1_vary_width_459_42 completed by gpu0
+2025-12-26 04:52:17,635 - INFO - Updated status: 202/640
+2025-12-26 04:52:27,642 - INFO - Assigned task exp1_vary_width_400_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 04:55:39,743 - INFO - Saved result for exp1_vary_width_400_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:55:39,743 - INFO - Task exp1_vary_width_400_42 completed by gpu0
+2025-12-26 04:55:39,743 - INFO - Updated status: 203/640
+2025-12-26 04:55:39,745 - INFO - Task exp1_vary_width_400_42 completed by gpu0
+2025-12-26 04:55:39,745 - INFO - Updated status: 203/640
+2025-12-26 04:55:49,747 - INFO - Assigned task exp1_vary_width_401_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 04:58:57,926 - INFO - Saved result for exp1_vary_width_401_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 04:58:57,927 - INFO - Task exp1_vary_width_401_42 completed by gpu0
+2025-12-26 04:58:57,927 - INFO - Updated status: 204/640
+2025-12-26 04:58:57,928 - INFO - Task exp1_vary_width_401_42 completed by gpu0
+2025-12-26 04:58:57,929 - INFO - Updated status: 204/640
+2025-12-26 04:59:07,931 - INFO - Assigned task exp1_vary_width_402_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:00:41,491 - INFO - Saved result for exp1_vary_width_352_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:00:41,492 - INFO - Task exp1_vary_width_352_42 completed by cpu_worker_15808
+2025-12-26 05:00:41,492 - INFO - Updated status: 205/640
+2025-12-26 05:00:41,497 - INFO - Task exp1_vary_width_352_42 completed by cpu_worker_15808
+2025-12-26 05:00:41,497 - INFO - Updated status: 205/640
+2025-12-26 05:00:51,499 - INFO - Assigned task exp1_vary_width_353_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:02:04,982 - INFO - Saved result for exp1_vary_width_402_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:02:04,983 - INFO - Task exp1_vary_width_402_42 completed by gpu0
+2025-12-26 05:02:04,983 - INFO - Updated status: 206/640
+2025-12-26 05:02:04,986 - INFO - Task exp1_vary_width_402_42 completed by gpu0
+2025-12-26 05:02:04,986 - INFO - Updated status: 206/640
+2025-12-26 05:02:14,989 - INFO - Assigned task exp1_vary_width_403_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:03:51,459 - INFO - Saved result for exp1_vary_width_403_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:03:51,459 - INFO - Task exp1_vary_width_403_42 completed by gpu0
+2025-12-26 05:03:51,460 - INFO - Updated status: 207/640
+2025-12-26 05:03:51,461 - INFO - Task exp1_vary_width_403_42 completed by gpu0
+2025-12-26 05:03:51,461 - INFO - Updated status: 207/640
+2025-12-26 05:04:01,464 - INFO - Assigned task exp1_vary_width_404_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:05:03,009 - INFO - Saved result for exp1_vary_width_353_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:05:03,010 - INFO - Task exp1_vary_width_353_42 completed by cpu_worker_15808
+2025-12-26 05:05:03,010 - INFO - Updated status: 208/640
+2025-12-26 05:05:03,015 - INFO - Task exp1_vary_width_353_42 completed by cpu_worker_15808
+2025-12-26 05:05:03,015 - INFO - Updated status: 208/640
+2025-12-26 05:05:13,017 - INFO - Assigned task exp1_vary_width_354_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:05:45,323 - INFO - Saved result for exp1_vary_width_404_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:05:45,324 - INFO - Task exp1_vary_width_404_42 completed by gpu0
+2025-12-26 05:05:45,324 - INFO - Updated status: 209/640
+2025-12-26 05:05:45,325 - INFO - Task exp1_vary_width_404_42 completed by gpu0
+2025-12-26 05:05:45,326 - INFO - Updated status: 209/640
+2025-12-26 05:05:55,328 - INFO - Assigned task exp1_vary_width_405_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:07:55,727 - INFO - Saved result for exp1_vary_width_405_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:07:55,728 - INFO - Task exp1_vary_width_405_42 completed by gpu0
+2025-12-26 05:07:55,728 - INFO - Updated status: 210/640
+2025-12-26 05:07:55,731 - INFO - Task exp1_vary_width_405_42 completed by gpu0
+2025-12-26 05:07:55,731 - INFO - Updated status: 210/640
+2025-12-26 05:08:05,734 - INFO - Assigned task exp1_vary_width_406_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:09:12,248 - INFO - Saved result for exp1_vary_width_406_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:09:12,248 - INFO - Task exp1_vary_width_406_42 completed by gpu0
+2025-12-26 05:09:12,248 - INFO - Updated status: 211/640
+2025-12-26 05:09:12,251 - INFO - Task exp1_vary_width_406_42 completed by gpu0
+2025-12-26 05:09:12,251 - INFO - Updated status: 211/640
+2025-12-26 05:09:22,254 - INFO - Assigned task exp1_vary_width_407_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:09:32,799 - INFO - Saved result for exp1_vary_width_354_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:09:32,799 - INFO - Task exp1_vary_width_354_42 completed by cpu_worker_15808
+2025-12-26 05:09:32,800 - INFO - Updated status: 212/640
+2025-12-26 05:09:32,805 - INFO - Task exp1_vary_width_354_42 completed by cpu_worker_15808
+2025-12-26 05:09:32,805 - INFO - Updated status: 212/640
+2025-12-26 05:09:42,807 - INFO - Assigned task exp1_vary_width_355_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:10:09,731 - INFO - Saved result for exp1_vary_width_407_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:10:09,731 - INFO - Task exp1_vary_width_407_42 completed by gpu0
+2025-12-26 05:10:09,731 - INFO - Updated status: 213/640
+2025-12-26 05:10:09,734 - INFO - Task exp1_vary_width_407_42 completed by gpu0
+2025-12-26 05:10:09,734 - INFO - Updated status: 213/640
+2025-12-26 05:10:19,737 - INFO - Assigned task exp1_vary_width_408_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:11:24,658 - INFO - Saved result for exp1_vary_width_408_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:11:24,658 - INFO - Task exp1_vary_width_408_42 completed by gpu0
+2025-12-26 05:11:24,659 - INFO - Updated status: 214/640
+2025-12-26 05:11:24,661 - INFO - Task exp1_vary_width_408_42 completed by gpu0
+2025-12-26 05:11:24,661 - INFO - Updated status: 214/640
+2025-12-26 05:11:34,664 - INFO - Assigned task exp1_vary_width_409_42 to gpu0 (gpu) - CNN: 125,642 params, complexity: 376,926
+2025-12-26 05:13:06,891 - INFO - Saved result for exp1_vary_width_409_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:13:06,891 - INFO - Task exp1_vary_width_409_42 completed by gpu0
+2025-12-26 05:13:06,892 - INFO - Updated status: 215/640
+2025-12-26 05:13:06,893 - INFO - Task exp1_vary_width_409_42 completed by gpu0
+2025-12-26 05:13:06,894 - INFO - Updated status: 215/640
+2025-12-26 05:13:16,896 - INFO - Assigned task exp1_vary_width_150_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:14:51,556 - INFO - Saved result for exp1_vary_width_355_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:14:51,556 - INFO - Task exp1_vary_width_355_42 completed by cpu_worker_15808
+2025-12-26 05:14:51,556 - INFO - Updated status: 216/640
+2025-12-26 05:14:51,559 - INFO - Task exp1_vary_width_355_42 completed by cpu_worker_15808
+2025-12-26 05:14:51,559 - INFO - Updated status: 216/640
+2025-12-26 05:15:01,562 - INFO - Assigned task exp1_vary_width_356_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:16:14,187 - INFO - Saved result for exp1_vary_width_150_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:16:14,187 - INFO - Task exp1_vary_width_150_42 completed by gpu0
+2025-12-26 05:16:14,188 - INFO - Updated status: 217/640
+2025-12-26 05:16:14,190 - INFO - Task exp1_vary_width_150_42 completed by gpu0
+2025-12-26 05:16:14,190 - INFO - Updated status: 217/640
+2025-12-26 05:16:24,192 - INFO - Assigned task exp1_vary_width_151_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:19:27,686 - INFO - Saved result for exp1_vary_width_151_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:19:27,687 - INFO - Task exp1_vary_width_151_42 completed by gpu0
+2025-12-26 05:19:27,688 - INFO - Updated status: 218/640
+2025-12-26 05:19:27,690 - INFO - Task exp1_vary_width_151_42 completed by gpu0
+2025-12-26 05:19:27,690 - INFO - Updated status: 218/640
+2025-12-26 05:19:34,019 - INFO - Saved result for exp1_vary_width_356_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:19:34,019 - INFO - Task exp1_vary_width_356_42 completed by cpu_worker_15808
+2025-12-26 05:19:34,019 - INFO - Updated status: 219/640
+2025-12-26 05:19:34,023 - INFO - Task exp1_vary_width_356_42 completed by cpu_worker_15808
+2025-12-26 05:19:34,023 - INFO - Updated status: 219/640
+2025-12-26 05:19:37,692 - INFO - Assigned task exp1_vary_width_152_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:19:44,025 - INFO - Assigned task exp1_vary_width_357_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:22:33,551 - INFO - Saved result for exp1_vary_width_152_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:22:33,552 - INFO - Task exp1_vary_width_152_42 completed by gpu0
+2025-12-26 05:22:33,552 - INFO - Updated status: 220/640
+2025-12-26 05:22:33,556 - INFO - Task exp1_vary_width_152_42 completed by gpu0
+2025-12-26 05:22:33,556 - INFO - Updated status: 220/640
+2025-12-26 05:22:43,559 - INFO - Assigned task exp1_vary_width_153_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:24:18,146 - INFO - Saved result for exp1_vary_width_357_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:24:18,146 - INFO - Task exp1_vary_width_357_42 completed by cpu_worker_15808
+2025-12-26 05:24:18,146 - INFO - Updated status: 221/640
+2025-12-26 05:24:18,149 - INFO - Task exp1_vary_width_357_42 completed by cpu_worker_15808
+2025-12-26 05:24:18,149 - INFO - Updated status: 221/640
+2025-12-26 05:24:28,151 - INFO - Assigned task exp1_vary_width_358_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:25:39,702 - INFO - Saved result for exp1_vary_width_153_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:25:39,702 - INFO - Task exp1_vary_width_153_42 completed by gpu0
+2025-12-26 05:25:39,702 - INFO - Updated status: 222/640
+2025-12-26 05:25:39,705 - INFO - Task exp1_vary_width_153_42 completed by gpu0
+2025-12-26 05:25:39,705 - INFO - Updated status: 222/640
+2025-12-26 05:25:49,729 - INFO - Assigned task exp1_vary_width_154_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:28:52,940 - INFO - Saved result for exp1_vary_width_154_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:28:52,940 - INFO - Task exp1_vary_width_154_42 completed by gpu0
+2025-12-26 05:28:52,940 - INFO - Updated status: 223/640
+2025-12-26 05:28:52,946 - INFO - Task exp1_vary_width_154_42 completed by gpu0
+2025-12-26 05:28:52,947 - INFO - Updated status: 223/640
+2025-12-26 05:29:02,950 - INFO - Assigned task exp1_vary_width_155_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:29:39,471 - INFO - Saved result for exp1_vary_width_358_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:29:39,472 - INFO - Task exp1_vary_width_358_42 completed by cpu_worker_15808
+2025-12-26 05:29:39,472 - INFO - Updated status: 224/640
+2025-12-26 05:29:39,475 - INFO - Task exp1_vary_width_358_42 completed by cpu_worker_15808
+2025-12-26 05:29:39,475 - INFO - Updated status: 224/640
+2025-12-26 05:29:49,477 - INFO - Assigned task exp1_vary_width_359_42 to cpu_worker_15808 (cpu) - CNN: 788 params, complexity: 2,364
+2025-12-26 05:32:01,515 - INFO - Saved result for exp1_vary_width_155_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:32:01,515 - INFO - Task exp1_vary_width_155_42 completed by gpu0
+2025-12-26 05:32:01,515 - INFO - Updated status: 225/640
+2025-12-26 05:32:01,518 - INFO - Task exp1_vary_width_155_42 completed by gpu0
+2025-12-26 05:32:01,518 - INFO - Updated status: 225/640
+2025-12-26 05:32:11,521 - INFO - Assigned task exp1_vary_width_156_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:34:41,469 - INFO - Saved result for exp1_vary_width_359_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:34:41,469 - INFO - Task exp1_vary_width_359_42 completed by cpu_worker_15808
+2025-12-26 05:34:41,469 - INFO - Updated status: 226/640
+2025-12-26 05:34:41,474 - INFO - Task exp1_vary_width_359_42 completed by cpu_worker_15808
+2025-12-26 05:34:41,474 - INFO - Updated status: 226/640
+2025-12-26 05:34:51,479 - INFO - Assigned task exp1_vary_width_510_42 to cpu_worker_15808 (cpu) - CNN: 806 params, complexity: 2,418
+2025-12-26 05:35:06,352 - INFO - Saved result for exp1_vary_width_156_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:35:06,353 - INFO - Task exp1_vary_width_156_42 completed by gpu0
+2025-12-26 05:35:06,353 - INFO - Updated status: 227/640
+2025-12-26 05:35:06,356 - INFO - Task exp1_vary_width_156_42 completed by gpu0
+2025-12-26 05:35:06,356 - INFO - Updated status: 227/640
+2025-12-26 05:35:16,359 - INFO - Assigned task exp1_vary_width_157_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:38:09,881 - INFO - Saved result for exp1_vary_width_157_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:38:09,882 - INFO - Task exp1_vary_width_157_42 completed by gpu0
+2025-12-26 05:38:09,882 - INFO - Updated status: 228/640
+2025-12-26 05:38:09,885 - INFO - Task exp1_vary_width_157_42 completed by gpu0
+2025-12-26 05:38:09,885 - INFO - Updated status: 228/640
+2025-12-26 05:38:19,888 - INFO - Assigned task exp1_vary_width_158_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:41:10,628 - INFO - Saved result for exp1_vary_width_158_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:41:10,629 - INFO - Task exp1_vary_width_158_42 completed by gpu0
+2025-12-26 05:41:10,629 - INFO - Updated status: 229/640
+2025-12-26 05:41:10,634 - INFO - Task exp1_vary_width_158_42 completed by gpu0
+2025-12-26 05:41:10,634 - INFO - Updated status: 229/640
+2025-12-26 05:41:20,638 - INFO - Assigned task exp1_vary_width_159_42 to gpu0 (gpu) - LR: 321,162 params, complexity: 321,162
+2025-12-26 05:44:03,776 - INFO - Saved result for exp1_vary_width_510_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:44:03,776 - INFO - Task exp1_vary_width_510_42 completed by cpu_worker_15808
+2025-12-26 05:44:03,777 - INFO - Updated status: 230/640
+2025-12-26 05:44:03,796 - INFO - Task exp1_vary_width_510_42 completed by cpu_worker_15808
+2025-12-26 05:44:03,796 - INFO - Updated status: 230/640
+2025-12-26 05:44:09,892 - INFO - Saved result for exp1_vary_width_159_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:44:09,892 - INFO - Task exp1_vary_width_159_42 completed by gpu0
+2025-12-26 05:44:09,892 - INFO - Updated status: 231/640
+2025-12-26 05:44:09,894 - INFO - Task exp1_vary_width_159_42 completed by gpu0
+2025-12-26 05:44:09,894 - INFO - Updated status: 231/640
+2025-12-26 05:44:13,799 - INFO - Assigned task exp1_vary_width_511_42 to cpu_worker_15808 (cpu) - CNN: 806 params, complexity: 2,418
+2025-12-26 05:44:19,897 - INFO - Assigned task exp1_vary_width_300_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:45:27,151 - INFO - Saved result for exp1_vary_width_300_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:45:27,151 - INFO - Task exp1_vary_width_300_42 completed by gpu0
+2025-12-26 05:45:27,151 - INFO - Updated status: 232/640
+2025-12-26 05:45:27,153 - INFO - Task exp1_vary_width_300_42 completed by gpu0
+2025-12-26 05:45:27,153 - INFO - Updated status: 232/640
+2025-12-26 05:45:37,155 - INFO - Assigned task exp1_vary_width_301_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:46:44,918 - INFO - Saved result for exp1_vary_width_301_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:46:44,918 - INFO - Task exp1_vary_width_301_42 completed by gpu0
+2025-12-26 05:46:44,919 - INFO - Updated status: 233/640
+2025-12-26 05:46:44,922 - INFO - Task exp1_vary_width_301_42 completed by gpu0
+2025-12-26 05:46:44,922 - INFO - Updated status: 233/640
+2025-12-26 05:46:54,925 - INFO - Assigned task exp1_vary_width_302_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:48:02,079 - INFO - Saved result for exp1_vary_width_302_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:48:02,080 - INFO - Task exp1_vary_width_302_42 completed by gpu0
+2025-12-26 05:48:02,080 - INFO - Updated status: 234/640
+2025-12-26 05:48:02,082 - INFO - Task exp1_vary_width_302_42 completed by gpu0
+2025-12-26 05:48:02,082 - INFO - Updated status: 234/640
+2025-12-26 05:48:12,084 - INFO - Assigned task exp1_vary_width_303_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:49:20,480 - INFO - Saved result for exp1_vary_width_303_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:49:20,480 - INFO - Task exp1_vary_width_303_42 completed by gpu0
+2025-12-26 05:49:20,480 - INFO - Updated status: 235/640
+2025-12-26 05:49:20,482 - INFO - Task exp1_vary_width_303_42 completed by gpu0
+2025-12-26 05:49:20,482 - INFO - Updated status: 235/640
+2025-12-26 05:49:30,485 - INFO - Assigned task exp1_vary_width_304_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:50:39,357 - INFO - Saved result for exp1_vary_width_304_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:50:39,357 - INFO - Task exp1_vary_width_304_42 completed by gpu0
+2025-12-26 05:50:39,357 - INFO - Updated status: 236/640
+2025-12-26 05:50:39,359 - INFO - Task exp1_vary_width_304_42 completed by gpu0
+2025-12-26 05:50:39,359 - INFO - Updated status: 236/640
+2025-12-26 05:50:49,361 - INFO - Assigned task exp1_vary_width_305_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:51:57,645 - INFO - Saved result for exp1_vary_width_305_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:51:57,646 - INFO - Task exp1_vary_width_305_42 completed by gpu0
+2025-12-26 05:51:57,646 - INFO - Updated status: 237/640
+2025-12-26 05:51:57,647 - INFO - Task exp1_vary_width_305_42 completed by gpu0
+2025-12-26 05:51:57,647 - INFO - Updated status: 237/640
+2025-12-26 05:52:07,650 - INFO - Assigned task exp1_vary_width_306_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:52:27,106 - INFO - Saved result for exp1_vary_width_511_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:52:27,106 - INFO - Task exp1_vary_width_511_42 completed by cpu_worker_15808
+2025-12-26 05:52:27,106 - INFO - Updated status: 238/640
+2025-12-26 05:52:27,110 - INFO - Task exp1_vary_width_511_42 completed by cpu_worker_15808
+2025-12-26 05:52:27,111 - INFO - Updated status: 238/640
+2025-12-26 05:52:37,115 - INFO - Assigned task exp1_vary_width_512_42 to cpu_worker_15808 (cpu) - CNN: 806 params, complexity: 2,418
+2025-12-26 05:53:09,309 - INFO - Saved result for exp1_vary_width_306_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:53:09,309 - INFO - Task exp1_vary_width_306_42 completed by gpu0
+2025-12-26 05:53:09,309 - INFO - Updated status: 239/640
+2025-12-26 05:53:09,311 - INFO - Task exp1_vary_width_306_42 completed by gpu0
+2025-12-26 05:53:09,311 - INFO - Updated status: 239/640
+2025-12-26 05:53:19,314 - INFO - Assigned task exp1_vary_width_307_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:54:26,084 - INFO - Saved result for exp1_vary_width_307_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:54:26,084 - INFO - Task exp1_vary_width_307_42 completed by gpu0
+2025-12-26 05:54:26,085 - INFO - Updated status: 240/640
+2025-12-26 05:54:26,086 - INFO - Task exp1_vary_width_307_42 completed by gpu0
+2025-12-26 05:54:26,086 - INFO - Updated status: 240/640
+2025-12-26 05:54:36,089 - INFO - Assigned task exp1_vary_width_308_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:55:42,991 - INFO - Saved result for exp1_vary_width_308_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:55:42,992 - INFO - Task exp1_vary_width_308_42 completed by gpu0
+2025-12-26 05:55:42,993 - INFO - Updated status: 241/640
+2025-12-26 05:55:42,994 - INFO - Task exp1_vary_width_308_42 completed by gpu0
+2025-12-26 05:55:42,995 - INFO - Updated status: 241/640
+2025-12-26 05:55:52,997 - INFO - Assigned task exp1_vary_width_309_42 to gpu0 (gpu) - LR: 261,770 params, complexity: 261,770
+2025-12-26 05:57:00,033 - INFO - Saved result for exp1_vary_width_309_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 05:57:00,033 - INFO - Task exp1_vary_width_309_42 completed by gpu0
+2025-12-26 05:57:00,033 - INFO - Updated status: 242/640
+2025-12-26 05:57:00,035 - INFO - Task exp1_vary_width_309_42 completed by gpu0
+2025-12-26 05:57:00,035 - INFO - Updated status: 242/640
+2025-12-26 05:57:10,037 - INFO - Assigned task exp1_vary_width_290_42 to gpu0 (gpu) - LR: 210,314 params, complexity: 210,314
+2025-12-26 06:01:56,115 - INFO - Saved result for exp1_vary_width_512_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 06:01:56,115 - INFO - Task exp1_vary_width_512_42 completed by cpu_worker_15808
+2025-12-26 06:01:56,115 - INFO - Updated status: 243/640
+2025-12-26 06:01:56,118 - INFO - Task exp1_vary_width_512_42 completed by cpu_worker_15808
+2025-12-26 06:01:56,118 - INFO - Updated status: 243/640
+2025-12-26 06:02:06,121 - INFO - Assigned task exp1_vary_width_513_42 to cpu_worker_15808 (cpu) - CNN: 806 params, complexity: 2,418
+2025-12-26 06:02:43,017 - INFO - Saved result for exp1_vary_width_290_42 to final_results.csv (phases: exp1_vary_width)
+2025-12-26 06:02:43,018 - INFO - Task exp1_vary_width_290_42 completed by gpu0
+2025-12-26 06:02:43,018 - INFO - Updated status: 244/640
+2025-12-26 06:02:43,021 - INFO - Task exp1_vary_width_290_42 completed by gpu0
+2025-12-26 06:02:43,021 - INFO - Updated status: 244/640
+2025-12-26 06:02:53,023 - INFO - Assigned task exp1_vary_width_291_42 to gpu0 (gpu) - LR: 210,314 params, complexity: 210,314
+2025-12-26 06:03:33,349 - INFO - Shutting down...

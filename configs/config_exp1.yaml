@@ -46,6 +46,6 @@ exp1_vary_width:
     - dataset: ["mnist", "cifar10"]
     - width_factor: [1, 4, 16, 64]              # Narrow to wide models (CNN only)
     - depth: [1, 4, 16, 64]                     # Shallow to deep models (CNN only)
-    - poison_ratio: [0.0, 0.25, 0.5, 0.75, 1.0]            # Clean, moderate, severe attacks
+    - poison_ratio: [0.0, 0.25, 0.5, 0.75, 0.8125, 0.875, 0.9375, 1.0]            # Clean, moderate, severe attacks
     - poison_type: ["label_flip", "random_noise"]  # Targeted vs untargeted attacks
     - aggregator: ["fedavg"]
