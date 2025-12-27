@@ -27,8 +27,8 @@ defaults:
   
   # Validation & Early Stopping
   validation_split: 0.1              # 10% for validation
-  early_stopping_patience: 10        # Increased patience for IEEE standards
-  min_delta: 0.0001                  # Minimum improvement threshold
+  early_stopping_patience: 5        # Increased patience for IEEE standards
+  min_delta: 0.001                  # Minimum improvement threshold
 
   # Poisoning Attack Configuration
   poison_type: "label_flip"
